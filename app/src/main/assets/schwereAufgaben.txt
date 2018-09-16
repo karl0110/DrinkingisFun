@@ -1,0 +1,2 @@
+Wann auch immer :PlayerName: will, kann :EinzahlGeschlecht: insgesamt :AnzahlSchlucke: Schlucke verteilen.:
+PlayerName:, du bist jetzt Questionaire. Wenn jemand eine Frage von dir beantwortet (Bis zu 3 mal), darfst du bis zu :AnzahlSchlucke: Schlucke an die Person verteilen.:

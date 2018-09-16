@@ -1,0 +1,2 @@
+PlayerName:, du darfst :AnzahlSchlucke: Schlucke trinken.:
+PlayerName:, mache einen Witz, wenn jemand Lacht darfst du :AnzahlSchlucke: Schlucke trinken:

@@ -1,0 +1,2 @@
+PlayerName: darf mit einer Person :MehrzahlGeschlecht: Wahl anstoßen.:
+Wenn das Glas von :PlayerName: mehr als halb voll ist, darf :EinzahlGeschlecht: :AnzahlSchlucke: trinken.:
