@@ -182,7 +182,11 @@ public class PlayerSelectActivity extends Activity {
     }
 
     public void startGame(View view){
-        if(!playerNames.get(0).getText().equals("") && !playerNames.get(1).getText().equals("")) {
+        if(playerNames.get(0).getText().length()==0 || playerNames.get(1).getText().length()==0) {
+            playButton.setText("Bitte gibt eure Namen ein");
+            playButton.setTextColor(Color.RED);
+        }
+        else{
             ArrayList<String> playerStringNames = new ArrayList<>();
             boolean[] playerBooleanSexes = new boolean[playerSexes.size()];
             for (int i = 0; i < playerNames.size(); i++) {
@@ -197,10 +201,6 @@ public class PlayerSelectActivity extends Activity {
             intent.putStringArrayListExtra("playerNames", playerStringNames);
             intent.putExtra("playerSexes", playerBooleanSexes);
             startActivity(intent);
-        }
-        else{
-            playButton.setText("Bitte gibt eure Namen ein");
-            playButton.setTextColor(Color.RED);
         }
     }
 
