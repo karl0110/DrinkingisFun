@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Game extends SurfaceView implements Runnable {
 
     private static final double maxZoom = 0.4;
-    private static final int zoomSpeed = 20;
+    private static final int zoomSpeed = 30;
 
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
