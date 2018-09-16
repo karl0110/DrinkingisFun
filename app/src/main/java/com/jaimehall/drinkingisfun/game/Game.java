@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Game extends SurfaceView implements Runnable {
 
     private static final double maxZoom = 0.4;
-    private static final int zoomSpeed = 30;
+    private static final int zoomSpeed = 20;
 
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
@@ -62,8 +62,10 @@ public class Game extends SurfaceView implements Runnable {
 
     public void progress(){
         if(touchTimer==0){
-            focusChange=true;
-            touchTimer=5;
+            if(!focusChange && !firstHalfFocusChange && !secondHalfFocusChange) {
+                focusChange = true;
+                touchTimer = 5;
+            }
         }
     }
 
@@ -205,7 +207,7 @@ public class Game extends SurfaceView implements Runnable {
 
     public void run() {
         long lastTime = System.nanoTime();//Wird für einen Timer benötigt.
-        final double amountOfTicks = 20.0;//Wie oft die Methode tick() in einer Sekunde aufgerufen werden soll.
+        final double amountOfTicks =20.0;//Wie oft die Methode tick() in einer Sekunde aufgerufen werden soll.
         double ns = 1000000000 / amountOfTicks;//Berechnet wie viel Zeit vergeht bis die Methode tick() aufgerufen wird.
         double delta = 0;//Variable welche Berechnet, wann die tick() Methode aufgerufen werden soll.
         int updates = 0;//Wie oft das Progam die tick() Methode in einer Sekunde aufrufen hat.
