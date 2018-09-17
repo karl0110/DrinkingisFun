@@ -3,8 +3,6 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Typeface;
 
 import com.jaimehall.drinkingisfun.helpers.TextRect;
 
@@ -25,13 +23,13 @@ public class Player {
 		this.isFemale=isFemale;
 	}
 	
-	public void render(Canvas canvas){
+	public void render(Canvas canvas,Game game){
 		if(location.isMiniGame){
-
+            game.startMiniGame();
 		}
 		else{
-			float baseX = location.getX()+20;
-			float baseY = location.getY()+25;
+			float baseX = location.getX()+56;
+			float baseY = location.getY()+27;
 
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
@@ -85,12 +83,13 @@ public class Player {
 			Paint paint = new Paint();
 			paint.setStyle(Paint.Style.FILL);
 			paint.setColor(Color.BLACK);
+			paint.getFontMetrics();
 			paint.setTextSize(30);
 			paint.setAntiAlias(true);
 
 			textRect = new TextRect(paint);
 
-			int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-40,(int)location.coordinates.height()-50);
+			int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
 
 			textRect.draw(canvas,(int)baseX,(int)baseY);
 		}

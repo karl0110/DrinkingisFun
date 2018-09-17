@@ -86,6 +86,7 @@ public class Map {
         Bitmap greenTile = BitmapFactory.decodeResource(game.getResources(), R.drawable.greentile);
         Bitmap blueTile = BitmapFactory.decodeResource(game.getResources(),R.drawable.bluetile);
         Bitmap redTile = BitmapFactory.decodeResource(game.getResources(),R.drawable.redtile);
+        Bitmap woodenTile = BitmapFactory.decodeResource(game.getResources(),R.drawable.woodentile);
 
         tileMap[0][3] = new MiniGameTile(0*tileWidth, 3*tileHeight, tileWidth, tileHeight, redTile,this, new int[][]{{1,2},{1,3},{1,4}});
 
@@ -118,17 +119,17 @@ public class Map {
         tileMap[9][3] = new NormalTile(9*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenTile,this, 0,3,unSplitStringsMediumTasks,4);
 
 
-        tileMap[1][4] = new NormalTile(1 * tileWidth, 4*tileHeight, tileWidth, tileHeight, greenTile,this, 2,5,unSplitStringsEasyTasks,2);
-        tileMap[2][5] = new NormalTile(2*tileWidth, 5*tileHeight, tileWidth, tileHeight, greenTile,this, 3,6,unSplitStringsEasyTasks,2);
-        tileMap[3][6] = new NormalTile(3*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 4,6,unSplitStringsEasyTasks,2);
-        tileMap[4][6] = new NormalTile(4*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 5,6,unSplitStringsEasyTasks,2);
-        tileMap[5][6] = new NormalTile(5*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 6,6,unSplitStringsEasyTasks,2);
+        tileMap[1][4] = new NormalTile(1 * tileWidth, 4*tileHeight, tileWidth, tileHeight, woodenTile,this, 2,5,unSplitStringsEasyTasks,2);
+        tileMap[2][5] = new NormalTile(2*tileWidth, 5*tileHeight, tileWidth, tileHeight, woodenTile,this, 3,6,unSplitStringsEasyTasks,2);
+        tileMap[3][6] = new NormalTile(3*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 4,6,unSplitStringsEasyTasks,2);
+        tileMap[4][6] = new NormalTile(4*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 5,6,unSplitStringsEasyTasks,2);
+        tileMap[5][6] = new NormalTile(5*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 6,6,unSplitStringsEasyTasks,2);
         tileMap[6][6] = new MiniGameTile(6*tileWidth, 6*tileHeight, tileWidth, tileHeight, redTile,this, new int[][]{{7,5},{7,6}});
-        tileMap[7][4] = new NormalTile(7*tileWidth, 4*tileHeight, tileWidth, tileHeight, greenTile,this, 8,5,unSplitStringsEasyTasks,2);
-        tileMap[7][6] = new NormalTile(7*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 8,6,unSplitStringsEasyTasks,2);
-        tileMap[8][5] = new NormalTile(8*tileWidth, 5*tileHeight, tileWidth, tileHeight, greenTile,this, 9,6,unSplitStringsEasyTasks,2);
-        tileMap[8][6] = new NormalTile(8*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 9,6,unSplitStringsEasyTasks,2);
-        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenTile,this, 0,3,unSplitStringsEasyTasks,2);
+        tileMap[7][4] = new NormalTile(7*tileWidth, 4*tileHeight, tileWidth, tileHeight, woodenTile,this, 8,5,unSplitStringsEasyTasks,2);
+        tileMap[7][6] = new NormalTile(7*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 8,6,unSplitStringsEasyTasks,2);
+        tileMap[8][5] = new NormalTile(8*tileWidth, 5*tileHeight, tileWidth, tileHeight, woodenTile,this, 9,6,unSplitStringsEasyTasks,2);
+        tileMap[8][6] = new NormalTile(8*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 9,6,unSplitStringsEasyTasks,2);
+        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, woodenTile,this, 0,3,unSplitStringsEasyTasks,2);
 
 
         for(int xxx=0; xxx<tileMap.length;xxx++){

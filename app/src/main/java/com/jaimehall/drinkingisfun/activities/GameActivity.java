@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class GameActivity extends Activity {
 
     private Game game;
-    private Button zoomButton;
 
     private int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

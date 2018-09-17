@@ -23,14 +23,16 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_game"
             android:multiprocess="true"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activities.menu.PlayerSelectActivity"
             android:label="@string/title_activity_player_select"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MiniGameActivity"
-            android:label="@string/title_activity_mini_game"></activity>
+            android:name=".activities.MiniGameHandlerActivity"
+            android:label="@string/title_activity_mini_game_handler"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>

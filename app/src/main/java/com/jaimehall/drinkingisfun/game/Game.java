@@ -1,6 +1,7 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.jaimehall.drinkingisfun.R;
+import com.jaimehall.drinkingisfun.activities.MiniGameHandlerActivity;
 
 import java.util.ArrayList;
 
@@ -78,6 +80,26 @@ public class Game extends SurfaceView implements Runnable {
         zoomButtonZoomedIn = BitmapFactory.decodeResource(getResources(),R.drawable.minuslupe);
         zoomButtonZoomedOut = BitmapFactory.decodeResource(getResources(),R.drawable.pluslupe);
 
+
+        Tile currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
+
+        float focusedTileWidth = currentFocusedTile.getCoordinates().width();
+        float focusedTileHeight = currentFocusedTile.getCoordinates().height();
+
+        float focusedScaleX = WIDTH / focusedTileWidth;
+        float focusedScaleY = HEIGHT / focusedTileHeight;
+
+        zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
+        zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
+
+        xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
+        yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
+
+    }
+
+    public void startMiniGame(){
+        Intent intent = new Intent(getContext(), MiniGameHandlerActivity.class);
+        getContext().startActivity(intent);
     }
 
     public void progress(MotionEvent motionEvent){
@@ -95,12 +117,12 @@ public class Game extends SurfaceView implements Runnable {
                 case MotionEvent.ACTION_UP:
                     deltaX2= motionEvent.getX();
                     float deltaX = deltaX2-deltaX1;
-                    if(Math.abs(deltaX)>200){
+                    if(Math.abs(deltaX)>50){
                         if(deltaX2>deltaX1){
-                            if(translateX!=0)translateX-=500;
+                            if(translateX!=0)translateX-=400;
                         }
                         else{
-                            translateX+=500;
+                            translateX+=400;
                         }
                     }
                 break;
@@ -123,12 +145,6 @@ public class Game extends SurfaceView implements Runnable {
 
         float focusedScaleX = WIDTH / focusedTileWidth;
         float focusedScaleY = HEIGHT / focusedTileHeight;
-
-        zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
-        zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
-
-        xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
-        yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
 
 
         if(zoomEvent){
@@ -341,7 +357,7 @@ public class Game extends SurfaceView implements Runnable {
         }
 
         if(playerAction){
-            playerHandler.render(canvas);
+            playerHandler.render(canvas,this);
         }
         if(zoomedOut){
             canvas.drawBitmap(zoomButtonZoomedOut,null,zoomButtonRenderingRect,null);
