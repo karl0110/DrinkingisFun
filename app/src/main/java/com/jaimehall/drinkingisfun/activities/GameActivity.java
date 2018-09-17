@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.jaimehall.drinkingisfun.game.Game;
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 public class GameActivity extends Activity {
 
     private Game game;
+    private Button zoomButton;
 
     private int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -38,14 +41,16 @@ public class GameActivity extends Activity {
         game.setOnTouchListener(new View.OnTouchListener() {
             @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    game.progress();
+                    game.progress(motionEvent);
 
                     return true;
                 }
             }
         );
 
+
         game.setSystemUiVisibility(uiOptions);
+
     }
 
         protected void onResume() {

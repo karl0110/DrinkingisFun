@@ -1,18 +1,24 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.jaimehall.drinkingisfun.activities.GameActivity;
+import com.jaimehall.drinkingisfun.R;
 
 import java.util.ArrayList;
 
 public class Game extends SurfaceView implements Runnable {
 
+    public static final float WIDTH = 1920;
+    public static final float HEIGHT=1080;
     private static final double maxZoom = 0.4;
     private static final int zoomSpeed = 30;
 
@@ -23,12 +29,19 @@ public class Game extends SurfaceView implements Runnable {
     private boolean running;
 
     private int touchTimer=0;
+    private Rect zoomButtonRect;
+    private Rect zoomButtonRenderingRect;
+    private Bitmap zoomButtonZoomedOut;
+    private Bitmap zoomButtonZoomedIn;
 
     private Map map;
     private PlayerHandler playerHandler;
 
+    private boolean zoomEvent = false;
+    private boolean zoomingIn = false;
+    private boolean zoomingOut = false;
+    private boolean zoomedOut = false;
     private boolean playerAction = false;
-
     private boolean focusChange = false;
     private boolean firstHalfFocusChange = false;
     private boolean secondHalfFocusChange = false;
@@ -43,11 +56,14 @@ public class Game extends SurfaceView implements Runnable {
     private double xZoomTranslateVariable;
     private double yZoomTranslateVariable;
     private int frameFocusChange = 0;
+    private int frameZoomEvent = 0;
 
     private float scaleX = 0;
     private float scaleY = 0;
     private float translateX = 0;
     private float translateY = 0;
+
+    private float deltaX1,deltaX2;
 
     public Game(Context context, ArrayList<String> playerNames,boolean[] playerSexes){
         super(context);
@@ -57,12 +73,41 @@ public class Game extends SurfaceView implements Runnable {
         for(int i =0;i<playerNames.size();i++){
             playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i),playerSexes[i]));
         }
+        zoomButtonRect = new Rect(0,0,(int)(WIDTH/8),((int)(HEIGHT/8)));
+        zoomButtonRenderingRect = new Rect();
+        zoomButtonZoomedIn = BitmapFactory.decodeResource(getResources(),R.drawable.minuslupe);
+        zoomButtonZoomedOut = BitmapFactory.decodeResource(getResources(),R.drawable.pluslupe);
 
     }
 
-    public void progress(){
-        if(touchTimer==0){
-            if(!focusChange && !firstHalfFocusChange && !secondHalfFocusChange) {
+    public void progress(MotionEvent motionEvent){
+        System.out.println("touched");
+        Rect touchPoint = new Rect((int)motionEvent.getX()-5,(int)motionEvent.getY()-5,(int)motionEvent.getX()+5,(int)motionEvent.getY()+5);
+        if(zoomButtonRect.contains(touchPoint)){
+            zoomEvent=true;
+        }
+        else if(zoomedOut){
+            switch(motionEvent.getAction())
+            {
+                case MotionEvent.ACTION_DOWN:
+                    deltaX1 = motionEvent.getX();
+                break;
+                case MotionEvent.ACTION_UP:
+                    deltaX2= motionEvent.getX();
+                    float deltaX = deltaX2-deltaX1;
+                    if(Math.abs(deltaX)>200){
+                        if(deltaX2>deltaX1){
+                            if(translateX!=0)translateX-=500;
+                        }
+                        else{
+                            translateX+=500;
+                        }
+                    }
+                break;
+            }
+        }
+        else if(touchTimer==0){
+            if(!focusChange && !firstHalfFocusChange && !secondHalfFocusChange && !zoomEvent && !zoomingOut && !zoomingIn && !zoomedOut) {
                 focusChange = true;
                 touchTimer = 5;
             }
@@ -70,17 +115,114 @@ public class Game extends SurfaceView implements Runnable {
     }
 
     private void tick(){
-
         Tile currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
         Tile nextFocusedTile = playerHandler.getNextPlayer().getLocation();
 
         float focusedTileWidth = currentFocusedTile.getCoordinates().width();
         float focusedTileHeight = currentFocusedTile.getCoordinates().height();
 
-        float focusedScaleX = 1920 / focusedTileWidth;
-        float focusedScaleY = 1080 / focusedTileHeight;
+        float focusedScaleX = WIDTH / focusedTileWidth;
+        float focusedScaleY = HEIGHT / focusedTileHeight;
 
-        if (focusChange) {
+        zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
+        zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
+
+        xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
+        yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
+
+
+        if(zoomEvent){
+
+            frameZoomEvent = 0;
+
+
+            float startXFocusChange;
+            float startYFocusChange;
+            float targetXFocusChange;
+            float targetYFocusChange;
+
+            if(zoomedOut){
+                startXFocusChange = 0;
+                startYFocusChange = -400;
+                targetXFocusChange = currentFocusedTile.getX();
+                targetYFocusChange = currentFocusedTile.getY();
+                zoomFactorXFocusChange = maxZoom;
+                zoomFactorYFocusChange = maxZoom;
+
+                zoomEvent = false;
+                zoomingIn = true;
+                System.out.println("Preparing zoom in");
+            }
+            else{
+                startXFocusChange = currentFocusedTile.getX();
+                startYFocusChange = currentFocusedTile.getY();
+                targetXFocusChange = 0;
+                targetYFocusChange = -400;
+                zoomFactorXFocusChange = focusedScaleX;
+                zoomFactorYFocusChange = focusedScaleY;
+
+                zoomEvent = false;
+                zoomingOut = true;
+                System.out.println("Preparing zoom out");
+            }
+            actualXFocusChange = startXFocusChange;
+            actualYFocusChange = startYFocusChange;
+
+            actualXStepFocusChange = (targetXFocusChange - startXFocusChange) / (zoomSpeed);
+            actualYStepFocusChange = (targetYFocusChange - startYFocusChange) / (zoomSpeed);
+        }
+        else if(zoomingOut){
+            if(frameZoomEvent<zoomSpeed){
+
+                actualXFocusChange += actualXStepFocusChange;
+                actualYFocusChange += actualYStepFocusChange;
+
+                zoomFactorXFocusChange -= zoomFactorXStepFocusChange;
+                zoomFactorYFocusChange -= zoomFactorYStepFocusChange;
+
+                scaleX = (float) zoomFactorXFocusChange;
+                scaleY = (float) zoomFactorYFocusChange;
+                translateX = (float)actualXFocusChange;
+                translateY = (float)actualYFocusChange;
+
+                frameZoomEvent ++;
+            }
+            else{
+                zoomingOut=false;
+                zoomedOut = true;
+                frameZoomEvent = 0;
+                System.out.println("Finished zoom out");
+            }
+        }
+        else if(zoomingIn){
+            if(frameZoomEvent<zoomSpeed){
+                actualXFocusChange += actualXStepFocusChange;
+                actualYFocusChange += actualYStepFocusChange;
+
+                zoomFactorXFocusChange += zoomFactorXStepFocusChange;
+                zoomFactorYFocusChange += zoomFactorYStepFocusChange;
+
+                scaleX = (float) zoomFactorXFocusChange;
+                scaleY = (float) zoomFactorYFocusChange;
+                translateX = (float)actualXFocusChange;
+                translateY = (float)actualYFocusChange;
+
+                frameZoomEvent ++;
+            }
+            else{
+                zoomingIn = false;
+                zoomedOut = false;
+                frameZoomEvent = 0;
+                System.out.println("Finished zoom in");
+            }
+        }
+//        else if(zoomedOut){
+//            scaleX=(float)maxZoom;
+//            scaleY =(float)maxZoom;
+//            translateX=0;
+//            translateY=-400;
+//        }
+        else if (focusChange) {
 
             frameFocusChange = 0;
 
@@ -109,17 +251,12 @@ public class Game extends SurfaceView implements Runnable {
 
                 actualXStepFocusChange = (targetXFocusChange - startXFocusChange) / (zoomSpeed * 2);
                 actualYStepFocusChange = (targetYFocusChange - startYFocusChange) / (zoomSpeed * 2);
-                zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
-                zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
-                xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
-                yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
 
                 focusChange = false;
                 firstHalfFocusChange = true;
             }
         }
-
-        if (firstHalfFocusChange) {
+        else if (firstHalfFocusChange) {
 
             if (frameFocusChange < zoomSpeed) {
                 zoomFactorXFocusChange -= zoomFactorXStepFocusChange;
@@ -159,13 +296,9 @@ public class Game extends SurfaceView implements Runnable {
                 playerHandler.getCurrentPlayer().setLocation(currentFocusedTile.getNextTile());
                 playerHandler.nextPlayer();
 
-
                 playerAction = true;
-
-
-                System.out.println("Finished");
             }
-        } else {
+        } else if(!zoomedOut){
 
             scaleX = focusedScaleX;
             scaleY = focusedScaleY;
@@ -173,7 +306,13 @@ public class Game extends SurfaceView implements Runnable {
             translateY = currentFocusedTile.getY();
         }
 
+        if(zoomedOut){
+            zoomButtonRenderingRect.set((int)(0+translateX),-400,(int)(500+translateX),100);
+        }
+        else{
 
+            zoomButtonRenderingRect.set((int)(currentFocusedTile.getX()),(int)(currentFocusedTile.getY()),(int)(currentFocusedTile.getX()+(focusedTileWidth/16)),(int)((focusedTileHeight/8)+currentFocusedTile.getY()));
+        }
         if(touchTimer>0)touchTimer--;
     }
 
@@ -181,27 +320,39 @@ public class Game extends SurfaceView implements Runnable {
 
         canvas = surfaceHolder.lockCanvas();
 
+
+
         /////Start of scaling and translating
         canvas.scale(scaleX,scaleY);
         canvas.translate(-translateX,-translateY);
         /////End of scaling and translating
 
 
-        /////////Start of rendering
+        /////////Start of scaled and translated rendering
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
-        if (firstHalfFocusChange || secondHalfFocusChange) {
+
+        if (firstHalfFocusChange || secondHalfFocusChange || zoomingIn || zoomingOut || zoomedOut) {
             map.render(canvas);
         } else {
             Tile currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
             map.render(canvas, currentFocusedTile);
+
+            canvas.drawBitmap(zoomButtonZoomedIn,null,zoomButtonRenderingRect,null);
         }
 
         if(playerAction){
             playerHandler.render(canvas);
         }
+        if(zoomedOut){
+            canvas.drawBitmap(zoomButtonZoomedOut,null,zoomButtonRenderingRect,null);
+        }
+
 
 
         //////////End of Rendering
+        //////Start of unscaled and unstranslated Rendering
+
+        //////End
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 

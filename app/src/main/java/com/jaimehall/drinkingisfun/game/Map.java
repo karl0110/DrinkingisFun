@@ -15,9 +15,12 @@ import java.util.ArrayList;
 public class Map {
 
     private Tile[][] tileMap;
+    private float tileWidth,tileHeight;
 
     public Map(Game game){
         tileMap= new Tile[20][7];
+        tileWidth = 500;
+        tileHeight = 281;
         createTileMap(game);
     }
 
@@ -83,12 +86,6 @@ public class Map {
         Bitmap greenTile = BitmapFactory.decodeResource(game.getResources(), R.drawable.greentile);
         Bitmap blueTile = BitmapFactory.decodeResource(game.getResources(),R.drawable.bluetile);
         Bitmap redTile = BitmapFactory.decodeResource(game.getResources(),R.drawable.redtile);
-
-        float tileWidth = 500;
-        float tileHeight = 281;
-        // (float)((xx*1117)+558.5)
-        // (float)((yy*763)+381.5)
-
 
         tileMap[0][3] = new MiniGameTile(0*tileWidth, 3*tileHeight, tileWidth, tileHeight, redTile,this, new int[][]{{1,2},{1,3},{1,4}});
 
@@ -176,5 +173,21 @@ public class Map {
         }
 
         return tileMap[indexA][indexB];
+    }
+
+    public float getTileWidth() {
+        return tileWidth;
+    }
+
+    public void setTileWidth(float tileWidth) {
+        this.tileWidth = tileWidth;
+    }
+
+    public float getTileHeight() {
+        return tileHeight;
+    }
+
+    public void setTileHeight(float tileHeight) {
+        this.tileHeight = tileHeight;
     }
 }
