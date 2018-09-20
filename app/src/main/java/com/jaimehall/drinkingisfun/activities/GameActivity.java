@@ -65,7 +65,11 @@ public class GameActivity extends Activity {
             game.pause();
         }
 
-
+        public void startMiniGame(){
+            Intent intent = new Intent(this, MiniGameHandlerActivity.class);
+            intent.putExtra
+            startActivity(intent);
+        }
 
 }
 

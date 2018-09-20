@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.jaimehall.drinkingisfun.activities.GameActivity;
 import com.jaimehall.drinkingisfun.helpers.TextRect;
 
 import java.util.StringTokenizer;
@@ -25,7 +26,7 @@ public class Player {
 	
 	public void render(Canvas canvas,Game game){
 		if(location.isMiniGame){
-            game.startMiniGame();
+			((GameActivity)game.getContextVariable()).startMiniGame();
 		}
 		else{
 			float baseX = location.getX()+56;

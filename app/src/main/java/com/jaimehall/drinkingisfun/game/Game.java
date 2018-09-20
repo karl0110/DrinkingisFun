@@ -29,6 +29,7 @@ public class Game extends SurfaceView implements Runnable {
 
     private Thread thread;
     private boolean running;
+    private Context context;
 
     private int touchTimer=0;
     private Rect zoomButtonRect;
@@ -69,6 +70,7 @@ public class Game extends SurfaceView implements Runnable {
 
     public Game(Context context, ArrayList<String> playerNames,boolean[] playerSexes){
         super(context);
+        this.context=context;
         surfaceHolder = getHolder();
         map = new Map(this);
         playerHandler = new PlayerHandler();
@@ -97,10 +99,6 @@ public class Game extends SurfaceView implements Runnable {
 
     }
 
-    public void startMiniGame(){
-        Intent intent = new Intent(getContext(), MiniGameHandlerActivity.class);
-        getContext().startActivity(intent);
-    }
 
     public void progress(MotionEvent motionEvent){
         System.out.println("touched");
@@ -421,4 +419,9 @@ public class Game extends SurfaceView implements Runnable {
         thread = new Thread(this);
         thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
     }
+
+    public Context getContextVariable() {
+        return context;
+    }
+
 }

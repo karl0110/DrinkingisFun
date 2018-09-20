@@ -32,7 +32,7 @@
             android:name=".activities.MiniGameHandlerActivity"
             android:label="@string/title_activity_mini_game_handler"
             android:screenOrientation="portrait"
-            ></activity>
+            android:multiprocess="true" />
     </application>
 
 </manifest>

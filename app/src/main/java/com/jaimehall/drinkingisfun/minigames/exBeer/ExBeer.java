@@ -34,6 +34,7 @@ public class ExBeer extends SurfaceView implements MiniGameInterface,Runnable{
 
     public ExBeer(Context context){
         super(context);
+
         surfaceHolder = getHolder();
         imageRect = new Rect((int)(WIDTH/8),(int)(HEIGHT/16),(int)((WIDTH/8)*7),(int)((HEIGHT/16)*12));
         buttonRect = new Rect((int)((WIDTH/8)*3),(int)((HEIGHT/8)*6),(int)((WIDTH/8)*5),(int)((HEIGHT/8)*7));
@@ -129,9 +130,11 @@ public class ExBeer extends SurfaceView implements MiniGameInterface,Runnable{
     }
 
 
-    public void onResume() {
+    public void resume(Thread thread) {
         running = true;
-        thread = new Thread(this);
-        thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
+        this.thread=thread;
+        thread.start();
+        //thread = new Thread(this);
+        //thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
     }
 }
