@@ -23,14 +23,31 @@ public class Player {
 		this.playerName=playerName;
 		this.isFemale=isFemale;
 	}
-	
+
+
+
 	public void render(Canvas canvas,Game game){
+		float baseX = location.getX()+56;
+		float baseY = location.getY()+27;
 		if(location.isMiniGame){
-			((GameActivity)game.getContextVariable()).startMiniGame();
+			completeInformation = playerName+" ,mach dich bereit ein Minispiel zu spielen!";
+			TextRect textRect;
+
+			Paint paint = new Paint();
+			paint.setStyle(Paint.Style.FILL);
+			paint.setColor(Color.BLACK);
+			paint.getFontMetrics();
+			paint.setTextSize(30);
+			paint.setAntiAlias(true);
+
+			textRect = new TextRect(paint);
+
+			int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
+
+			textRect.draw(canvas,(int)baseX,(int)baseY);
 		}
 		else{
-			float baseX = location.getX()+56;
-			float baseY = location.getY()+27;
+
 
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
@@ -65,9 +82,9 @@ public class Player {
 						}
 					}
 					else if(tokenedString[i].matches("AnzahlSchlucke")){
-						int anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getDifficulty()));
+						int anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
 						while(anzahlSchlucke==0){
-							anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getDifficulty()));
+							anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
 						}
 						completeBufferedInformation.append(anzahlSchlucke);
 					}

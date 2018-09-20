@@ -22,17 +22,11 @@
             android:name=".activities.GameActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_game"
-            android:multiprocess="true"
-            android:screenOrientation="landscape" />
+            android:multiprocess="true" />
         <activity
             android:name=".activities.menu.PlayerSelectActivity"
             android:label="@string/title_activity_player_select"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.MiniGameHandlerActivity"
-            android:label="@string/title_activity_mini_game_handler"
-            android:screenOrientation="portrait"
-            android:multiprocess="true" />
     </application>
 
 </manifest>

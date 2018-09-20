@@ -7,24 +7,38 @@ public class MiniGameTile extends Tile {
 
     private int[][] coordinatesOfNextTiles;
     private Tile[] nextPossibleTiles;
+    private Tile nextEasierTile;
+    private Tile nextTile;
+    private Tile nextHarderTile;
 
-    public MiniGameTile(float x, float y, float width , float height, Bitmap image, Map map, int[][] coordinatesOfNextTiles){
-        super(new RectF(x,y,x+width,y+height),x,y,image,map);
+    public MiniGameTile(float x, float y, float width , float height, Bitmap image, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
+        super(new RectF(x,y,x+width,y+height),x,y,image,map,tileDifficulty);
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
         nextPossibleTiles = new Tile[coordinatesOfNextTiles.length];
         isMiniGame = true;
     }
 
-    @Override
-    public Tile getNextTile() {
-        double index = Math.random()*(nextPossibleTiles.length-1);
-        return nextPossibleTiles[(int) Math.round(index)];
-    }
 
     @Override
     public void findNextTile() {
-        for(int i=0; i < coordinatesOfNextTiles.length ;i++){
-            nextPossibleTiles[i]=map.getTileFromTileMap(coordinatesOfNextTiles[i][0], coordinatesOfNextTiles[i][1]);
-        }
+        nextEasierTile = map.getTileFromTileMap(coordinatesOfNextTiles[0][0],coordinatesOfNextTiles[0][1]);
+        nextTile = map.getTileFromTileMap(coordinatesOfNextTiles[1][0],coordinatesOfNextTiles[1][1]);
+        nextHarderTile = map.getTileFromTileMap(coordinatesOfNextTiles[2][0],coordinatesOfNextTiles[2][1]);
+    }
+
+    public Tile getNextEasierTile() {
+        return nextEasierTile;
+    }
+
+    public Tile getNextTile() {
+        return nextTile;
+    }
+
+    public Tile getNextHarderTile() {
+        return nextHarderTile;
+    }
+
+    public int getTileDifficulty(){
+        return tileDifficulty;
     }
 }

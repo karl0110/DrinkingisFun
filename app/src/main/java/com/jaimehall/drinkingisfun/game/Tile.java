@@ -14,13 +14,15 @@ public abstract class Tile {
     protected Map map;
     protected boolean taskFinished = false;
     protected boolean isMiniGame;
+    protected int tileDifficulty;
 
-    public Tile(RectF coordinates,float x,float y,Bitmap image,Map map){
+    public Tile(RectF coordinates,float x,float y,Bitmap image,Map map,int tileDifficulty){
         this.coordinates=coordinates;
         this.x=x;
         this.y=y;
         this.image=image;
         this.map=map;
+        this.tileDifficulty=tileDifficulty;
     }
 
     public void render(Canvas canvas){
@@ -30,6 +32,8 @@ public abstract class Tile {
     public abstract Tile getNextTile();
 
     public abstract void findNextTile();
+
+    public abstract int getTileDifficulty() ;
 
     public Rect getRectCoordinates(){
         return new Rect((int)x,(int)y,(int)coordinates.width(),(int)coordinates.height());
@@ -75,4 +79,6 @@ public abstract class Tile {
     public void setMiniGame(boolean miniGame) {
         isMiniGame = miniGame;
     }
+
+
 }

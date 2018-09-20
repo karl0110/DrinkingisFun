@@ -1,0 +1,25 @@
+package com.jaimehall.drinkingisfun.minigames;
+
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.view.MotionEvent;
+
+import com.jaimehall.drinkingisfun.game.Game;
+
+public abstract class MiniGame {
+
+    protected Resources resources;
+    protected Game game;
+
+    public MiniGame(Game game){
+        this.game=game;
+        resources = game.getResources();
+    }
+
+    public abstract MiniGameType getMiniGameType();
+    public abstract void render(Canvas canvas);
+    public abstract void tick();
+    public abstract void touched(MotionEvent motionEvent);
+    public abstract void reset();
+
+}
