@@ -5,7 +5,8 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import com.jaimehall.drinkingisfun.game.Game;
-import com.jaimehall.drinkingisfun.minigames.exBeer.ExBeer;
+import com.jaimehall.drinkingisfun.minigames.exBeer.ExBeerMiniGame;
+import com.jaimehall.drinkingisfun.minigames.pong.PongMiniGame;
 
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class MiniGameHandler {
     public MiniGameHandler(Game game,float width,float height) {
         this.game=game;
         miniGames= new ArrayList<>();
-        miniGames.add(new ExBeer(game,width,height));
+        miniGames.add(new ExBeerMiniGame(game,width,height));
+        miniGames.add(new PongMiniGame(game));
 
     }
 

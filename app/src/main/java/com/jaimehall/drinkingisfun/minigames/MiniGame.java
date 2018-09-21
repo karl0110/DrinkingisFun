@@ -21,5 +21,6 @@ public abstract class MiniGame {
     public abstract void tick();
     public abstract void touched(MotionEvent motionEvent);
     public abstract void reset();
+    public abstract boolean isPortrait();
 
 }

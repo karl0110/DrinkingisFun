@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
@@ -15,7 +14,7 @@ import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.minigames.MiniGame;
 
-public class ExBeer extends MiniGame {
+public class ExBeerMiniGame extends MiniGame {
 
     private float width;
     private float height;
@@ -40,7 +39,7 @@ public class ExBeer extends MiniGame {
     private Paint timerTextPaint;
 
 
-    public ExBeer(Game game,float width,float height){
+    public ExBeerMiniGame(Game game, float width, float height){
        super(game);
 
        this.width=width;
@@ -72,6 +71,10 @@ public class ExBeer extends MiniGame {
         tutorialPaint = new Paint();
         tutorialPaint.setAlpha(180);
 
+    }
+
+    public boolean isPortrait(){
+        return true;
     }
 
     public void reset(){

@@ -28,7 +28,7 @@ public class Player {
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.getFontMetrics();
         paint.setTextSize(30);
         paint.setAntiAlias(true);
