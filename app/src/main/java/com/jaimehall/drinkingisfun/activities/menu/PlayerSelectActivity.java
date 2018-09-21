@@ -32,6 +32,8 @@ public class PlayerSelectActivity extends Activity {
     private LinearLayout.LayoutParams checkBoxParams;
     private LinearLayout.LayoutParams horizontalLinearLayoutParams;
 
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_select);
@@ -198,6 +200,7 @@ public class PlayerSelectActivity extends Activity {
 
 
             Intent intent = new Intent(this, GameActivity.class);
+
             intent.putStringArrayListExtra("playerNames", playerStringNames);
             intent.putExtra("playerSexes", playerBooleanSexes);
             startActivity(intent);

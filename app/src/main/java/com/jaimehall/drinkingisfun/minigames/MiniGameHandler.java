@@ -16,12 +16,13 @@ public class MiniGameHandler {
     private MiniGame miniGame;
     private ArrayList<MiniGame> miniGames;
     private Game game;
+    private float width,height;
 
 
-    public MiniGameHandler(Game game) {
+    public MiniGameHandler(Game game,float width,float height) {
         this.game=game;
         miniGames= new ArrayList<>();
-        miniGames.add(new ExBeer(game));
+        miniGames.add(new ExBeer(game,width,height));
 
     }
 

@@ -10,13 +10,13 @@ public abstract class MiniGame {
 
     protected Resources resources;
     protected Game game;
+    protected boolean tutorialFinished =false;
 
     public MiniGame(Game game){
         this.game=game;
         resources = game.getResources();
     }
 
-    public abstract MiniGameType getMiniGameType();
     public abstract void render(Canvas canvas);
     public abstract void tick();
     public abstract void touched(MotionEvent motionEvent);

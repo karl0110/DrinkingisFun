@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
@@ -12,12 +14,11 @@ import com.jaimehall.drinkingisfun.R;
 
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.minigames.MiniGame;
-import com.jaimehall.drinkingisfun.minigames.MiniGameType;
 
 public class ExBeer extends MiniGame {
 
-    public static final float WIDTH = 1080;
-    public static final float HEIGHT= 1920;
+    private float width;
+    private float height;
 
     private int amountOfSeconds =6;
     private int bottleFillStep= 9;
@@ -26,15 +27,20 @@ public class ExBeer extends MiniGame {
     private Bitmap[] bottle;
     private Rect imageRect;
     private Bitmap button;
+    private Rect tutorialRect;
+    private Bitmap tutorial;
     private int timer= 0;
     private int tickCounter =0;
     private boolean timeStarted = false;
 
-    public ExBeer(Game game){
+    public ExBeer(Game game,float width,float height){
        super(game);
 
-        imageRect = new Rect((int)(WIDTH/8),(int)(HEIGHT/16),(int)((WIDTH/8)*7),(int)((HEIGHT/16)*12));
-        buttonRect = new Rect((int)((WIDTH/8)*3),(int)((HEIGHT/8)*6),(int)((WIDTH/8)*5),(int)((HEIGHT/8)*7));
+       this.width=width;
+       this.height = height;
+
+        imageRect = new Rect((int)(width/8),(int)(height/16),(int)((width/8)*7),(int)((height/16)*12));
+        buttonRect = new Rect((int)((width/8)*3),(int)((height/8)*6),(int)((width/8)*5),(int)((height/8)*7));
         button = BitmapFactory.decodeResource(resources,R.drawable.tapbutton);
         bottle = new Bitmap[10];
         bottle[0]=BitmapFactory.decodeResource(resources,R.drawable.bottle0);
@@ -47,6 +53,9 @@ public class ExBeer extends MiniGame {
         bottle[7]=BitmapFactory.decodeResource(resources,R.drawable.bottle7);
         bottle[8]=BitmapFactory.decodeResource(resources,R.drawable.bottle8);
         bottle[9]=BitmapFactory.decodeResource(resources,R.drawable.bottle9);
+
+        tutorialRect = new Rect(0,0,(int)width,(int)height);
+        tutorial=BitmapFactory.decodeResource(resources,R.drawable.exbeertutorial);
 
     }
 
@@ -61,14 +70,19 @@ public class ExBeer extends MiniGame {
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(buttonRect.contains(touchPoint)){
-            if(timeStarted == false){
-                timeStarted=true;
-            }
-            tapCounter++;
-            if(tapCounter>19){
-                tapCounter= 0;
-                bottleFillStep--;
+        if(tutorialFinished == false){
+            tutorialFinished=true;
+        }
+        else {
+            if (buttonRect.contains(touchPoint)) {
+                if (timeStarted == false) {
+                    timeStarted = true;
+                }
+                tapCounter++;
+                if (tapCounter > 19) {
+                    tapCounter = 0;
+                    bottleFillStep--;
+                }
             }
         }
     }
@@ -95,14 +109,20 @@ public class ExBeer extends MiniGame {
     }
 
     public void render(Canvas canvas){
+
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
         canvas.drawBitmap(bottle[bottleFillStep],null,imageRect,null);
         canvas.drawBitmap(button,null,buttonRect,null);
 
+        if(tutorialFinished==false){
+            Paint paint = new Paint();
+            paint.setAlpha(200);
+
+            Matrix matrix = new Matrix();
+            canvas.drawBitmap(tutorial,matrix,paint);
+        }
+
     }
 
-    public MiniGameType getMiniGameType() {
-        return MiniGameType.EXBEER;
-    }
 
 }

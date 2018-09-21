@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
 
 public class Game extends SurfaceView implements Runnable {
 
-    public static final float WIDTH = 1920;
-    public static final float HEIGHT=1080;
+    private float width ;
+    private float height;
     private static final double maxZoom = 0.4;
     private static final int zoomSpeed = 30;
 
@@ -74,18 +75,24 @@ public class Game extends SurfaceView implements Runnable {
         MAINGAME,MINIGAME
     }
 
-    public Game(Context context, ArrayList<String> playerNames,boolean[] playerSexes){
+    public Game(Context context, ArrayList<String> playerNames,boolean[] playerSexes,float width,float height){
         super(context);
+
+        this.width = height;
+        this.height=width;
+        System.out.println(width+"           "+height);
+
         this.context=context;
         surfaceHolder = getHolder();
         map = new Map(this);
         gameState = State.MAINGAME;
         playerHandler = new PlayerHandler();
-        miniGameHandler = new MiniGameHandler(this);
+        miniGameHandler = new MiniGameHandler(this,width,height);
+
         for(int i =0;i<playerNames.size();i++){
             playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i),playerSexes[i]));
         }
-        zoomButtonRect = new Rect(0,0,(int)(WIDTH/8),((int)(HEIGHT/8)));
+        zoomButtonRect = new Rect(0,0,(int)(width/8),((int)(height/8)));
         zoomButtonRenderingRect = new Rect();
         zoomButtonZoomedIn = BitmapFactory.decodeResource(getResources(),R.drawable.minuslupe);
         zoomButtonZoomedOut = BitmapFactory.decodeResource(getResources(),R.drawable.pluslupe);
@@ -96,14 +103,15 @@ public class Game extends SurfaceView implements Runnable {
         float focusedTileWidth = currentFocusedTile.getCoordinates().width();
         float focusedTileHeight = currentFocusedTile.getCoordinates().height();
 
-        float focusedScaleX = WIDTH / focusedTileWidth;
-        float focusedScaleY = HEIGHT / focusedTileHeight;
+        float focusedScaleX = width / focusedTileWidth;
+        float focusedScaleY = height / focusedTileHeight;
 
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
         zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
 
         xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
         yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
+
 
     }
 
@@ -205,8 +213,8 @@ public class Game extends SurfaceView implements Runnable {
             float focusedTileWidth = currentFocusedTile.getCoordinates().width();
             float focusedTileHeight = currentFocusedTile.getCoordinates().height();
 
-            float focusedScaleX = WIDTH / focusedTileWidth;
-            float focusedScaleY = HEIGHT / focusedTileHeight;
+            float focusedScaleX = width / focusedTileWidth;
+            float focusedScaleY = height / focusedTileHeight;
 
 
             if (zoomEvent) {
