@@ -31,6 +31,7 @@ public class GameActivity extends Activity {
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
+
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,11 +78,6 @@ public class GameActivity extends Activity {
         protected void onPause() {
             super.onPause();
             game.pause();
-        }
-
-        public void startMiniGame(){
-            Intent intent = new Intent(this, MiniGameHandler.class);
-            startActivity(intent);
         }
 
         public void setScreenOrientationLandscape(){

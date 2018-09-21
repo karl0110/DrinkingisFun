@@ -22,7 +22,7 @@ public class Game extends SurfaceView implements Runnable {
 
     private float width ;
     private float height;
-    private static final double maxZoom = 0.4;
+    private double maxZoom;
     private static final int zoomSpeed = 30;
 
     private Canvas canvas;
@@ -80,7 +80,6 @@ public class Game extends SurfaceView implements Runnable {
 
         this.width = height;
         this.height=width;
-        System.out.println(width+"           "+height);
 
         this.context=context;
         surfaceHolder = getHolder();
@@ -103,14 +102,18 @@ public class Game extends SurfaceView implements Runnable {
         float focusedTileWidth = currentFocusedTile.getCoordinates().width();
         float focusedTileHeight = currentFocusedTile.getCoordinates().height();
 
-        float focusedScaleX = width / focusedTileWidth;
-        float focusedScaleY = height / focusedTileHeight;
+        float focusedScaleX = this.width / focusedTileWidth;
+        float focusedScaleY = this.height / focusedTileHeight;
+
+        maxZoom = this.height/(focusedTileHeight*7);
 
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
         zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
 
         xZoomTranslateVariable = ((focusedTileWidth/2)*focusedScaleX);
         yZoomTranslateVariable = ((focusedTileHeight/2)*focusedScaleY);
+
+
 
 
     }
@@ -229,7 +232,7 @@ public class Game extends SurfaceView implements Runnable {
 
                 if (zoomedOut) {
                     startXFocusChange = 0;
-                    startYFocusChange = -400;
+                    startYFocusChange = 0;
                     targetXFocusChange = currentFocusedTile.getX();
                     targetYFocusChange = currentFocusedTile.getY();
                     zoomFactorXFocusChange = maxZoom;
@@ -242,7 +245,7 @@ public class Game extends SurfaceView implements Runnable {
                     startXFocusChange = currentFocusedTile.getX();
                     startYFocusChange = currentFocusedTile.getY();
                     targetXFocusChange = 0;
-                    targetYFocusChange = -400;
+                    targetYFocusChange = 0;
                     zoomFactorXFocusChange = focusedScaleX;
                     zoomFactorYFocusChange = focusedScaleY;
 
@@ -384,7 +387,7 @@ public class Game extends SurfaceView implements Runnable {
             }
 
             if (zoomedOut) {
-                zoomButtonRenderingRect.set((int) (0 + translateX), -400, (int) (500 + translateX), 100);
+                zoomButtonRenderingRect.set((int) (0 + translateX), 0, (int) (500 + translateX), 500);
             } else {
 
                 zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));

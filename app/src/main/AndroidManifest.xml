@@ -27,6 +27,15 @@
             android:name=".activities.menu.PlayerSelectActivity"
             android:label="@string/title_activity_player_select"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.menu.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.menu.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jaimehall.drinkingisfun.activities.menu.MainActivity"
+                />
+        </activity>
     </application>
 
 </manifest>

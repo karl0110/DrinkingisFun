@@ -17,37 +17,35 @@ public class Player {
 	private String completeInformation;
 	private String playerName;
 	private boolean isFemale;
+	private TextRect textRect;
+	private float baseX,baseY;
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
+
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.BLACK);
+        paint.getFontMetrics();
+        paint.setTextSize(30);
+        paint.setAntiAlias(true);
+        paint.setTextAlign(Paint.Align.CENTER);
+
+        textRect = new TextRect(paint);
 	}
 
 
 
 	public void render(Canvas canvas,Game game){
-		float baseX = location.getX()+56;
-		float baseY = location.getY()+27;
+		baseX = location.getX()+(location.coordinates.width()/2);
+		baseY = location.getY()+27;
 		if(location.isMiniGame){
-			completeInformation = playerName+" ,mach dich bereit ein Minispiel zu spielen!";
-			TextRect textRect;
-
-			Paint paint = new Paint();
-			paint.setStyle(Paint.Style.FILL);
-			paint.setColor(Color.BLACK);
-			paint.getFontMetrics();
-			paint.setTextSize(30);
-			paint.setAntiAlias(true);
-
-			textRect = new TextRect(paint);
-
-			int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
-
-			textRect.draw(canvas,(int)baseX,(int)baseY);
+			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
 		}
 		else{
-
 
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
@@ -95,28 +93,12 @@ public class Player {
 				completeInformation=completeBufferedInformation.toString();
 				prevLocation=location;
 			}
-
-			TextRect textRect;
-
-			Paint paint = new Paint();
-			paint.setStyle(Paint.Style.FILL);
-			paint.setColor(Color.BLACK);
-			paint.getFontMetrics();
-			paint.setTextSize(30);
-			paint.setAntiAlias(true);
-
-			textRect = new TextRect(paint);
-
-			int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
-
-			textRect.draw(canvas,(int)baseX,(int)baseY);
 		}
 
 
+        int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
+        textRect.draw(canvas,(int)baseX,(int)baseY);
 
-
-
-		
 	}
 
 

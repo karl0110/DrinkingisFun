@@ -20,18 +20,25 @@ public class ExBeer extends MiniGame {
     private float width;
     private float height;
 
-    private int amountOfSeconds =6;
+    private int tickCounter = 0;
+    private double amountOfSeconds =5;
     private int bottleFillStep= 9;
     private int tapCounter = 0;
+    private double timer= 0;
+
     private Rect buttonRect;
+    private Bitmap button;
+
     private Bitmap[] bottle;
     private Rect imageRect;
-    private Bitmap button;
+
     private Rect tutorialRect;
     private Bitmap tutorial;
-    private int timer= 0;
-    private int tickCounter =0;
-    private boolean timeStarted = false;
+    private Paint tutorialPaint;
+
+    private String timerString= "";
+    private Paint timerTextPaint;
+
 
     public ExBeer(Game game,float width,float height){
        super(game);
@@ -39,8 +46,8 @@ public class ExBeer extends MiniGame {
        this.width=width;
        this.height = height;
 
-        imageRect = new Rect((int)(width/8),(int)(height/16),(int)((width/8)*7),(int)((height/16)*12));
-        buttonRect = new Rect((int)((width/8)*3),(int)((height/8)*6),(int)((width/8)*5),(int)((height/8)*7));
+        imageRect = new Rect((int)(width/8),(int)(height/16)*3,(int)((width/8)*7),(int)((height/16)*14));
+        buttonRect = new Rect((int)((width/8)*3),(int)((height/16)*14)+10,(int)((width/8)*5),(int)(height-10));
         button = BitmapFactory.decodeResource(resources,R.drawable.tapbutton);
         bottle = new Bitmap[10];
         bottle[0]=BitmapFactory.decodeResource(resources,R.drawable.bottle0);
@@ -57,29 +64,35 @@ public class ExBeer extends MiniGame {
         tutorialRect = new Rect(0,0,(int)width,(int)height);
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.exbeertutorial);
 
+        timerTextPaint = new Paint();
+        timerTextPaint.setColor(Color.WHITE);
+        timerTextPaint.setTextAlign(Paint.Align.CENTER);
+        timerTextPaint.setTextSize(140);
+
+        tutorialPaint = new Paint();
+        tutorialPaint.setAlpha(180);
+
     }
 
     public void reset(){
           bottleFillStep= 9;
           tapCounter = 0;
           timer= 0;
-          tickCounter =0;
-          timeStarted = false;
+          tutorialFinished=false;
+          tickCounter=0;
 
     }
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(tutorialFinished == false){
+        if(tutorialFinished == false && tickCounter>=10){
             tutorialFinished=true;
         }
         else {
             if (buttonRect.contains(touchPoint)) {
-                if (timeStarted == false) {
-                    timeStarted = true;
-                }
+
                 tapCounter++;
-                if (tapCounter > 19) {
+                if (tapCounter >= 40) {
                     tapCounter = 0;
                     bottleFillStep--;
                 }
@@ -90,16 +103,17 @@ public class ExBeer extends MiniGame {
 
 
     public void tick(){
-        tickCounter++;
-        if(timeStarted && tickCounter>=20){
-            timer++;
-            tickCounter=0;
+        if(!tutorialFinished)tickCounter++;
+        if(tutorialFinished){
+            timer+=0.05;
+            double displayTimer = Math.round((amountOfSeconds-timer)*10);
+            timerString = "Time left: "+displayTimer/10+" s";
         }
-        if(timer==amountOfSeconds || bottleFillStep == 0){
+        if(timer>=amountOfSeconds || bottleFillStep == 0){
             if(bottleFillStep > 5){
                 game.finishMiniGame(0);
             }
-            else if(bottleFillStep >3){
+            else if(bottleFillStep >2){
                 game.finishMiniGame(1);
             }
             else if(bottleFillStep >=0){
@@ -110,16 +124,18 @@ public class ExBeer extends MiniGame {
 
     public void render(Canvas canvas){
 
+
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
+
+        if(tutorialFinished){
+            canvas.drawText(timerString,width/2,(height/16)*2,timerTextPaint);
+        }
+
         canvas.drawBitmap(bottle[bottleFillStep],null,imageRect,null);
         canvas.drawBitmap(button,null,buttonRect,null);
 
         if(tutorialFinished==false){
-            Paint paint = new Paint();
-            paint.setAlpha(200);
-
-            Matrix matrix = new Matrix();
-            canvas.drawBitmap(tutorial,matrix,paint);
+            canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
         }
 
     }
