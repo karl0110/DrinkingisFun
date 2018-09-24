@@ -24,12 +24,12 @@ public class MiniGameHandler {
         this.game=game;
         miniGames= new ArrayList<>();
         miniGames.add(new ExBeerMiniGame(game,width,height));
-        miniGames.add(new PongMiniGame(game));
+        miniGames.add(new PongMiniGame(game,width,height));
 
     }
 
     public void selectNewMiniGame(){
-        miniGame=miniGames.get(0);
+        miniGame=miniGames.get(1);
         miniGame.reset();
     }
 
