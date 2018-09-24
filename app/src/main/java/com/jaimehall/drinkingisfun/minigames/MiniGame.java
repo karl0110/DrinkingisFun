@@ -11,6 +11,7 @@ public abstract class MiniGame {
     protected Resources resources;
     protected Game game;
     protected boolean tutorialFinished =false;
+    protected int tickCounter = 0;
 
     public MiniGame(Game game){
         this.game=game;

@@ -445,7 +445,7 @@ public class Game extends SurfaceView implements Runnable {
 
     public void run() {
         long lastTime = System.nanoTime();//Wird für einen Timer benötigt.
-        final double amountOfTicks =20.0;//Wie oft die Methode tick() in einer Sekunde aufgerufen werden soll.
+        final double amountOfTicks =30.0;//Wie oft die Methode tick() in einer Sekunde aufgerufen werden soll.
         double ns = 1000000000 / amountOfTicks;//Berechnet wie viel Zeit vergeht bis die Methode tick() aufgerufen wird.
         double delta = 0;//Variable welche Berechnet, wann die tick() Methode aufgerufen werden soll.
         int updates = 0;//Wie oft das Progam die tick() Methode in einer Sekunde aufrufen hat.

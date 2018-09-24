@@ -19,7 +19,7 @@ public class ExBeerMiniGame extends MiniGame {
     private float width;
     private float height;
 
-    private int tickCounter = 0;
+
     private double amountOfSeconds =5;
     private int bottleFillStep= 9;
     private int tapCounter = 0;
@@ -88,7 +88,7 @@ public class ExBeerMiniGame extends MiniGame {
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(tutorialFinished == false && tickCounter>=10){
+        if(tutorialFinished == false && tickCounter>=20){
             tutorialFinished=true;
         }
         else {
@@ -108,7 +108,7 @@ public class ExBeerMiniGame extends MiniGame {
     public void tick(){
         if(!tutorialFinished)tickCounter++;
         if(tutorialFinished){
-            timer+=0.05;
+            timer+=0.0333333333;
             double displayTimer = Math.round((amountOfSeconds-timer)*10);
             timerString = "Time left: "+displayTimer/10+" s";
         }

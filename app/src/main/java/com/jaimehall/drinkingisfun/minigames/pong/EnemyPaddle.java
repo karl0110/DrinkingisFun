@@ -7,7 +7,8 @@ public class EnemyPaddle extends Paddle {
 
     private PongBall pongBall;
     private PongBall ghostPongBall;
-    private float targetX;
+
+
 
     public EnemyPaddle(PongMiniGame pongMiniGame,float x, float y,float width, float height,PongBall pongBall,PongBall ghostPongBall) {
         super(x, y,width,height, Color.BLACK,pongMiniGame);
@@ -18,9 +19,12 @@ public class EnemyPaddle extends Paddle {
 
     @Override
     public void tick() {
-        x+=xAcc;
-        if(Math.signum(-1) != Math.signum(pongBall.getyAcc())){
-           xAcc=0;
+        xVel-=xVel/4;
+        x+=xVel;
+        xVel+=xAcc;
+        if(Math.signum(-1) != Math.signum(pongBall.getyVel())){
+            xAcc=0;
+            xVel=0;
         }
         else{
            targetX = (ghostPongBall.getX()-(width/2));
@@ -28,13 +32,15 @@ public class EnemyPaddle extends Paddle {
        }
 
         if(targetX > x){
-            xAcc = 15;
+            xAcc = +8;
         }
         else if(targetX < x){
-            xAcc =-15;
+            xAcc =-8;
         }
         else{
             xAcc = 0;
+
         }
+
     }
 }

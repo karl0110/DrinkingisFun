@@ -23,13 +23,15 @@ public class MiniGameHandler {
     public MiniGameHandler(Game game,float width,float height) {
         this.game=game;
         miniGames= new ArrayList<>();
-        miniGames.add(new ExBeerMiniGame(game,width,height));
         miniGames.add(new PongMiniGame(game,width,height));
+        miniGames.add(new ExBeerMiniGame(game,width,height));
+
 
     }
 
     public void selectNewMiniGame(){
-        miniGame=miniGames.get(1);
+        int index = (int)Math.round(Math.random()*(1));
+        miniGame=miniGames.get(index);
         miniGame.reset();
     }
 

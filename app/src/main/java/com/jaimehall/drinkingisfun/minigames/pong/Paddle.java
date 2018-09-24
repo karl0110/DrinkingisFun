@@ -7,10 +7,11 @@ import android.graphics.Rect;
 
 public abstract class Paddle {
 
-    protected float x,y,xAcc;
+    protected float x,y,xVel,xAcc;
     protected float width,height;
     protected Paint paddlePaint;
     protected PongMiniGame pongMiniGame;
+    protected float targetX;
 
     public Paddle(float x,float y, float width,float height,int paddleColor,PongMiniGame pongMiniGame){
         this.x=x;
@@ -40,5 +41,13 @@ public abstract class Paddle {
 
     public float getHeight() {
         return height;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }

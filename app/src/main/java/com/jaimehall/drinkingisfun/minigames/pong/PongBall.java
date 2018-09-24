@@ -7,58 +7,78 @@ import android.graphics.Rect;
 
 public class PongBall {
 
-    private float radius = 30;
-    private float x,y,xAcc,yAcc;
+    private float radius;
+    private float x,y,xVel,yVel,acceleration;
     private PongMiniGame pongMiniGame;
     private Paint ballPaint;
     private boolean isGhostBall;
 
-    public PongBall(PongMiniGame pongMiniGame,float x,float y,float xAcc, float yAcc,boolean isGhostBall){
+    public PongBall(PongMiniGame pongMiniGame,float x,float y,float radius,float xVel, float yVel,float acceleration,boolean isGhostBall){
         this.x=x;
         this.y=y;
-        this.xAcc=xAcc;
-        this.yAcc=yAcc;
+        this.xVel=xVel;
+        this.yVel=yVel;
         this.pongMiniGame=pongMiniGame;
         this.isGhostBall=isGhostBall;
+        this.radius=radius;
+        this.acceleration=acceleration;
 
         ballPaint = new Paint();
         ballPaint.setStyle(Paint.Style.FILL);
         if(isGhostBall){
             ballPaint.setColor(Color.RED);
         }
-        else{
+        else {
             ballPaint.setColor(Color.BLACK);
         }
+
+
 
 
     }
 
     public void tick(){
-        x+=xAcc;
-        y+=yAcc;
-        if(y>pongMiniGame.getHeight()){
-            pongMiniGame.gameOver();
+        x+=xVel;
+        if(isGhostBall && (y+yVel) < (pongMiniGame.getEnemyPaddle().getY()+pongMiniGame.getEnemyPaddle().getHeight())){
+            y=pongMiniGame.getEnemyPaddle().getY()+pongMiniGame.getEnemyPaddle().getHeight();
+            yVel=0;
+            xVel=0;
         }
-        else if(x <0 || x > pongMiniGame.getWidth() -radius){
-            xAcc= -xAcc;
+        else{
+            y+=yVel;
         }
 
+        if(xVel>0 && yVel>0){
+            xVel+=acceleration;
+            yVel+=acceleration;
+        }
+        if(x <0 || x > pongMiniGame.getWidth() -radius){
+            xVel= -xVel;
+        }
         if(isGhostBall){
-            if(y>=(pongMiniGame.getHeight()-pongMiniGame.getPlayerPaddle().getHeight())){
-                yAcc = -yAcc;
-            }
-            if(y<=0){
-                xAcc=0;
-                yAcc=0;
+            if(y <= (pongMiniGame.getEnemyPaddle().getY()+pongMiniGame.getEnemyPaddle().getHeight())){
+
+                if(Math.signum(yVel) == Math.signum(-1)) {
+                    xVel=0;
+                    yVel=0;
+                }
             }
         }
         else{
-            if(pongMiniGame.getPlayerPaddle().getCoordinates().contains(getCoordinates())){
-                yAcc = -yAcc;
+            if(y>pongMiniGame.getHeight()){
+                pongMiniGame.gameOver();
             }
-            if(pongMiniGame.getEnemyPaddle().getCoordinates().contains(getCoordinates())){
-                yAcc = -yAcc;
-                pongMiniGame.resetGhostBall();
+            if(Rect.intersects(getCoordinates(),pongMiniGame.getPlayerPaddle().getCoordinates())){
+                if(Math.signum(yVel) == Math.signum(1)){
+                    yVel = -yVel;
+                    pongMiniGame.resetGhostBall();
+                }
+            }
+            if(Rect.intersects(getCoordinates(),pongMiniGame.getEnemyPaddle().getCoordinates())){
+                if(Math.signum(yVel) == (-1)) {
+                    yVel = -yVel;
+
+                }
             }
         }
 
@@ -67,12 +87,8 @@ public class PongBall {
     }
 
     public void render(Canvas canvas){
-        if(isGhostBall){
-            canvas.drawCircle(x,y,radius,ballPaint);
-        }
-        else{
-            canvas.drawCircle(x,y,radius,ballPaint);
-        }
+
+        canvas.drawCircle(x,y,radius,ballPaint);
 
     }
 
@@ -88,12 +104,12 @@ public class PongBall {
         return y;
     }
 
-    public float getxAcc() {
-        return xAcc;
+    public float getxVel() {
+        return xVel;
     }
 
-    public float getyAcc() {
-        return yAcc;
+    public float getyVel() {
+        return yVel;
     }
 
     public void setX(float x) {
@@ -104,11 +120,19 @@ public class PongBall {
         this.y = y;
     }
 
-    public void setxAcc(float xAcc) {
-        this.xAcc = xAcc;
+    public void setxVel(float xVel) {
+        this.xVel = xVel;
     }
 
-    public void setyAcc(float yAcc) {
-        this.yAcc = yAcc;
+    public void setyVel(float yVel) {
+        this.yVel = yVel;
+    }
+
+    public float getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
     }
 }

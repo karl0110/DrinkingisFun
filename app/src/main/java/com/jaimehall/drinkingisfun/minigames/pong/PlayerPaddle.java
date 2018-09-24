@@ -9,20 +9,32 @@ public class PlayerPaddle extends Paddle {
 
 
     public PlayerPaddle(PongMiniGame pongMiniGame,float x, float y,float width,float height) {
-        super(x, y,width,height, Color.BLUE,pongMiniGame);
+        super(x, y,width,height, Color.BLACK,pongMiniGame);
+        targetX = pongMiniGame.getWidth()/2;
     }
 
     @Override
     public void tick() {
-        if (x > 0 && x < pongMiniGame.getWidth() - width )
-            x += xAcc;
-        else if (x == 0)
-            x++;
-        else if (x == pongMiniGame.getWidth() - width)
-            x--;
+        x-=xAcc/4;
+        x += xVel;
+        xVel+=xAcc;
+
+        if(targetX > (x+((width/8)*6))){
+            xAcc = +10;
+        }
+        else if(targetX < (x+((width/8)*2))){
+            xAcc =-10;
+        }
+        else{
+            xAcc = 0;
+            xVel-=xVel/2;
+        }
+
     }
 
     public void touched(MotionEvent motionEvent){
-        x=motionEvent.getX();
+
+        targetX=motionEvent.getX();
+
     }
 }
