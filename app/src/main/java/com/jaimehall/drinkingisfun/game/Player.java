@@ -17,31 +17,17 @@ public class Player {
 	private String completeInformation;
 	private String playerName;
 	private boolean isFemale;
-	private TextRect textRect;
 	private float baseX,baseY;
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
-
-
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        paint.getFontMetrics();
-        paint.setTextSize(30);
-        paint.setAntiAlias(true);
-        paint.setTextAlign(Paint.Align.CENTER);
-
-        textRect = new TextRect(paint);
 	}
 
 
 
 	public void render(Canvas canvas,Game game){
-		baseX = location.getX()+(location.coordinates.width()/2);
-		baseY = location.getY()+27;
 		if(location.isMiniGame){
 			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
 		}
@@ -49,21 +35,15 @@ public class Player {
 
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
-				String information = normalLocation.getRandomInformation();
+				String[] tokenedInformation = normalLocation.getRandomInformation();
 				StringBuffer completeBufferedInformation = new StringBuffer();
-				StringTokenizer tokens = new StringTokenizer(information,":");
-				String[] tokenedString = new String[tokens.countTokens()];
-				int r = 0;
-				while(tokens.hasMoreTokens()){
-					tokenedString[r]=tokens.nextToken();
-					r++;
-				}
-				for(int i = 0;i<tokenedString.length;i++){
-					if(tokenedString[i].matches("PlayerName")){
+
+				for(int i = 0;i<tokenedInformation.length;i++){
+					if(tokenedInformation[i].matches("PlayerName")){
 						completeBufferedInformation.append(playerName);
 
 					}
-					else if(tokenedString[i].matches("EinzahlGeschlecht")){
+					else if(tokenedInformation[i].matches("EinzahlGeschlecht")){
 						if(isFemale){
 							completeBufferedInformation.append("sie");
 						}
@@ -71,7 +51,7 @@ public class Player {
 							completeBufferedInformation.append("er");
 						}
 					}
-					else if(tokenedString[i].matches("MehrzahlGeschlecht")){
+					else if(tokenedInformation[i].matches("MehrzahlGeschlecht")){
 						if(isFemale){
 							completeBufferedInformation.append("ihrer");
 						}
@@ -79,7 +59,7 @@ public class Player {
 							completeBufferedInformation.append("seiner");
 						}
 					}
-					else if(tokenedString[i].matches("AnzahlSchlucke")){
+					else if(tokenedInformation[i].matches("AnzahlSchlucke")){
 						int anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
 						while(anzahlSchlucke==0){
 							anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
@@ -87,17 +67,14 @@ public class Player {
 						completeBufferedInformation.append(anzahlSchlucke);
 					}
 					else{
-						completeBufferedInformation.append(tokenedString[i]);
+						completeBufferedInformation.append(tokenedInformation[i]);
 					}
 				}
 				completeInformation=completeBufferedInformation.toString();
 				prevLocation=location;
 			}
 		}
-
-
-        int h = textRect.prepare(completeInformation,(int)location.coordinates.width()-112,(int)location.coordinates.height()-62);
-        textRect.draw(canvas,(int)baseX,(int)baseY);
+		location.renderText(canvas,completeInformation);
 
 	}
 
