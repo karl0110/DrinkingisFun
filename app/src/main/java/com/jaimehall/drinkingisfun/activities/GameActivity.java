@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.AttributeSet;
 import android.view.Display;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.minigames.MiniGameHandler;
 
@@ -35,6 +37,7 @@ public class GameActivity extends Activity {
     @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent intent = getIntent();
 
 
@@ -48,7 +51,7 @@ public class GameActivity extends Activity {
         ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
         boolean[] playerSexes = intent.getBooleanArrayExtra("playerSexes");
 
-        game = new Game(this,playerNames,playerSexes,width,height);
+        game = new Game(this , playerNames, playerSexes, height, width);
         setContentView(game);
 
         game.setOnTouchListener(new View.OnTouchListener() {
@@ -61,6 +64,7 @@ public class GameActivity extends Activity {
             }
         );
         game.setSystemUiVisibility(uiOptions);
+
         setScreenOrientationLandscape();
 
 

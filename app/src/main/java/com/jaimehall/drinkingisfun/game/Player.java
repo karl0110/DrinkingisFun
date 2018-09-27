@@ -17,7 +17,7 @@ public class Player {
 	private String completeInformation;
 	private String playerName;
 	private boolean isFemale;
-	private float baseX,baseY;
+	private long score = 0;
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
 		this.location=location;
@@ -27,7 +27,7 @@ public class Player {
 
 
 
-	public void render(Canvas canvas,Game game){
+	public void render(Canvas canvas){
 		if(location.isMiniGame){
 			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
 		}

@@ -20,10 +20,11 @@ public class ExBeerMiniGame extends MiniGame {
     private float height;
 
 
-    private double amountOfSeconds =5;
+    private double amountOfMilliSeconds =5000;
     private int bottleFillStep= 9;
     private int tapCounter = 0;
-    private double timer= 0;
+    private long timer;
+    private long startTime;
 
     private Rect buttonRect;
     private Bitmap button;
@@ -88,8 +89,8 @@ public class ExBeerMiniGame extends MiniGame {
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(tutorialFinished == false && tickCounter>=20){
-            tutorialFinished=true;
+        if(tutorialFinished == false && tickCounter>=60){
+            tutorialFinished();
         }
         else {
             if (buttonRect.contains(touchPoint)) {
@@ -103,16 +104,20 @@ public class ExBeerMiniGame extends MiniGame {
         }
     }
 
+    public void tutorialFinished(){
+        startTime = System.currentTimeMillis();
+        tutorialFinished=true;
 
+    }
 
     public void tick(){
         if(!tutorialFinished)tickCounter++;
         if(tutorialFinished){
-            timer+=0.0333333333;
-            double displayTimer = Math.round((amountOfSeconds-timer)*10);
-            timerString = "Time left: "+displayTimer/10+" s";
+            timer = System.currentTimeMillis() - startTime;
+            double displayTimer = Math.round((amountOfMilliSeconds-timer)*10);
+            timerString = "Time left: "+displayTimer/10000+" s";
         }
-        if(timer>=amountOfSeconds || bottleFillStep == 0){
+        if(timer>=amountOfMilliSeconds || bottleFillStep == 0){
             if(bottleFillStep > 5){
                 game.finishMiniGame(0);
             }

@@ -1,2 +1,4 @@
 PlayerName:, du darfst :AnzahlSchlucke: Schlucke trinken.:
 PlayerName:, mache einen Witz, wenn jemand Lacht darfst du :AnzahlSchlucke: Schlucke trinken:
+PlayerName:, falls du ein Brillenträger bist, darfst du :AnzahlSchlucke: Schlucke trinken.
+PlayerName:, falls du mit Öffis gekommen bist, trink :AnzahlSchlucke: Schlucke. Langweiler!

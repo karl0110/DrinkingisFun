@@ -40,6 +40,10 @@ public class PongMiniGame extends MiniGame {
         }
     }
 
+    public void tutorialFinished(){
+
+    }
+
     @Override
     public void reset() {
         pongBall = new PongBall(this,width/2,height/2,height/64,15,-15,0.1f,false);
@@ -92,7 +96,7 @@ public class PongMiniGame extends MiniGame {
             playerPaddle.touched(motionEvent);
         }
        if(!tutorialFinished && tickCounter>50){
-            tutorialFinished=true;
+           tutorialFinished=true;
         }
     }
 

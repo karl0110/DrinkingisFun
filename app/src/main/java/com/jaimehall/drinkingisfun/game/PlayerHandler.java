@@ -32,8 +32,8 @@ public class PlayerHandler {
 	}
 	
 
-	public void render(Canvas canvas,Game game) {
-		currentPlayer.render(canvas,game);
+	public void render(Canvas canvas) {
+		currentPlayer.render(canvas);
 	}
 
 

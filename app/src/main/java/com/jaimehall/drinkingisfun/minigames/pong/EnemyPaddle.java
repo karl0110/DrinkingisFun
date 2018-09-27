@@ -32,10 +32,10 @@ public class EnemyPaddle extends Paddle {
        }
 
         if(targetX > x){
-            xAcc = +8;
+            xAcc = +10;
         }
         else if(targetX < x){
-            xAcc =-8;
+            xAcc =-10;
         }
         else{
             xAcc = 0;
