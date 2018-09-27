@@ -131,6 +131,7 @@ public class Camera implements Runnable {
     }
 
     private void tick(){
+        playerHandler.tick();
 
         if (touchTimer > 0) touchTimer--;
 
@@ -235,6 +236,7 @@ public class Camera implements Runnable {
         focusedScaleY = height / focusedTileHeight;
 
         zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
+
     }
 
     public void prepareZoomEvent(){

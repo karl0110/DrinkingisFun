@@ -47,6 +47,7 @@ public class Renderer implements Runnable {
                 if(camera.getCameraState() == Camera.CameraState.FOCUSED){
                     map.render(canvas, camera.getCurrentFocusedTile());
 
+                    camera.getCurrentFocusedTile().renderText(canvas,playerHandler.getCurrentPlayer());
                     playerHandler.render(canvas);
 
                     canvas.drawBitmap(game.getZoomButtonZoomedIn(), null, camera.getZoomButtonRenderingRect(), null);

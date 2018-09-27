@@ -12,7 +12,7 @@ import com.jaimehall.drinkingisfun.helpers.TextRect;
 
 public abstract class Tile {
 
-    protected RectF coordinates;
+    protected float width,height;
     protected float x,y;
     protected Bitmap image;
     protected Map map;
@@ -23,8 +23,9 @@ public abstract class Tile {
     protected int textRectPrep;
     protected float baseX,baseY;
 
-    public Tile(RectF coordinates,float x,float y,Bitmap image,Map map,int tileDifficulty){
-        this.coordinates=coordinates;
+    public Tile(float x,float y,float width,float height,Bitmap image,Map map,int tileDifficulty){
+        this.width=width;
+        this.height=height;
         this.x=x;
         this.y=y;
         this.image=image;
@@ -34,8 +35,8 @@ public abstract class Tile {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
-        paint.getFontMetrics();
-        paint.setTextSize(30);
+        paint.setFakeBoldText(true);
+        paint.setTextSize(25);
         paint.setAntiAlias(true);
         paint.setTextAlign(Paint.Align.CENTER);
 
@@ -43,17 +44,19 @@ public abstract class Tile {
     }
 
     public void render(Canvas canvas){
-        canvas.drawBitmap(image,null,coordinates,null);
+        canvas.drawBitmap(image,null,getCoordinates(),null);
     }
 
-    public void renderText(Canvas canvas,String completeInformation){
-        if(textRectPrep !=textRect.prepare(completeInformation,(int)(coordinates.width()-((coordinates.width()/32)*6)),(int)(coordinates.height()-((coordinates.height()/32)*12)))){
-            baseX = x+(coordinates.width()/2);
-            baseY = y+((coordinates.height()/32)*3);
-            textRectPrep = textRect.prepare(completeInformation,(int)(coordinates.width()-((coordinates.width()/32)*6)),(int)(coordinates.height()-((coordinates.height()/32)*12)));
-        }
+    public void renderText(Canvas canvas,Player currentFocusedPlayer){
+        if(currentFocusedPlayer.getCompleteInformation() != null) {
+            if (textRectPrep != textRect.prepare(currentFocusedPlayer.getCompleteInformation(), (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)))) {
+                baseX = x + (width / 2);
+                baseY = y + ((height / 32) * 3);
+                textRectPrep = textRect.prepare(currentFocusedPlayer.getCompleteInformation(), (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)));
+            }
 
-        textRect.draw(canvas,(int)baseX,(int)baseY);
+            textRect.draw(canvas, (int) baseX, (int) baseY);
+        }
     }
 
     public abstract Tile getNextTile();
@@ -62,16 +65,8 @@ public abstract class Tile {
 
     public abstract int getTileDifficulty() ;
 
-    public Rect getRectCoordinates(){
-        return new Rect((int)x,(int)y,(int)coordinates.width(),(int)coordinates.height());
-    }
-
-    public RectF getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(RectF coordinates) {
-        this.coordinates = coordinates;
+    public Rect getCoordinates(){
+        return new Rect((int)x,(int)y,(int)(x+width),(int)(y+height));
     }
 
 
@@ -107,5 +102,11 @@ public abstract class Tile {
         isMiniGame = miniGame;
     }
 
+    public float getWidth() {
+        return width;
+    }
 
+    public float getHeight() {
+        return height;
+    }
 }

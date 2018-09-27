@@ -12,7 +12,7 @@ public class MiniGameTile extends Tile {
     private Tile nextHarderTile;
 
     public MiniGameTile(float x, float y, float width , float height, Bitmap image, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
-        super(new RectF(x,y,x+width,y+height),x,y,image,map,tileDifficulty);
+        super(x,y,width,height,image,map,tileDifficulty);
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
         nextPossibleTiles = new Tile[coordinatesOfNextTiles.length];
         isMiniGame = true;

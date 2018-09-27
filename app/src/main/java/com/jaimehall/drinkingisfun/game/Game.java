@@ -48,12 +48,14 @@ public class Game extends SurfaceView {
         Map map = new Map(this);
         gameState = State.MAINGAME;
         playerHandler = new PlayerHandler();
-
-        miniGameHandler = new MiniGameHandler(this, height, width);
-
         for (int i = 0; i < playerNames.size(); i++) {
             playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i]));
         }
+        playerHandler.currentPlayerChanged();
+
+        miniGameHandler = new MiniGameHandler(this, height, width);
+
+
         zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
         zoomButtonZoomedIn = BitmapFactory.decodeResource(getResources(), R.drawable.minuslupe);
         zoomButtonZoomedOut = BitmapFactory.decodeResource(getResources(), R.drawable.pluslupe);

@@ -1,8 +1,10 @@
 package com.jaimehall.drinkingisfun.game;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import com.jaimehall.drinkingisfun.activities.GameActivity;
 import com.jaimehall.drinkingisfun.helpers.TextRect;
@@ -18,25 +20,34 @@ public class Player {
 	private String playerName;
 	private boolean isFemale;
 	private long score = 0;
+	private Bitmap image;
+	private Rect coordinates;
+	private Paint tempPaint;
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
+		this.image=image;
+
+		tempPaint = new Paint();
+		tempPaint.setStyle(Paint.Style.FILL);
+		tempPaint.setColor(Color.BLACK);
 	}
 
 
 
 	public void render(Canvas canvas){
-		if(location.isMiniGame){
-			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
-		}
-		else{
+		canvas.drawRect(coordinates,tempPaint);
 
+	}
+
+	public void tick(){
+		if(!location.isMiniGame){
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
 				String[] tokenedInformation = normalLocation.getRandomInformation();
-				StringBuffer completeBufferedInformation = new StringBuffer();
+				StringBuilder completeBufferedInformation = new StringBuilder();
 
 				for(int i = 0;i<tokenedInformation.length;i++){
 					if(tokenedInformation[i].matches("PlayerName")){
@@ -64,7 +75,13 @@ public class Player {
 						while(anzahlSchlucke==0){
 							anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
 						}
-						completeBufferedInformation.append(anzahlSchlucke);
+						if(anzahlSchlucke != 1){
+                            completeBufferedInformation.append(anzahlSchlucke+ " Schlucke");
+                        }
+                        else{
+                            completeBufferedInformation.append(anzahlSchlucke+ " Schluck");
+                        }
+
 					}
 					else{
 						completeBufferedInformation.append(tokenedInformation[i]);
@@ -74,8 +91,11 @@ public class Player {
 				prevLocation=location;
 			}
 		}
-		location.renderText(canvas,completeInformation);
+		else{
 
+			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
+
+		}
 	}
 
 
@@ -94,6 +114,14 @@ public class Player {
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
-	
-	
+
+	public String getCompleteInformation() {
+		return completeInformation;
+	}
+
+	public void setCoordinates(Rect coordinates) {
+	    int amount = (coordinates.width()/16)*7;
+	    Rect rect = new Rect(coordinates.centerX()-amount,coordinates.centerY()-amount,coordinates.centerX()+amount,coordinates.centerY()+amount);
+		this.coordinates = rect;
+	}
 }
