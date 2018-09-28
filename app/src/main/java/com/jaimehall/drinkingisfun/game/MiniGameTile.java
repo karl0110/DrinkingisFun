@@ -11,8 +11,8 @@ public class MiniGameTile extends Tile {
     private Tile nextTile;
     private Tile nextHarderTile;
 
-    public MiniGameTile(float x, float y, float width , float height, Bitmap image, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
-        super(x,y,width,height,image,map,tileDifficulty);
+    public MiniGameTile(float x, float y, float width , float height, Bitmap border,Bitmap background, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
+        super(x,y,width,height,border,background,map,tileDifficulty);
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
         nextPossibleTiles = new Tile[coordinatesOfNextTiles.length];
         isMiniGame = true;

@@ -32,9 +32,6 @@ public class ExBeerMiniGame extends MiniGame {
     private Bitmap[] bottle;
     private Rect imageRect;
 
-    private Rect tutorialRect;
-    private Bitmap tutorial;
-    private Paint tutorialPaint;
 
     private String timerString= "";
     private Paint timerTextPaint;
@@ -69,8 +66,6 @@ public class ExBeerMiniGame extends MiniGame {
         timerTextPaint.setTextAlign(Paint.Align.CENTER);
         timerTextPaint.setTextSize(140);
 
-        tutorialPaint = new Paint();
-        tutorialPaint.setAlpha(180);
 
     }
 

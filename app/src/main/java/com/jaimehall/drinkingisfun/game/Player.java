@@ -120,7 +120,7 @@ public class Player {
 	}
 
 	public void setCoordinates(Rect coordinates) {
-	    int amount = (coordinates.width()/16)*7;
+	    int amount = (coordinates.width()/16)*5;
 	    Rect rect = new Rect(coordinates.centerX()-amount,coordinates.centerY()-amount,coordinates.centerX()+amount,coordinates.centerY()+amount);
 		this.coordinates = rect;
 	}

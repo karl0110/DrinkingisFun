@@ -1,7 +1,10 @@
 package com.jaimehall.drinkingisfun.minigames;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 
 import com.jaimehall.drinkingisfun.game.Game;
@@ -13,9 +16,18 @@ public abstract class MiniGame {
     protected boolean tutorialFinished =false;
     protected int tickCounter = 0;
 
+    protected Rect tutorialRect;
+    protected Bitmap tutorial;
+    protected Paint tutorialPaint;
+
     public MiniGame(Game game){
         this.game=game;
+        this.tutorial=tutorial;
         resources = game.getResources();
+
+
+        tutorialPaint = new Paint();
+        tutorialPaint.setAlpha(180);
     }
 
     public abstract void render(Canvas canvas);

@@ -1,10 +1,13 @@
 package com.jaimehall.drinkingisfun.minigames.pong;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.minigames.MiniGame;
 
@@ -26,17 +29,20 @@ public class PongMiniGame extends MiniGame {
         ghostPongBall = new PongBall(this,width/2,height/2,30,30,-30,0.1f,true);
         enemyPaddle=new EnemyPaddle(this,(width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
+
+        tutorialRect = new Rect(0,0,(int)width,(int)height);
+        tutorial=BitmapFactory.decodeResource(resources,R.drawable.pongtutorial);
     }
 
     public void gameOver(){
-        if(timer > 0){
-            game.finishMiniGame(0);
+        if(timer >=10){
+            game.finishMiniGame(2);
         }
         else if(timer >5){
             game.finishMiniGame(1);
         }
-        else if(timer >=10){
-            game.finishMiniGame(2);
+        else if(timer >0){
+            game.finishMiniGame(0);
         }
     }
 
@@ -74,6 +80,9 @@ public class PongMiniGame extends MiniGame {
         pongBall.render(canvas);
         enemyPaddle.render(canvas);
         playerPaddle.render(canvas);
+        if(!tutorialFinished){
+            canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
+        }
     }
 
     @Override

@@ -62,15 +62,11 @@ public class Camera implements Runnable {
 
         cameraState = CameraState.FOCUSED;
 
-        currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
+        zoomButtonRenderingRect= new Rect();
+        currentFocusedTileChanged();
 
-        focusedTileWidth = currentFocusedTile.getCoordinates().width();
-        focusedTileHeight = currentFocusedTile.getCoordinates().height();
+        maxZoom =height/(focusedTileHeight *5);
 
-        focusedScaleX = width / focusedTileWidth;
-        focusedScaleY = height / focusedTileHeight;
-
-        maxZoom = height / (focusedTileHeight * 6);
 
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
         zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
@@ -78,8 +74,6 @@ public class Camera implements Runnable {
         xZoomTranslateVariable = ((focusedTileWidth / 2) * focusedScaleX);
         yZoomTranslateVariable = ((focusedTileHeight / 2) * focusedScaleY);
 
-
-        zoomButtonRenderingRect = new Rect((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
     }
 
     public void run(){
@@ -178,6 +172,7 @@ public class Camera implements Runnable {
 
                 frameZoomEvent++;
             } else {
+                zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
                 cameraState = CameraState.FOCUSED;
             }
         }
@@ -229,8 +224,8 @@ public class Camera implements Runnable {
         currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
         nextFocusedTile = playerHandler.getNextPlayer().getLocation();
 
-        focusedTileWidth = currentFocusedTile.getCoordinates().width();
-        focusedTileHeight = currentFocusedTile.getCoordinates().height();
+        focusedTileWidth = currentFocusedTile.getWidth();
+        focusedTileHeight = currentFocusedTile.getHeight();
 
         focusedScaleX = width / focusedTileWidth;
         focusedScaleY = height / focusedTileHeight;
@@ -245,7 +240,7 @@ public class Camera implements Runnable {
         if(cameraState == CameraState.FOCUSED){
             float startXFocusChange = currentFocusedTile.getX();
             float startYFocusChange = currentFocusedTile.getY();
-            float targetXFocusChange = 0;
+            float targetXFocusChange = currentFocusedTile.getX()/2;
             float targetYFocusChange = 0;
             zoomFactorXFocusChange = focusedScaleX;
             zoomFactorYFocusChange = focusedScaleY;
@@ -259,7 +254,7 @@ public class Camera implements Runnable {
             cameraState = CameraState.ZOOMINGOUT;
         }
         if (cameraState == CameraState.ZOOMEDOUT){
-            float startXFocusChange = 0;
+            float startXFocusChange = translateX;
             float startYFocusChange = 0;
             float targetXFocusChange = currentFocusedTile.getX();
             float targetYFocusChange = currentFocusedTile.getY();

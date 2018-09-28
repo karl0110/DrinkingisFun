@@ -12,8 +12,8 @@ public class NormalTile extends Tile {
     private Tile nextTile;
     private String[][] information;
 
-    public NormalTile(float x,float y, float width, float height,Bitmap image, Map map,int xPosOfNextTile,int yPosOfNextTile, String[][] information,int tileDifficulty){
-        super(x,y,width,height,image,map,tileDifficulty);
+    public NormalTile(float x,float y, float width, float height,Bitmap border,Bitmap background, Map map,int xPosOfNextTile,int yPosOfNextTile, String[][] information,int tileDifficulty){
+        super(x,y,width,height,border,background,map,tileDifficulty);
         this.xPosOfNextTile=xPosOfNextTile;
         this.yPosOfNextTile=yPosOfNextTile;
         isMiniGame=false;

@@ -38,17 +38,19 @@ public class PlayerHandler {
 	    playersOnCurrentTile.clear();
 
 		Tile currentTile = currentPlayer.getLocation();
-		float baseX = currentTile.getX()+((currentTile.getWidth()/32)*3);
-		float baseY = currentTile.getY()+((currentTile.getHeight()/16)*10);
 		for(int i =0;i<players.size();i++){
 			Player tempPlayer = players.get(i);
 			if(currentTile == tempPlayer.getLocation()){
 				playersOnCurrentTile.add(tempPlayer);
 			}
 		}
+
+		float baseX = currentTile.getX()+((currentTile.getWidth()/32)*3);
+		float baseY = currentTile.getY()+((currentTile.getHeight()/32)*23);
+
 		for(int i=0;i<playersOnCurrentTile.size();i++){
 			float x =baseX+(i*((currentTile.getWidth()/16)*3));
-			Rect rect = new Rect((int)x,(int)baseY,(int)(x+((currentTile.getWidth()/16)*3)),(int)(baseY+((currentTile.getWidth()/16)*3)));
+			Rect rect = new Rect((int)x,(int)baseY,(int)(x+((currentTile.getWidth()/16)*3)),(int)(baseY+((currentTile.getHeight()/16)*3)));
 			playersOnCurrentTile.get(i).setCoordinates(rect);
 		}
 

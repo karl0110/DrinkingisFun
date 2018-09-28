@@ -3,6 +3,7 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -23,12 +24,12 @@ public abstract class Tile {
     protected int textRectPrep;
     protected float baseX,baseY;
 
-    public Tile(float x,float y,float width,float height,Bitmap image,Map map,int tileDifficulty){
+    public Tile(float x,float y,float width,float height,Bitmap border,Bitmap background,Map map,int tileDifficulty){
         this.width=width;
         this.height=height;
         this.x=x;
         this.y=y;
-        this.image=image;
+        this.image=combineTwoBitmaps(background,border);
         this.map=map;
         this.tileDifficulty=tileDifficulty;
 
@@ -57,6 +58,14 @@ public abstract class Tile {
 
             textRect.draw(canvas, (int) baseX, (int) baseY);
         }
+    }
+
+    private Bitmap combineTwoBitmaps(Bitmap bmp1,Bitmap bmp2){
+        Bitmap bitmapOverlay = Bitmap.createBitmap(bmp1.getWidth(),bmp1.getHeight(),bmp1.getConfig());
+        Canvas canvas = new Canvas(bitmapOverlay);
+        canvas.drawBitmap(bmp1,new Matrix(),null);
+        canvas.drawBitmap(bmp2,0,0,null);
+        return bitmapOverlay;
     }
 
     public abstract Tile getNextTile();
