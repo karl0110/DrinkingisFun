@@ -26,10 +26,9 @@ public class Game extends SurfaceView {
 
     private Context context;
 
-    private Rect zoomButtonRect;
 
-    private Bitmap zoomButtonZoomedOut;
-    private Bitmap zoomButtonZoomedIn;
+    private Rect playerIconTouchRect;
+    private Rect zoomButtonRect;
 
     private PlayerHandler playerHandler;
     private MiniGameHandler miniGameHandler;
@@ -47,7 +46,7 @@ public class Game extends SurfaceView {
         this.context = context;
         Map map = new Map(this);
         gameState = State.MAINGAME;
-        playerHandler = new PlayerHandler();
+        playerHandler = new PlayerHandler(width,height);
         for (int i = 0; i < playerNames.size(); i++) {
             playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i]));
         }
@@ -55,10 +54,9 @@ public class Game extends SurfaceView {
 
         miniGameHandler = new MiniGameHandler(this, height, width);
 
+        playerIconTouchRect = new  Rect((int) ((width / 8)*7), 0, (int) width, ((int) (height / 8)));
 
         zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
-        zoomButtonZoomedIn = BitmapFactory.decodeResource(getResources(), R.drawable.minuslupe);
-        zoomButtonZoomedOut = BitmapFactory.decodeResource(getResources(), R.drawable.pluslupe);
 
         camera = new Camera(this,playerHandler,width,height);
         renderer = new Renderer(this,getHolder(),map,playerHandler,camera,miniGameHandler);
@@ -81,14 +79,15 @@ public class Game extends SurfaceView {
         camera.setTouchTimer(30);
         switch (tempTile.getTileDifficulty()) {
             case 0:
+                tempPlayer.addToScore(134);
                 if (score == 0) {
-
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
                     tempPlayer.setLocation(tempTile.getNextHarderTile());
                 }
                 break;
             case 1:
+                tempPlayer.addToScore(309);
                 if (score == 0) {
                     tempPlayer.setLocation(tempTile.getNextEasierTile());
                 } else if (score == 2) {
@@ -98,6 +97,7 @@ public class Game extends SurfaceView {
                 }
                 break;
             case 2:
+                tempPlayer.addToScore(489);
                 if (score == 2) {
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
@@ -117,9 +117,18 @@ public class Game extends SurfaceView {
 
     public void progress(MotionEvent motionEvent) {
         if (gameState == State.MAINGAME) {
-            Rect touchPoint = new Rect((int) motionEvent.getX() - 5, (int) motionEvent.getY() - 5, (int) motionEvent.getX() + 5, (int) motionEvent.getY() + 5);
-            if (zoomButtonRect.contains(touchPoint)) {
+            Rect touchPoint = new Rect((int) motionEvent.getX() - 1, (int) motionEvent.getY() - 1, (int) motionEvent.getX() + 1, (int) motionEvent.getY() + 1);
+            if (Rect.intersects(touchPoint,zoomButtonRect)) {
                 camera.prepareZoomEvent();
+            }
+            else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                if(playerHandler.isDetailedPlayerInfo()){
+                    playerHandler.setDetailedPlayerInfo(false);
+                }
+                else{
+                    playerHandler.setDetailedPlayerInfo(true);
+                }
+
             }
             else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
                 switch (motionEvent.getAction()) {
@@ -142,10 +151,17 @@ public class Game extends SurfaceView {
                 }
             } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
                 if (camera.getTouchTimer() == 0) {
-                    if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
-                        startMiniGame();
-                    } else {
-                        camera.prepareFocusChange();
+                    if(!playerHandler.isDetailedPlayerInfo()) {
+
+                            if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
+                                startMiniGame();
+                            } else {
+                                camera.prepareFocusChange();
+                            }
+
+                    }
+                    else{
+                        playerHandler.touched(touchPoint);
                     }
                     camera.setTouchTimer(30);
                 }
@@ -169,14 +185,6 @@ public class Game extends SurfaceView {
         miniGameHandler.resume();
 
 
-    }
-
-    public Bitmap getZoomButtonZoomedOut() {
-        return zoomButtonZoomedOut;
-    }
-
-    public Bitmap getZoomButtonZoomedIn() {
-        return zoomButtonZoomedIn;
     }
 
     public State getGameState() {

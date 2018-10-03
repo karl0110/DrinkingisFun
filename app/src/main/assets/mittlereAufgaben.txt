@@ -1,4 +1,6 @@
-PlayerName: darf mit einer Person :MehrzahlGeschlecht: Wahl anstoßen.:
-Wenn das Glas von :PlayerName: mehr als halb voll ist, darf :EinzahlGeschlecht: :AnzahlSchlucke: trinken.:
+PlayerName: darf mit einer Person :MehrzahlGeschlecht: Wahl anstoßen.
+Wenn das Glas von :PlayerName: mehr als halb voll ist, darf :EinzahlGeschlecht: :AnzahlSchlucke: trinken.
 PlayerName:, falls du mit Fahrrad gekommen bist, trink :AnzahlSchlucke:. Schon besser.
-:PlayerName:, wenn du ein Kiffer bist, proste mit einer Person deiner Wahl.
+PlayerName:, wenn du kiffst, proste mit einer Person deiner Wahl.
+PlayerName:, falls du kein Sterni trinkst, MUSST du :AnzahlSchlucke: trinken.
+PlayerName:, falls du Techno feierst, darfst du :AnzahlSchlucke: trinken.

@@ -2,3 +2,5 @@ Wann auch immer :PlayerName: will, kann :EinzahlGeschlecht: insgesamt :AnzahlSch
 PlayerName:, du bist jetzt Questionaire. Wenn jemand eine Frage von dir beantwortet (Bis zu 3 mal), darfst du bis zu :AnzahlSchlucke: an die Person verteilen.:
 PlayerName:, falls du mit Auto gekommen bist, trink :AnzahlSchlucke:. Mutig!
 PlayerName:, trink so viel wie du willst, wenn du schon mal ja zu Bierball gesagt hast, obwohl du nichts mehr hättest trinken sollen.
+PlayerName:, verteile :AnzahlSchlucke: an die Person, die deiner Meinung am meisten verträgt.
+PlayerName:, falls du Goa feierst, darfst du :AnzahlSchlucke: trinken.

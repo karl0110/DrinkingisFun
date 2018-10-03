@@ -1,10 +1,14 @@
 package com.jaimehall.drinkingisfun.helpers;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.SurfaceHolder;
 
+import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.game.Map;
 import com.jaimehall.drinkingisfun.game.PlayerHandler;
@@ -22,6 +26,12 @@ public class Renderer implements Runnable {
     private Camera camera;
     private MiniGameHandler miniGameHandler;
 
+    private Bitmap zoomButtonZoomedOut;
+    private Bitmap zoomButtonZoomedIn;
+
+    private Bitmap showPlayers;
+    private Bitmap hidePlayers;
+
     public Renderer(Game game,SurfaceHolder surfaceHolder, Map map, PlayerHandler playerHandler,Camera camera,MiniGameHandler miniGameHandler){
         this.game=game;
         this.surfaceHolder = surfaceHolder;
@@ -29,6 +39,14 @@ public class Renderer implements Runnable {
         this.playerHandler=playerHandler;
         this.camera=camera;
         this.miniGameHandler = miniGameHandler;
+
+        Resources resources = game.getResources();
+
+        showPlayers = BitmapFactory.decodeResource(resources, R.drawable.spieleranzeigen);
+        hidePlayers = BitmapFactory.decodeResource(resources, R.drawable.spielerverstecken);
+
+        zoomButtonZoomedIn = BitmapFactory.decodeResource(resources, R.drawable.minuslupe);
+        zoomButtonZoomedOut = BitmapFactory.decodeResource(resources, R.drawable.pluslupe);
     }
 
     private void render(){
@@ -50,15 +68,25 @@ public class Renderer implements Runnable {
                     camera.getCurrentFocusedTile().renderText(canvas,playerHandler.getCurrentPlayer());
                     playerHandler.render(canvas);
 
-                    canvas.drawBitmap(game.getZoomButtonZoomedIn(), null, camera.getZoomButtonRenderingRect(), null);
+                    canvas.drawBitmap(zoomButtonZoomedIn, null, camera.getZoomButtonRenderingRect(), null);
+                    if(playerHandler.isDetailedPlayerInfo()){
+                        canvas.drawBitmap(hidePlayers,null,camera.getPlayerIconRenderingRect(),null);
+                    }
+                    else{
+                        canvas.drawBitmap(showPlayers,null,camera.getPlayerIconRenderingRect(),null);
+                    }
+
 
                 }
-                else {
+                else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
                     map.render(canvas);
-                }
+                    playerHandler.render(canvas);
 
-                if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
-                    canvas.drawBitmap(game.getZoomButtonZoomedOut(), null, camera.getZoomButtonRenderingRect(), null);
+                    canvas.drawBitmap(zoomButtonZoomedOut, null, camera.getZoomButtonRenderingRect(), null);
+                }
+                else{
+                    map.render(canvas);
+                    playerHandler.render(canvas);
                 }
 
             } else if (game.getGameState() == Game.State.MINIGAME) {

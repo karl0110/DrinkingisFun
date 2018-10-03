@@ -22,7 +22,11 @@ public class Player {
 	private long score = 0;
 	private Bitmap image;
 	private Rect coordinates;
-	private Paint tempPaint;
+    private Paint iconPaint;
+	private Rect detailCoordinates;
+	private Paint detailedPaint;
+	private Paint backgroundPaint;
+
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
 		this.location=location;
@@ -30,15 +34,39 @@ public class Player {
 		this.isFemale=isFemale;
 		this.image=image;
 
-		tempPaint = new Paint();
-		tempPaint.setStyle(Paint.Style.FILL);
-		tempPaint.setColor(Color.BLACK);
+		detailCoordinates=new Rect();
+
+		int r = (int)(Math.random()*255);
+        int g = (int)(Math.random()*255);
+        int b = (int)(Math.random()*255);
+
+        iconPaint = new Paint();
+        iconPaint.setStyle(Paint.Style.FILL);
+        iconPaint.setARGB(255,r,g,b);
+
+        detailedPaint = new Paint();
+        detailedPaint.setColor(Color.BLACK);
+        detailedPaint.setFakeBoldText(true);
+        detailedPaint.setTextAlign(Paint.Align.LEFT);
+        detailedPaint.setTextSize(40);
+
+        backgroundPaint = new Paint();
+        backgroundPaint.setStyle(Paint.Style.FILL);
+        backgroundPaint.setColor(Color.WHITE);
+        backgroundPaint.setAlpha(150);
 	}
 
 
+	public void renderDetails(Canvas canvas){
+	    canvas.drawRect(detailCoordinates,backgroundPaint);
+        canvas.drawRect(detailCoordinates.left,detailCoordinates.top,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.bottom,iconPaint);
+        canvas.drawText(playerName,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/8,detailedPaint);
+        canvas.drawText("Score:",detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/2,detailedPaint);
+        canvas.drawText(""+Math.round(score),detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+((detailCoordinates.height()/4)*3),detailedPaint);
+    }
 
 	public void render(Canvas canvas){
-		canvas.drawRect(coordinates,tempPaint);
+		canvas.drawRect(coordinates,iconPaint);
 
 	}
 
@@ -107,21 +135,21 @@ public class Player {
 		this.location = location;
 	}
 
-	public String getPlayerName() {
-		return playerName;
-	}
-
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
-
 	public String getCompleteInformation() {
 		return completeInformation;
 	}
 
 	public void setCoordinates(Rect coordinates) {
-	    int amount = (coordinates.width()/16)*5;
-	    Rect rect = new Rect(coordinates.centerX()-amount,coordinates.centerY()-amount,coordinates.centerX()+amount,coordinates.centerY()+amount);
-		this.coordinates = rect;
+		this.coordinates = coordinates;
+		detailCoordinates.set(new Rect((int)(location.getX()+((location.getWidth()/32)*3)),(int)(location.getY()+((location.getHeight()/32)*3)),(int)(location.getX()+((location.getWidth()/32)*29)),(int)(location.getY()+(location.getHeight()/32)*29)));
 	}
+
+    public Rect getCoordinates() {
+        return coordinates;
+    }
+
+    public void addToScore(double scoreAdd){
+	    score+=scoreAdd;
+    }
+
 }

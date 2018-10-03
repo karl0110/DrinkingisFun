@@ -22,6 +22,7 @@ public class Camera implements Runnable {
     private int touchTimer;
 
     private Rect zoomButtonRenderingRect;
+    private Rect playerIconRenderingRect;
 
     private double zoomFactorXFocusChange = 1.0;
     private double zoomFactorXStepFocusChange;
@@ -62,6 +63,7 @@ public class Camera implements Runnable {
 
         cameraState = CameraState.FOCUSED;
 
+        playerIconRenderingRect = new Rect();
         zoomButtonRenderingRect= new Rect();
         currentFocusedTileChanged();
 
@@ -172,7 +174,7 @@ public class Camera implements Runnable {
 
                 frameZoomEvent++;
             } else {
-                zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
+                currentFocusedTileChanged();
                 cameraState = CameraState.FOCUSED;
             }
         }
@@ -231,6 +233,8 @@ public class Camera implements Runnable {
         focusedScaleY = height / focusedTileHeight;
 
         zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
+        playerIconRenderingRect.set((int) (currentFocusedTile.getX() + ((focusedTileWidth / 16)*15)), (int) (currentFocusedTile.getY()), (int) focusedTileWidth, (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
+
 
     }
 
@@ -242,8 +246,8 @@ public class Camera implements Runnable {
             float startYFocusChange = currentFocusedTile.getY();
             float targetXFocusChange = currentFocusedTile.getX()/2;
             float targetYFocusChange = 0;
-            zoomFactorXFocusChange = focusedScaleX;
-            zoomFactorYFocusChange = focusedScaleY;
+            zoomFactorXFocusChange = scaleX;
+            zoomFactorYFocusChange = scaleY;
 
             actualXFocusChange = startXFocusChange;
             actualYFocusChange = startYFocusChange;
@@ -334,6 +338,10 @@ public class Camera implements Runnable {
         return zoomButtonRenderingRect;
     }
 
+    public Rect getPlayerIconRenderingRect() {
+        return playerIconRenderingRect;
+    }
+
     public void setCameraState(CameraState cameraState) {
         this.cameraState = cameraState;
     }
@@ -349,4 +357,5 @@ public class Camera implements Runnable {
     public Tile getCurrentFocusedTile() {
         return currentFocusedTile;
     }
+
 }
