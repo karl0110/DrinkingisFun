@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="586dp"
-        android:layout_height="724dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/menubackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

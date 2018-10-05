@@ -1,8 +1,12 @@
 package com.jaimehall.drinkingisfun.game;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+
+import com.jaimehall.drinkingisfun.R;
 
 import java.util.LinkedList;
 
@@ -15,17 +19,25 @@ public class PlayerHandler {
 	private Player currentPlayer;
 	private Player nextPlayer;
 	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
-	private boolean detailedPlayerInfo =false;
 	private int indexOfDetailedPlayer=0;
-	private Rect detailRight,detailLeft;
+	private Rect touchLeftRect,touchRightRect;
+	private Rect menuBackgroundRect,menuDetailRect;
+	private Bitmap playerMenuBackground;
+
+	private boolean playerChanged = true;
 	
-	public PlayerHandler(float width,float height){
-	    detailRight = new Rect((int)(width/2),0,(int)width,(int)height);
-	    detailLeft = new Rect(0,0,(int)(width/2),(int)height);
+	public PlayerHandler(Game game,float width,float height){ ;
+
+	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
+	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
+        menuBackgroundRect = new Rect(0,0,(int)width,(int)height);
+        menuDetailRect = new Rect((int)((width/32)*3),(int)((height/32)*3),(int)((width/32)*29),(int)((height/32)*29));
+
+        playerMenuBackground = BitmapFactory.decodeResource(game.getResources(),R.drawable.spielermenu);
 	}
 
 	public void touched(Rect touchPoint){
-	    if(Rect.intersects(touchPoint,detailLeft)){
+	    if(Rect.intersects(touchPoint,touchRightRect)){
 	        if(indexOfDetailedPlayer==0){
 	            indexOfDetailedPlayer=playersOnCurrentTile.size()-1;
             }
@@ -33,16 +45,13 @@ public class PlayerHandler {
 	            indexOfDetailedPlayer--;
             }
         }
-        else if(Rect.intersects(touchPoint,detailRight)){
+        else if(Rect.intersects(touchPoint,touchLeftRect)){
             if(indexOfDetailedPlayer == playersOnCurrentTile.size()-1){
                 indexOfDetailedPlayer=0;
             }
             else{
                 indexOfDetailedPlayer++;
             }
-        }
-        else{
-            detailedPlayerInfo = false;
         }
 	}
 	
@@ -64,13 +73,16 @@ public class PlayerHandler {
 
         currentPlayerChanged();
         indexOfDetailedPlayer=0;
+        playerChanged = true;
     }
 
 
 	public void currentPlayerChanged(){
+        Tile currentTile = currentPlayer.getLocation();
+
 	    playersOnCurrentTile.clear();
 
-		Tile currentTile = currentPlayer.getLocation();
+
 		for(int i =0;i<players.size();i++){
 			Player tempPlayer = players.get(i);
 			if(currentTile == tempPlayer.getLocation()){
@@ -89,16 +101,17 @@ public class PlayerHandler {
 
 	}
 
-	public void render(Canvas canvas) {
+	public void renderPlayerIcons(Canvas canvas) {
 		for(int i =0;i<playersOnCurrentTile.size();i++){
 			playersOnCurrentTile.get(i).render(canvas);
 		}
-		if(detailedPlayerInfo){
-		    playersOnCurrentTile.get(indexOfDetailedPlayer).renderDetails(canvas);
-
-        }
 
 	}
+
+	public void renderPlayerMenu(Canvas canvas){
+	    canvas.drawBitmap(playerMenuBackground,null,menuBackgroundRect,null);
+        playersOnCurrentTile.get(indexOfDetailedPlayer).renderDetails(canvas,menuDetailRect);
+    }
 
 	public void tick() {
 		currentPlayer.tick();
@@ -142,13 +155,11 @@ public class PlayerHandler {
 		this.nextPlayer = nextPlayer;
 	}
 
-    public boolean isDetailedPlayerInfo() {
-        return detailedPlayerInfo;
+    public boolean isPlayerChanged() {
+        return playerChanged;
     }
 
-    public void setDetailedPlayerInfo(boolean detailedPlayerInfo) {
-        this.detailedPlayerInfo = detailedPlayerInfo;
+    public void setPlayerChanged(boolean playerChanged) {
+        this.playerChanged = playerChanged;
     }
-
-
 }

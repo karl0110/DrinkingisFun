@@ -129,7 +129,9 @@ public class Camera implements Runnable {
     private void tick(){
         playerHandler.tick();
 
-        if (touchTimer > 0) touchTimer--;
+        if (touchTimer >= 0) {
+            touchTimer = (touchTimer-2);
+        }
 
         if(cameraState == CameraState.FOCUSED){
             scaleX = focusedScaleX;
@@ -232,8 +234,11 @@ public class Camera implements Runnable {
         focusedScaleX = width / focusedTileWidth;
         focusedScaleY = height / focusedTileHeight;
 
-        zoomButtonRenderingRect.set((int) (currentFocusedTile.getX()), (int) (currentFocusedTile.getY()), (int) (currentFocusedTile.getX() + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
-        playerIconRenderingRect.set((int) (currentFocusedTile.getX() + ((focusedTileWidth / 16)*15)), (int) (currentFocusedTile.getY()), (int) focusedTileWidth, (int) ((focusedTileHeight / 8) + currentFocusedTile.getY()));
+        float currentTileX = currentFocusedTile.getX();
+        float currentTileY = currentFocusedTile.getY();
+
+        zoomButtonRenderingRect.set((int) (currentTileX), (int) (currentTileY), (int) (currentTileX + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentTileY));
+        playerIconRenderingRect.set((int) (currentTileX + ((focusedTileWidth / 16)*15)), (int) (currentTileY), (int)( currentTileX+focusedTileWidth), (int) ((focusedTileHeight / 8) + currentTileY));
 
 
     }

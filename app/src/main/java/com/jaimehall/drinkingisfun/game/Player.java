@@ -23,9 +23,7 @@ public class Player {
 	private Bitmap image;
 	private Rect coordinates;
     private Paint iconPaint;
-	private Rect detailCoordinates;
 	private Paint detailedPaint;
-	private Paint backgroundPaint;
 
 	
 	public Player(Tile location,String playerName, Boolean isFemale){
@@ -34,7 +32,6 @@ public class Player {
 		this.isFemale=isFemale;
 		this.image=image;
 
-		detailCoordinates=new Rect();
 
 		int r = (int)(Math.random()*255);
         int g = (int)(Math.random()*255);
@@ -50,15 +47,10 @@ public class Player {
         detailedPaint.setTextAlign(Paint.Align.LEFT);
         detailedPaint.setTextSize(40);
 
-        backgroundPaint = new Paint();
-        backgroundPaint.setStyle(Paint.Style.FILL);
-        backgroundPaint.setColor(Color.WHITE);
-        backgroundPaint.setAlpha(150);
 	}
 
 
-	public void renderDetails(Canvas canvas){
-	    canvas.drawRect(detailCoordinates,backgroundPaint);
+	public void renderDetails(Canvas canvas,Rect detailCoordinates){
         canvas.drawRect(detailCoordinates.left,detailCoordinates.top,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.bottom,iconPaint);
         canvas.drawText(playerName,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/8,detailedPaint);
         canvas.drawText("Score:",detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/2,detailedPaint);
@@ -141,7 +133,7 @@ public class Player {
 
 	public void setCoordinates(Rect coordinates) {
 		this.coordinates = coordinates;
-		detailCoordinates.set(new Rect((int)(location.getX()+((location.getWidth()/32)*3)),(int)(location.getY()+((location.getHeight()/32)*3)),(int)(location.getX()+((location.getWidth()/32)*29)),(int)(location.getY()+(location.getHeight()/32)*29)));
+
 	}
 
     public Rect getCoordinates() {

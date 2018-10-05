@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 public class Game extends SurfaceView {
 
+    private float width,height;
+
     private Camera camera;
     private Renderer renderer;
 
@@ -37,16 +39,21 @@ public class Game extends SurfaceView {
     private State gameState;
 
     public enum State {
-        MAINGAME, MINIGAME
+        MAINGAME, MINIGAME, PLAYERMENU
     }
+
+
 
     public Game(Context context,  ArrayList<String> playerNames, boolean[] playerSexes, float width, float height) {
         super(context);
+        this.width=width;
+        this.height=height;
 
         this.context = context;
         Map map = new Map(this);
         gameState = State.MAINGAME;
-        playerHandler = new PlayerHandler(width,height);
+
+        playerHandler = new PlayerHandler(this,width,height);
         for (int i = 0; i < playerNames.size(); i++) {
             playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i]));
         }
@@ -116,59 +123,60 @@ public class Game extends SurfaceView {
 
 
     public void progress(MotionEvent motionEvent) {
-        if (gameState == State.MAINGAME) {
+        System.out.println("progress");
+        if (camera.getTouchTimer() <= 0) {
+            System.out.println("touch timer 0");
             Rect touchPoint = new Rect((int) motionEvent.getX() - 1, (int) motionEvent.getY() - 1, (int) motionEvent.getX() + 1, (int) motionEvent.getY() + 1);
-            if (Rect.intersects(touchPoint,zoomButtonRect)) {
-                camera.prepareZoomEvent();
-            }
-            else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
-                if(playerHandler.isDetailedPlayerInfo()){
-                    playerHandler.setDetailedPlayerInfo(false);
-                }
-                else{
-                    playerHandler.setDetailedPlayerInfo(true);
-                }
+            if (gameState == State.MAINGAME) {
+                if (Rect.intersects(touchPoint, zoomButtonRect)) {
+                    camera.prepareZoomEvent();
+                    camera.setTouchTimer(20);
+                } else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                    gameState = State.PLAYERMENU;
+                    camera.setTouchTimer(20);
 
-            }
-            else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        deltaX1 = motionEvent.getX();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        deltaX2 = motionEvent.getX();
-                        float deltaX = deltaX2 - deltaX1;
-                        if (Math.abs(deltaX) > 50) {
-                            if (deltaX2 > deltaX1) {
-                                if (camera.getTranslateX() != 0){
-                                    camera.addToTranslateX(-400);
+                } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
+                    switch (motionEvent.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            deltaX1 = motionEvent.getX();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            deltaX2 = motionEvent.getX();
+                            float deltaX = deltaX2 - deltaX1;
+                            if (Math.abs(deltaX) > 50) {
+                                if (deltaX2 > deltaX1) {
+                                    if (camera.getTranslateX() != 0) {
+                                        camera.addToTranslateX(-400);
+                                    }
+                                } else {
+                                    camera.addToTranslateX(400);
                                 }
-                            } else {
-                                camera.addToTranslateX(400);
                             }
-                        }
-                        break;
-                }
-            } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
-                if (camera.getTouchTimer() == 0) {
-                    if(!playerHandler.isDetailedPlayerInfo()) {
-
-                            if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
-                                startMiniGame();
-                            } else {
-                                camera.prepareFocusChange();
-                            }
-
+                            break;
                     }
-                    else{
-                        playerHandler.touched(touchPoint);
+                } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+
+                    if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
+                        startMiniGame();
+                        camera.setTouchTimer(20);
+                    } else {
+                        camera.prepareFocusChange();
+                        camera.setTouchTimer(20);
                     }
-                    camera.setTouchTimer(30);
+
+
                 }
+            } else if (gameState == State.MINIGAME) {
+                miniGameHandler.touched(motionEvent);
+                camera.setTouchTimer(20);
+            } else if (gameState == State.PLAYERMENU) {
+                if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                    gameState = State.MAINGAME;
+                    camera.setTouchTimer(20);
+                }
+                playerHandler.touched(touchPoint);
+
             }
-        }
-        else if (gameState == State.MINIGAME) {
-            miniGameHandler.touched(motionEvent);
         }
     }
 
@@ -191,8 +199,12 @@ public class Game extends SurfaceView {
         return gameState;
     }
 
-    public void setGameState(State gameState) {
-        this.gameState = gameState;
+    public float getScreenWidth() {
+        return width;
+    }
+
+    public float getScreenHeight() {
+        return height;
     }
 
 }

@@ -32,6 +32,7 @@ public class Renderer implements Runnable {
     private Bitmap showPlayers;
     private Bitmap hidePlayers;
 
+
     public Renderer(Game game,SurfaceHolder surfaceHolder, Map map, PlayerHandler playerHandler,Camera camera,MiniGameHandler miniGameHandler){
         this.game=game;
         this.surfaceHolder = surfaceHolder;
@@ -47,10 +48,12 @@ public class Renderer implements Runnable {
 
         zoomButtonZoomedIn = BitmapFactory.decodeResource(resources, R.drawable.minuslupe);
         zoomButtonZoomedOut = BitmapFactory.decodeResource(resources, R.drawable.pluslupe);
+
     }
 
     private void render(){
-        Canvas canvas  = surfaceHolder.lockCanvas();
+        if(surfaceHolder.getSurface().isValid()) {
+            Canvas canvas  = surfaceHolder.lockCanvas();
 
             if (game.getGameState() == Game.State.MAINGAME) {
                 /////Start of scaling and translating
@@ -60,52 +63,43 @@ public class Renderer implements Runnable {
 
 
                 /////////Start of scaled and translated rendering
-                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
 
-                if(camera.getCameraState() == Camera.CameraState.FOCUSED){
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
+                if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+
                     map.render(canvas, camera.getCurrentFocusedTile());
 
-                    camera.getCurrentFocusedTile().renderText(canvas,playerHandler.getCurrentPlayer());
-                    playerHandler.render(canvas);
+                    camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
+
+                    playerHandler.renderPlayerIcons(canvas);
 
                     canvas.drawBitmap(zoomButtonZoomedIn, null, camera.getZoomButtonRenderingRect(), null);
-                    if(playerHandler.isDetailedPlayerInfo()){
-                        canvas.drawBitmap(hidePlayers,null,camera.getPlayerIconRenderingRect(),null);
-                    }
-                    else{
-                        canvas.drawBitmap(showPlayers,null,camera.getPlayerIconRenderingRect(),null);
-                    }
+                    canvas.drawBitmap(showPlayers, null, camera.getPlayerIconRenderingRect(), null);
 
-
-                }
-                else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
+                } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
                     map.render(canvas);
-                    playerHandler.render(canvas);
+                    playerHandler.renderPlayerIcons(canvas);
 
                     canvas.drawBitmap(zoomButtonZoomedOut, null, camera.getZoomButtonRenderingRect(), null);
-                }
-                else{
+                } else {
                     map.render(canvas);
-                    playerHandler.render(canvas);
+                    playerHandler.renderPlayerIcons(canvas);
                 }
 
             } else if (game.getGameState() == Game.State.MINIGAME) {
-
                 miniGameHandler.render(canvas);
+            } else if (game.getGameState() == Game.State.PLAYERMENU) {
+                playerHandler.renderPlayerMenu(canvas);
+
+                canvas.drawBitmap(hidePlayers, null, camera.getPlayerIconRenderingRect(), null);
             }
 
             //////////End of Rendering
             //////Start of unscaled and unstranslated Rendering
 
             //////End
-
             surfaceHolder.unlockCanvasAndPost(canvas);
-
-
-
-
-
-
+        }
 
     }
 
@@ -118,9 +112,7 @@ public class Renderer implements Runnable {
         long timer = System.currentTimeMillis();//Eine Variable um die Zeit zu Zählen. Ist für die Berechnung der "TicksPerSecond" und "FramesPerSecond" notwendig.
 
         while (running) {
-            if(!surfaceHolder.getSurface().isValid()) {
-                continue;
-            }
+
             render();
 
             long now = System.nanoTime();//Timer Variable für die aktuelle Zeit.
@@ -155,4 +147,5 @@ public class Renderer implements Runnable {
         thread = new Thread(this);
         thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
     }
+
 }
