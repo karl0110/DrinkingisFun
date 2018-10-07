@@ -2,6 +2,7 @@ package com.jaimehall.drinkingisfun.activities.menu;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
@@ -31,7 +32,6 @@ public class PlayerSelectActivity extends Activity {
     private LinearLayout.LayoutParams editTextParams;
     private LinearLayout.LayoutParams checkBoxParams;
     private LinearLayout.LayoutParams horizontalLinearLayoutParams;
-
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +203,8 @@ public class PlayerSelectActivity extends Activity {
 
             intent.putStringArrayListExtra("playerNames", playerStringNames);
             intent.putExtra("playerSexes", playerBooleanSexes);
+
+
             startActivity(intent);
         }
     }

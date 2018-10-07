@@ -44,9 +44,11 @@ public abstract class Tile {
         textRect = new TextRect(paint);
     }
 
-    public void render(Canvas canvas){
+    public void renderFocusedTile(Canvas canvas){
         canvas.drawBitmap(image,null,getCoordinates(),null);
     }
+
+    public abstract void renderMap(Canvas canvas);
 
     public void renderText(Canvas canvas,Player currentFocusedPlayer){
         if(currentFocusedPlayer.getCompleteInformation() != null) {
@@ -70,7 +72,7 @@ public abstract class Tile {
 
     public abstract Tile getNextTile();
 
-    public abstract void findNextTile();
+    public abstract void findNextTile(Bitmap arrowRight,Bitmap arrowRightUp,Bitmap arrowRightDown);
 
     public abstract int getTileDifficulty() ;
 

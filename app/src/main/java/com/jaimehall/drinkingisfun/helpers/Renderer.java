@@ -30,10 +30,9 @@ public class Renderer implements Runnable {
     private Bitmap zoomButtonZoomedIn;
 
     private Bitmap showPlayers;
-    private Bitmap hidePlayers;
 
 
-    public Renderer(Game game,SurfaceHolder surfaceHolder, Map map, PlayerHandler playerHandler,Camera camera,MiniGameHandler miniGameHandler){
+    public Renderer(Game game, BitmapLoader bitmapLoader, SurfaceHolder surfaceHolder, Map map, PlayerHandler playerHandler, Camera camera, MiniGameHandler miniGameHandler){
         this.game=game;
         this.surfaceHolder = surfaceHolder;
         this.map=map;
@@ -43,8 +42,7 @@ public class Renderer implements Runnable {
 
         Resources resources = game.getResources();
 
-        showPlayers = BitmapFactory.decodeResource(resources, R.drawable.spieleranzeigen);
-        hidePlayers = BitmapFactory.decodeResource(resources, R.drawable.spielerverstecken);
+        showPlayers = bitmapLoader.getBitmap(R.drawable.spieleranzeigen);
 
         zoomButtonZoomedIn = BitmapFactory.decodeResource(resources, R.drawable.minuslupe);
         zoomButtonZoomedOut = BitmapFactory.decodeResource(resources, R.drawable.pluslupe);
@@ -91,7 +89,6 @@ public class Renderer implements Runnable {
             } else if (game.getGameState() == Game.State.PLAYERMENU) {
                 playerHandler.renderPlayerMenu(canvas);
 
-                canvas.drawBitmap(hidePlayers, null, camera.getPlayerIconRenderingRect(), null);
             }
 
             //////////End of Rendering

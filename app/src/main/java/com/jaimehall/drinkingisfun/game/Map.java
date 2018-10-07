@@ -1,12 +1,11 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.jaimehall.drinkingisfun.R;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +18,15 @@ public class Map {
     private Tile[][] tileMap;
     private float tileWidth,tileHeight;
 
-    public Map(Game game){
+    public Map(Game game, BitmapLoader bitmapLoader){
         tileMap= new Tile[20][7];
         tileWidth = 500;
         tileHeight = 281;
-        createTileMap(game);
+
+        createTileMap(game, bitmapLoader);
     }
 
-    private void createTileMap(Game game){
+    private void createTileMap(Game game,BitmapLoader bitmapLoader){
 
         ArrayList<String> unSplitStringsEasyTasks= new ArrayList<String>();
         ArrayList<String> unSplitStringsMediumTasks= new ArrayList<String>();
@@ -117,13 +117,12 @@ public class Map {
             }
         }
 
-        Resources resources = game.getResources();
 
-        Bitmap miniGameBorder = BitmapFactory.decodeResource(resources,R.drawable.minigameumrandung);
-        Bitmap greenBorder = BitmapFactory.decodeResource(resources,R.drawable.grueneumrandung);
-        Bitmap blueBorder = BitmapFactory.decodeResource(resources,R.drawable.blaueumrandung);
+        Bitmap miniGameBorder = bitmapLoader.getBitmap(R.drawable.minigameumrandung);
+        Bitmap greenBorder = bitmapLoader.getBitmap(R.drawable.grueneumrandung);
+        Bitmap blueBorder = bitmapLoader.getBitmap(R.drawable.blaueumrandung);
 
-        Bitmap background = BitmapFactory.decodeResource(resources,R.drawable.uebergehenderhintergrund);
+        Bitmap background = bitmapLoader.getBitmap(R.drawable.uebergehenderhintergrund);
 
 
         tileMap[0][3] = new MiniGameTile(0*tileWidth, 3*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{1,2},{1,3},{1,4}},1);
@@ -169,21 +168,24 @@ public class Map {
         tileMap[8][6] = new NormalTile(8*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,6,tokenedStringHardTasks,2);
         tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 0,3,tokenedStringHardTasks,2);
 
+        Bitmap arrowRight = bitmapLoader.getBitmap(R.drawable.pfeilrechts);
+        Bitmap arrowRightUp = bitmapLoader.getBitmap(R.drawable.pfeilrechtsoben);
+        Bitmap arrowRightDown = bitmapLoader.getBitmap(R.drawable.pfeilrechtsunten);
 
         for(int xxx=0; xxx<tileMap.length;xxx++){
             for(int yyy =0; yyy<tileMap[0].length;yyy++){
 
-                if(tileMap[xxx][yyy]!=null)tileMap[xxx][yyy].findNextTile();
+                if(tileMap[xxx][yyy]!=null)tileMap[xxx][yyy].findNextTile(arrowRight,arrowRightUp,arrowRightDown);
 
             }
         }
     }
 
     public void render(Canvas canvas){
-        for(int xx=0; xx<20;xx++){
-            for(int yy =0; yy<7;yy++){
+        for(int xx=19; xx>=0;xx--){
+            for(int yy =6; yy>=0;yy--){
 
-                if(tileMap[xx][yy]!= null)tileMap[xx][yy].render(canvas);
+                if(tileMap[xx][yy]!= null)tileMap[xx][yy].renderMap(canvas);
 
 
 
@@ -192,7 +194,7 @@ public class Map {
     }
 
     public void render(Canvas canvas,Tile currentFocusedTile){
-        currentFocusedTile.render(canvas);
+        currentFocusedTile.renderFocusedTile(canvas);
     }
 
     public Tile getTileFromTileMap(int indexA, int indexB){

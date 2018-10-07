@@ -8,23 +8,23 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.AttributeSet;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.game.Game;
-import com.jaimehall.drinkingisfun.minigames.MiniGameHandler;
 
 import java.util.ArrayList;
 
 public class GameActivity extends Activity {
 
     private Game game;
+    private GestureDetector mGestureDetector;
+
 
     private int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -52,28 +52,32 @@ public class GameActivity extends Activity {
         boolean[] playerSexes = intent.getBooleanArrayExtra("playerSexes");
 
         game = new Game(this , playerNames, playerSexes, height, width);
+
         setContentView(game);
 
         game.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    game.progress(motionEvent);
-
-                    return true;
-                }
-            }
+                                    @Override
+                                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                                        game.progress(motionEvent);
+                                        mGestureDetector.onTouchEvent(motionEvent);
+                                        return true;
+                                    }
+                                }
         );
-        game.setSystemUiVisibility(uiOptions);
 
+        game.setSystemUiVisibility(uiOptions);
         setScreenOrientationLandscape();
 
+        CustomGestureListener customGestureListener = new CustomGestureListener();
 
+        mGestureDetector = new GestureDetector(this,customGestureListener);
 
     }
 
+
+
         protected void onResume() {
             super.onResume();
-            game.setSystemUiVisibility(uiOptions);
             game.resume();
 
         }
@@ -121,6 +125,39 @@ public class GameActivity extends Activity {
         return (getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    class CustomGestureListener implements GestureDetector.OnGestureListener{
+        @Override
+        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            game.fling(motionEvent,motionEvent1,v,v1);
+            return true;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent motionEvent) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent motionEvent) {
+
+        }
     }
 
 }

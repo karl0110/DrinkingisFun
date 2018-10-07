@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import com.jaimehall.drinkingisfun.R;
 
 import com.jaimehall.drinkingisfun.game.Game;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 import com.jaimehall.drinkingisfun.minigames.MiniGame;
 
 public class ExBeerMiniGame extends MiniGame {
@@ -37,7 +38,7 @@ public class ExBeerMiniGame extends MiniGame {
     private Paint timerTextPaint;
 
 
-    public ExBeerMiniGame(Game game, float width, float height){
+    public ExBeerMiniGame(Game game, float width, float height, BitmapLoader bitmapLoader){
        super(game);
 
        this.width=width;
@@ -45,18 +46,18 @@ public class ExBeerMiniGame extends MiniGame {
 
         imageRect = new Rect((int)(width/8),(int)(height/16)*3,(int)((width/8)*7),(int)((height/16)*14));
         buttonRect = new Rect((int)((width/8)*3),(int)((height/16)*14)+10,(int)((width/8)*5),(int)(height-10));
-        button = BitmapFactory.decodeResource(resources,R.drawable.tapbutton);
+        button = bitmapLoader.getBitmap(R.drawable.tapbutton);
         bottle = new Bitmap[10];
-        bottle[0]=BitmapFactory.decodeResource(resources,R.drawable.bottle0);
-        bottle[1]=BitmapFactory.decodeResource(resources,R.drawable.bottle1);
-        bottle[2]=BitmapFactory.decodeResource(resources,R.drawable.bottle2);
-        bottle[3]=BitmapFactory.decodeResource(resources,R.drawable.bottle3);
-        bottle[4]=BitmapFactory.decodeResource(resources,R.drawable.bottle4);
-        bottle[5]=BitmapFactory.decodeResource(resources,R.drawable.bottle5);
-        bottle[6]=BitmapFactory.decodeResource(resources,R.drawable.bottle6);
-        bottle[7]=BitmapFactory.decodeResource(resources,R.drawable.bottle7);
-        bottle[8]=BitmapFactory.decodeResource(resources,R.drawable.bottle8);
-        bottle[9]=BitmapFactory.decodeResource(resources,R.drawable.bottle9);
+        bottle[0]=bitmapLoader.getBitmap(R.drawable.bottle0);
+        bottle[1]=bitmapLoader.getBitmap(R.drawable.bottle1);
+        bottle[2]=bitmapLoader.getBitmap(R.drawable.bottle2);
+        bottle[3]=bitmapLoader.getBitmap(R.drawable.bottle3);
+        bottle[4]=bitmapLoader.getBitmap(R.drawable.bottle4);
+        bottle[5]=bitmapLoader.getBitmap(R.drawable.bottle5);
+        bottle[6]=bitmapLoader.getBitmap(R.drawable.bottle6);
+        bottle[7]=bitmapLoader.getBitmap(R.drawable.bottle7);
+        bottle[8]=bitmapLoader.getBitmap(R.drawable.bottle8);
+        bottle[9]=bitmapLoader.getBitmap(R.drawable.bottle9);
 
         tutorialRect = new Rect(0,0,(int)width,(int)height);
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.exbeertutorial);

@@ -166,4 +166,15 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="bitmap_spieler">spieler</string>
+    <string name="bitmap_spielermenu">spielermenu</string>
+    <string name="bitmap_spieleranzeigen">spieleranzeigen</string>
+
+    <string-array name="bitmap_names">
+        <item>spieler</item>
+        <item>spielermenu</item>
+        <item>spieleranzeigen</item>
+    </string-array>
+
 </resources>

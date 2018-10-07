@@ -4,3 +4,4 @@ PlayerName:, falls du mit Auto gekommen bist, trink :AnzahlSchlucke:. Mutig!
 PlayerName:, trink so viel wie du willst, wenn du schon mal ja zu Bierball gesagt hast, obwohl du nichts mehr hättest trinken sollen.
 PlayerName:, verteile :AnzahlSchlucke: an die Person, die deiner Meinung am meisten verträgt.
 PlayerName:, falls du Goa feierst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, die anderen Spieler suchen sich ein Wort aus das du nicht mehr sagen darfst. Falls du das bis zum nächsten Minigame schaffst, darfst du :AnzahlSchlucke: trinken.

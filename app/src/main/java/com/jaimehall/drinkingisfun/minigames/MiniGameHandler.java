@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import com.jaimehall.drinkingisfun.game.Game;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 import com.jaimehall.drinkingisfun.minigames.exBeer.ExBeerMiniGame;
 import com.jaimehall.drinkingisfun.minigames.pong.PongMiniGame;
 
@@ -19,14 +20,13 @@ public class MiniGameHandler implements Runnable {
     private MiniGame miniGame;
     private ArrayList<MiniGame> miniGames;
     private Game game;
-    private float width,height;
 
 
-    public MiniGameHandler(Game game,float width,float height) {
+    public MiniGameHandler(Game game, float width, float height, BitmapLoader bitmapLoader) {
         this.game=game;
         miniGames= new ArrayList<>();
         miniGames.add(new PongMiniGame(game,width,height));
-        miniGames.add(new ExBeerMiniGame(game,width,height));
+        miniGames.add(new ExBeerMiniGame(game,width,height,bitmapLoader));
 
 
     }

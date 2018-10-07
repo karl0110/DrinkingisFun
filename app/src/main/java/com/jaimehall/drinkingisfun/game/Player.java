@@ -3,6 +3,7 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -20,42 +21,38 @@ public class Player {
 	private String playerName;
 	private boolean isFemale;
 	private long score = 0;
-	private Bitmap image;
+	private Bitmap playerImage;
 	private Rect coordinates;
     private Paint iconPaint;
-	private Paint detailedPaint;
+	private int playerColor;
 
 	
-	public Player(Tile location,String playerName, Boolean isFemale){
+	public Player(Tile location,String playerName, Boolean isFemale,Bitmap image){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
-		this.image=image;
-
 
 		int r = (int)(Math.random()*255);
-        int g = (int)(Math.random()*255);
-        int b = (int)(Math.random()*255);
+		int g = (int)(Math.random()*255);
+		int b = (int)(Math.random()*255);
+
+		playerColor = Color.argb(255,r,g,b);
+
+		Bitmap playerBackground = Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
+
+		Canvas canvas = new Canvas(playerBackground);
+		Paint paint = new Paint();
+		paint.setColor(playerColor);
+		canvas.drawRect(0,0,image.getWidth(),image.getHeight(),paint);
+
+		playerImage = combineTwoBitmaps(playerBackground,image);
 
         iconPaint = new Paint();
         iconPaint.setStyle(Paint.Style.FILL);
-        iconPaint.setARGB(255,r,g,b);
-
-        detailedPaint = new Paint();
-        detailedPaint.setColor(Color.BLACK);
-        detailedPaint.setFakeBoldText(true);
-        detailedPaint.setTextAlign(Paint.Align.LEFT);
-        detailedPaint.setTextSize(40);
+        iconPaint.setColor(playerColor);
 
 	}
 
-
-	public void renderDetails(Canvas canvas,Rect detailCoordinates){
-        canvas.drawRect(detailCoordinates.left,detailCoordinates.top,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.bottom,iconPaint);
-        canvas.drawText(playerName,detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/8,detailedPaint);
-        canvas.drawText("Score:",detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+detailCoordinates.height()/2,detailedPaint);
-        canvas.drawText(""+Math.round(score),detailCoordinates.left+detailCoordinates.width()/2,detailCoordinates.top+((detailCoordinates.height()/4)*3),detailedPaint);
-    }
 
 	public void render(Canvas canvas){
 		canvas.drawRect(coordinates,iconPaint);
@@ -118,6 +115,13 @@ public class Player {
 		}
 	}
 
+	private Bitmap combineTwoBitmaps(Bitmap bmp1,Bitmap bmp2){
+		Bitmap bitmapOverlay = Bitmap.createBitmap(bmp1.getWidth(),bmp1.getHeight(),bmp1.getConfig());
+		Canvas canvas = new Canvas(bitmapOverlay);
+		canvas.drawBitmap(bmp1,new Matrix(),null);
+		canvas.drawBitmap(bmp2,0,0,null);
+		return bitmapOverlay;
+	}
 
 	public Tile getLocation() {
 		return location;
@@ -144,4 +148,15 @@ public class Player {
 	    score+=scoreAdd;
     }
 
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public long getScore() {
+		return score;
+	}
+
+	public Bitmap getImage() {
+		return playerImage;
+	}
 }

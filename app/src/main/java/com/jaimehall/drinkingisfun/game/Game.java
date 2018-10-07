@@ -2,17 +2,13 @@ package com.jaimehall.drinkingisfun.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 import com.jaimehall.drinkingisfun.helpers.Camera;
 import com.jaimehall.drinkingisfun.helpers.Renderer;
 import com.jaimehall.drinkingisfun.minigames.MiniGameHandler;
@@ -25,6 +21,7 @@ public class Game extends SurfaceView {
 
     private Camera camera;
     private Renderer renderer;
+    private BitmapLoader bitmapLoader;
 
     private Context context;
 
@@ -44,29 +41,35 @@ public class Game extends SurfaceView {
 
 
 
-    public Game(Context context,  ArrayList<String> playerNames, boolean[] playerSexes, float width, float height) {
+    public Game(Context context, ArrayList<String> playerNames, boolean[] playerSexes, float width, float height) {
         super(context);
         this.width=width;
         this.height=height;
 
         this.context = context;
-        Map map = new Map(this);
+
+        bitmapLoader = new BitmapLoader(getResources());
+
+        Map map = new Map(this,bitmapLoader);
         gameState = State.MAINGAME;
 
-        playerHandler = new PlayerHandler(this,width,height);
+        Bitmap playerImage = bitmapLoader.getBitmap(R.drawable.spieler);
+        playerHandler = new PlayerHandler(this,width,height, bitmapLoader);
+
+
         for (int i = 0; i < playerNames.size(); i++) {
-            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i]));
+            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i],playerImage));
         }
         playerHandler.currentPlayerChanged();
 
-        miniGameHandler = new MiniGameHandler(this, height, width);
+        miniGameHandler = new MiniGameHandler(this, height, width,bitmapLoader);
 
         playerIconTouchRect = new  Rect((int) ((width / 8)*7), 0, (int) width, ((int) (height / 8)));
 
         zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
 
         camera = new Camera(this,playerHandler,width,height);
-        renderer = new Renderer(this,getHolder(),map,playerHandler,camera,miniGameHandler);
+        renderer = new Renderer(this, bitmapLoader,getHolder(),map,playerHandler,camera,miniGameHandler);
 
 
 
@@ -86,7 +89,7 @@ public class Game extends SurfaceView {
         camera.setTouchTimer(30);
         switch (tempTile.getTileDifficulty()) {
             case 0:
-                tempPlayer.addToScore(134);
+                tempPlayer.addToScore(Math.random()*100);
                 if (score == 0) {
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
@@ -94,7 +97,7 @@ public class Game extends SurfaceView {
                 }
                 break;
             case 1:
-                tempPlayer.addToScore(309);
+                tempPlayer.addToScore(200+(Math.random()*100));
                 if (score == 0) {
                     tempPlayer.setLocation(tempTile.getNextEasierTile());
                 } else if (score == 2) {
@@ -104,7 +107,7 @@ public class Game extends SurfaceView {
                 }
                 break;
             case 2:
-                tempPlayer.addToScore(489);
+                tempPlayer.addToScore(400+(Math.random()*200));
                 if (score == 2) {
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
@@ -120,65 +123,55 @@ public class Game extends SurfaceView {
         ((GameActivity) context).setScreenOrientationLandscape();
     }
 
+    public void fling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1){
+        if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
+            if (motionEvent.getX() > motionEvent1.getX()) {
+                camera.addToTranslateX(400);
+            } else if (motionEvent.getX() < motionEvent1.getX()) {
 
-
-    public void progress(MotionEvent motionEvent) {
-        System.out.println("progress");
-        if (camera.getTouchTimer() <= 0) {
-            System.out.println("touch timer 0");
-            Rect touchPoint = new Rect((int) motionEvent.getX() - 1, (int) motionEvent.getY() - 1, (int) motionEvent.getX() + 1, (int) motionEvent.getY() + 1);
-            if (gameState == State.MAINGAME) {
-                if (Rect.intersects(touchPoint, zoomButtonRect)) {
-                    camera.prepareZoomEvent();
-                    camera.setTouchTimer(20);
-                } else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
-                    gameState = State.PLAYERMENU;
-                    camera.setTouchTimer(20);
-
-                } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
-                    switch (motionEvent.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            deltaX1 = motionEvent.getX();
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            deltaX2 = motionEvent.getX();
-                            float deltaX = deltaX2 - deltaX1;
-                            if (Math.abs(deltaX) > 50) {
-                                if (deltaX2 > deltaX1) {
-                                    if (camera.getTranslateX() != 0) {
-                                        camera.addToTranslateX(-400);
-                                    }
-                                } else {
-                                    camera.addToTranslateX(400);
-                                }
-                            }
-                            break;
-                    }
-                } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
-
-                    if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
-                        startMiniGame();
-                        camera.setTouchTimer(20);
-                    } else {
-                        camera.prepareFocusChange();
-                        camera.setTouchTimer(20);
-                    }
-
-
+                if (camera.getTranslateX() != 0) {
+                    camera.addToTranslateX(-400);
                 }
-            } else if (gameState == State.MINIGAME) {
-                miniGameHandler.touched(motionEvent);
-                camera.setTouchTimer(20);
-            } else if (gameState == State.PLAYERMENU) {
-                if (Rect.intersects(touchPoint, playerIconTouchRect)) {
-                    gameState = State.MAINGAME;
-                    camera.setTouchTimer(20);
-                }
-                playerHandler.touched(touchPoint);
-
             }
         }
+
     }
+
+    public void progress(MotionEvent motionEvent){
+
+            if (camera.getTouchTimer() == 0) {
+
+                Rect touchPoint = new Rect((int) motionEvent.getX() - 1, (int) motionEvent.getY() - 1, (int) motionEvent.getX() + 1, (int) motionEvent.getY() + 1);
+                if (gameState == State.MAINGAME) {
+                    if (Rect.intersects(touchPoint, zoomButtonRect)) {
+                        camera.prepareZoomEvent();
+                    } else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                        gameState = State.PLAYERMENU;
+
+                    } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+
+                        if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
+                            startMiniGame();
+                        } else {
+                            camera.prepareFocusChange();
+                        }
+                    }
+                } else if (gameState == State.PLAYERMENU) {
+                    if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                        gameState = State.MAINGAME;
+                    } else {
+                        playerHandler.touched(touchPoint);
+                    }
+                }
+
+                camera.setTouchTimer(20);
+            }
+
+            if (gameState == State.MINIGAME) {
+                miniGameHandler.touched(motionEvent);
+            }
+        }
+
 
     public void pause() {
 

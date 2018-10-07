@@ -67,7 +67,7 @@ public class Camera implements Runnable {
         zoomButtonRenderingRect= new Rect();
         currentFocusedTileChanged();
 
-        maxZoom =height/(focusedTileHeight *5);
+        maxZoom =height/(focusedTileHeight *7);
 
 
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
@@ -93,8 +93,9 @@ public class Camera implements Runnable {
             if (delta >= 1) {//Guckt ob die Methode tick() jetzt aufgerufen werden soll.
 
                 if(game.getGameState() == Game.State.MAINGAME) {
-                    tick();//ruft die Methode tick() auf.
+                    tickMainGame();//ruft die Methode tick() auf.
                 }
+                generalTick();
 
                 updates++;//Addiert zum Update-Zähler 1 dazu.
                 delta--;//Setzt den tick() Aufruf-Timer zurück.
@@ -126,12 +127,14 @@ public class Camera implements Runnable {
         thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
     }
 
-    private void tick(){
-        playerHandler.tick();
-
-        if (touchTimer >= 0) {
-            touchTimer = (touchTimer-2);
+    private void generalTick(){
+        if (touchTimer > 0) {
+            touchTimer--;
         }
+    }
+
+    private void tickMainGame(){
+        playerHandler.tick();
 
         if(cameraState == CameraState.FOCUSED){
             scaleX = focusedScaleX;
