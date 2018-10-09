@@ -176,5 +176,7 @@
         <item>spielermenu</item>
         <item>spieleranzeigen</item>
     </string-array>
+    <string name="title_activity_character_menu">CharacterMenuActivity</string>
+    <string name="title_activity_character_creation">CharacterCreationActivity</string>
 
 </resources>

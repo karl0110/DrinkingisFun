@@ -33,9 +33,16 @@
             android:parentActivityName=".activities.menu.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jaimehall.drinkingisfun.activities.menu.MainActivity"
-                />
+                android:value="com.jaimehall.drinkingisfun.activities.menu.MainActivity" />
         </activity>
+        <activity
+            android:name=".activities.menu.CharacterMenuActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_character_menu" />
+        <activity
+            android:name=".activities.menu.CharacterCreationActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_character_creation"></activity>
     </application>
 
 </manifest>
