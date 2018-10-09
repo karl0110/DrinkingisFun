@@ -43,7 +43,7 @@ public class Map {
             brMedium = new BufferedReader(new InputStreamReader(am.open("mittlereAufgaben.txt")));
             brHard = new BufferedReader(new InputStreamReader(am.open("schwereAufgaben.txt")));
             String lineEasy;
-            while ((lineEasy = brEasy.readLine()) != null) {
+            while ((lineEasy=brEasy.readLine()) != null) {
                 unSplitStringsEasyTasks.add(lineEasy);
             }
             String lineMedium;

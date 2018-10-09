@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -29,9 +30,12 @@ import java.net.URI;
 public class CharacterCreationActivity extends Activity {
 
     private ImageButton playerIcon;
+    private EditText playerNameEditText;
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
     private Bitmap playerIconImage;
+    private File characterDirectory;
+    private File characterTextPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,28 @@ public class CharacterCreationActivity extends Activity {
         setContentView(R.layout.activity_character_creation);
 
         playerIcon = findViewById(R.id.playerIconImageButton);
+        playerNameEditText = findViewById(R.id.playerNameEditText);
         playerIconImage = null;
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
+
+        if(!characterDirectory.exists()){
+            characterDirectory.mkdir();
+        }
+
+        characterTextPath = new File(characterDirectory,"playerInformation");
+        if(!characterTextPath.exists()){
+            try {
+                characterTextPath.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+
 
 
     }
@@ -103,21 +128,29 @@ public class CharacterCreationActivity extends Activity {
 
     public void save(View view){
         String imageName = "icon_"+System.currentTimeMillis()+".png";
+        String playerName = playerNameEditText.getText().toString();
 
-
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        File directory = cw.getDir("characters", Context.MODE_PRIVATE);
-        if(!directory.exists()){
-            directory.mkdir();
+        File myImagePath = new File(characterDirectory,imageName);
+        if(!myImagePath.exists()){
+            try {
+                myImagePath.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        File myImagePath = new File(directory,imageName);
-
-        FileOutputStream fos;
+        FileOutputStream outputStreamImage;
+        FileOutputStream outputStreamText;
         try{
-            fos = new FileOutputStream(myImagePath);
-            playerIconImage.compress(Bitmap.CompressFormat.PNG,100,fos);
-            fos.close();
+            outputStreamImage = new FileOutputStream(myImagePath);
+            playerIconImage.compress(Bitmap.CompressFormat.PNG,100,outputStreamImage);
+            outputStreamImage.close();
+
+            String textToWrite = (":"+playerName+":"+imageName+":");
+
+            outputStreamText = new FileOutputStream(characterTextPath);
+            outputStreamText.write(textToWrite.getBytes());
+            outputStreamText.close();
 
         } catch(Exception e){
             Log.e("SAVE_IMAGE", e.getMessage(), e);
