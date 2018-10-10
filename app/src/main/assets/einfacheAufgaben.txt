@@ -3,3 +3,13 @@ PlayerName:, mache einen Witz, wenn jemand Lacht darfst du :AnzahlSchlucke: trin
 PlayerName:, falls du ein Brillenträger bist, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, falls du mit Öffis gekommen bist, trink :AnzahlSchlucke:. Langweiler!
 PlayerName:, wenn du morgen Schule/Arbeit hast, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, trinke für jede deiner Ex-Beziehungen :AnzahlSchlucke:. Für jede Beziehung die schlimm geendet ist nochmal :AnzahlSchlucke:.
+PlayerName:, wenn du ein Feuer dabei hast darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du eine Jogginghose trägst darfst du :AnzahlSchlucke: trinken.
+PlayerName:, trink :AnzahlSchlucke: wenn du gerne Sport guckst.
+PlayerName:, wenn du ein Android-Handy hast, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du einen Soundcloud-Account hast, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du schon mehr als 3 mal von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Anfänger.
+PlayerName:, wenn du Pyromaniker bist, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal mit einem Familienmitglied gekifft hast.
+PlayerName:, die anderen Spieler entscheiden, wie viele Bier du verträgst (0,5 L). So viele Schlucke darfst du trinken.

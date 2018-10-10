@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
@@ -48,10 +49,11 @@ public class GameActivity extends Activity {
         float width = size.x;
         float height = size.y+getNavBarHeight();
 
-        ArrayList<String> playerNames = intent.getStringArrayListExtra("playerNames");
+        String[] playerNames = intent.getStringArrayExtra("playerNames");
+        String[] playerIcons = intent.getStringArrayExtra("playerIcons");
         boolean[] playerSexes = intent.getBooleanArrayExtra("playerSexes");
 
-        game = new Game(this , playerNames, playerSexes, height, width);
+        game = new Game(this , playerNames,playerIcons, playerSexes, height, width);
 
         setContentView(game);
 

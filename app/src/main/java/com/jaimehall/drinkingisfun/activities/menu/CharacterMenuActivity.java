@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import java.util.StringTokenizer;
 public class CharacterMenuActivity extends Activity {
 
     private String[] playerNames;
+    private String[] imagePaths;
+    private boolean[] playerSexes;
     private File characterDirectory;
     private File characterTextPath;
 
@@ -41,6 +44,11 @@ public class CharacterMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_menu);
         linearLayout = findViewById(R.id.characterMenuLinearLayout);
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
+        characterTextPath = new File(characterDirectory,"playerInformation");
+
         refreshPlayerList();
 
     }
@@ -68,10 +76,6 @@ public class CharacterMenuActivity extends Activity {
     }
 
     private void refreshPlayerList(){
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
-        characterTextPath = new File(characterDirectory,"playerInformation");
-        System.out.println(characterTextPath.getAbsolutePath());
 
 
         if(characterTextPath.exists()){
@@ -79,7 +83,7 @@ public class CharacterMenuActivity extends Activity {
             linearLayout.removeAllViews();
 
             ArrayList<String> untokenedPlayerNames= new ArrayList<String>();
-            BufferedReader nameReader = null;
+            BufferedReader nameReader;
             try {
                 FileInputStream fis= new FileInputStream(characterTextPath);
                 DataInputStream in = new DataInputStream(fis);
@@ -95,17 +99,25 @@ public class CharacterMenuActivity extends Activity {
                 fis.close();
                 in.close();
 
-
             }catch(IOException e){
                 e.printStackTrace();
             }
 
             playerNames = new String[untokenedPlayerNames.size()];
+            imagePaths = new String[untokenedPlayerNames.size()];
+            playerSexes = new boolean[untokenedPlayerNames.size()];
 
             for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
                 StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
                 if(tokens.hasMoreTokens()){
                     playerNames[i] = tokens.nextToken();
+                    imagePaths[i] = tokens.nextToken();
+                    if(tokens.nextToken().matches("true")){
+                        playerSexes[i] = true;
+                    }
+                    else{
+                        playerSexes[i] = false;
+                    }
                 }
 
             }
@@ -122,15 +134,6 @@ public class CharacterMenuActivity extends Activity {
                 linearLayout.addView(button);
 
             }
-
-
-
-
         }
-
-
-
-
-
     }
 }

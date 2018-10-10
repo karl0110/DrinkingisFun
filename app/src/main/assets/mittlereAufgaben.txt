@@ -4,3 +4,12 @@ PlayerName:, falls du mit Fahrrad gekommen bist, trink :AnzahlSchlucke:. Schon b
 PlayerName:, wenn du kiffst, proste mit einer Person deiner Wahl.
 PlayerName:, falls du kein Sterni trinkst, MUSST du :AnzahlSchlucke: trinken.
 PlayerName:, falls du Techno feierst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du es schaffst, bis zum nächsten Minigame nicht zu rölpsen, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, mache ein beliebiges Tier nach. Die anderen Spieler bewerten deine Performance und können dir bis zu :AnzahlSchlucke: geben.
+PlayerName:, wenn du Sommer besser als Winter findest, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du mit weniger als 5 Leuten schonmal einen Kasten getrunken hast, trink :AnzahlSchlucke:. Wer von den Mitspielern mitgemacht hat darf auch trinken.
+PlayerName:, für jedes 2 Euro Stück in deinem Portmonnaie, darfst du :AnzahlSchlucke: verteilen.
+PlayerName:, für jeden Joint den du heute gebaut hast, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du schon mehr als 6 mal von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Nicht Schlecht.
+PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal mit einem Familienmitglied Bierball gespielt hast.
+PlayerName:, trink so viele Schlucke wie du schon Haustiere hattest.

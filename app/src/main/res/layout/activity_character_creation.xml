@@ -14,7 +14,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/textView8"
@@ -57,7 +59,7 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         app:layout_constraintVertical_bias="1.0">
@@ -69,10 +71,10 @@
 
             <ImageButton
                 android:id="@+id/playerIconImageButton"
-                android:scaleType="fitXY"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="selectPlayerIcon"
+                android:scaleType="fitXY"
                 android:src="@drawable/spieler"
 
                 />
@@ -86,6 +88,15 @@
                 android:inputType="textPersonName"
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="413dp" />
+
+            <CheckBox
+                android:id="@+id/characterSexCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Weiblich"
+                android:textAlignment="textStart" />
+
         </LinearLayout>
     </ScrollView>
 

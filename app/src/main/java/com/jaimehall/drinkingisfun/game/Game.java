@@ -41,7 +41,7 @@ public class Game extends SurfaceView {
 
 
 
-    public Game(Context context, ArrayList<String> playerNames, boolean[] playerSexes, float width, float height) {
+    public Game(Context context, String[] playerNames,String[] playerIcons, boolean[] playerSexes, float width, float height) {
         super(context);
         this.width=width;
         this.height=height;
@@ -53,12 +53,11 @@ public class Game extends SurfaceView {
         Map map = new Map(this,bitmapLoader);
         gameState = State.MAINGAME;
 
-        Bitmap playerImage = bitmapLoader.getBitmap(R.drawable.spieler);
         playerHandler = new PlayerHandler(this,width,height, bitmapLoader);
 
 
-        for (int i = 0; i < playerNames.size(); i++) {
-            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames.get(i), playerSexes[i],playerImage));
+        for (int i = 0; i < playerNames.length; i++) {
+            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames[i], playerSexes[i],playerIcons[i],bitmapLoader));
         }
         playerHandler.currentPlayerChanged();
 

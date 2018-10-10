@@ -1,9 +1,15 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -18,8 +24,18 @@ import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class PlayerSelectActivity extends Activity {
 
@@ -32,6 +48,13 @@ public class PlayerSelectActivity extends Activity {
     private LinearLayout.LayoutParams editTextParams;
     private LinearLayout.LayoutParams checkBoxParams;
     private LinearLayout.LayoutParams horizontalLinearLayoutParams;
+
+
+    private String[] characterNames;
+    private String[] characterBitmapPaths;
+    private boolean[] characterSexes;
+    private File characterDirectory;
+    private File characterTextPath;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +71,13 @@ public class PlayerSelectActivity extends Activity {
         checkBoxParams = new LinearLayout.LayoutParams(1,LinearLayout.LayoutParams.WRAP_CONTENT,1.0f);
         horizontalLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
 
-        EditText firstEditText = new EditText(getApplicationContext());
+        final EditText firstEditText = new EditText(getApplicationContext());
         playerNames.add(firstEditText);
         firstEditText.setHint("Name");
         firstEditText.setLayoutParams(editTextParams);
         firstEditText.setEms(10);
 
-        EditText secondEditText = new EditText(getApplicationContext());
+        final EditText secondEditText = new EditText(getApplicationContext());
         playerNames.add(secondEditText);
         secondEditText.setHint("Name");
         secondEditText.setLayoutParams(editTextParams);
@@ -64,7 +87,7 @@ public class PlayerSelectActivity extends Activity {
         playerSexes.add(firstCheckBox);
         firstCheckBox.setLayoutParams(checkBoxParams);
 
-        CheckBox secondCheckBox = new CheckBox(getApplicationContext());
+        final CheckBox secondCheckBox = new CheckBox(getApplicationContext());
         playerSexes.add(secondCheckBox);
         secondCheckBox.setLayoutParams(checkBoxParams);
 
@@ -109,6 +132,13 @@ public class PlayerSelectActivity extends Activity {
                     }
                     playButton.setText("Play");
                     playButton.setTextColor(Color.BLACK);
+
+                    if(checkForExistingCharacters(editable.toString()) != (-1)){
+                        secondEditText.setBackgroundColor(Color.rgb(220,20,20));
+                    }
+                    else{
+                        secondEditText.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             }
         });
@@ -128,8 +158,23 @@ public class PlayerSelectActivity extends Activity {
             public void afterTextChanged(Editable editable) {
                 playButton.setText("Play");
                 playButton.setTextColor(Color.BLACK);
+
+                if(checkForExistingCharacters(editable.toString()) != (-1)){
+                    firstEditText.setBackgroundColor(Color.rgb(220,20,20));
+                }
+                else{
+                    firstEditText.setBackgroundColor(Color.TRANSPARENT);
+                }
             }
         });
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
+        characterTextPath = new File(characterDirectory,"playerInformation");
+
+        refreshPlayerList();
+
+
     }
 
     public void addTempViewsToList(){
@@ -177,6 +222,13 @@ public class PlayerSelectActivity extends Activity {
                     }
                     playButton.setText("Play");
                     playButton.setTextColor(Color.BLACK);
+
+                    if(checkForExistingCharacters(editable.toString()) != (-1)){
+                        tempEditText.setBackgroundColor(Color.rgb(220,20,20));
+                    }
+                    else{
+                        tempEditText.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             }
         });
@@ -189,24 +241,111 @@ public class PlayerSelectActivity extends Activity {
             playButton.setTextColor(Color.RED);
         }
         else{
-            ArrayList<String> playerStringNames = new ArrayList<>();
-            boolean[] playerBooleanSexes = new boolean[playerSexes.size()];
-            for (int i = 0; i < playerNames.size(); i++) {
+            int arrayLength = 0;
+
+            while(playerNames.get(arrayLength).getText().length() != 0){
+                arrayLength++;
+            }
+
+            String[] playerStringNames = new String[arrayLength];
+            String[] playerBitmapIconPaths = new String[arrayLength];
+            boolean[] playerBooleanSexes = new boolean[arrayLength];
+
+            for (int i = 0; i < arrayLength; i++) {
                 if(playerNames.get(i).getText().length()!=0) {
-                    playerStringNames.add(playerNames.get(i).getText().toString());
-                    playerBooleanSexes[i] = playerSexes.get(i).isChecked();
+
+                    if(checkForExistingCharacters(playerNames.get(i).getText().toString()) != (-1)){
+                        int characterIndex = checkForExistingCharacters(playerNames.get(i).getText().toString());
+                        playerStringNames[i] = characterNames[characterIndex];
+                        playerBitmapIconPaths[i] = characterBitmapPaths[characterIndex];
+                        playerBooleanSexes[i] = characterSexes[characterIndex];
+                    }
+                    else{
+                        playerStringNames[i] = playerNames.get(i).getText().toString();
+                        playerBitmapIconPaths[i] = "Color";
+                        playerBooleanSexes[i] = playerSexes.get(i).isChecked();
+                    }
+
                 }
             }
 
 
             Intent intent = new Intent(this, GameActivity.class);
 
-            intent.putStringArrayListExtra("playerNames", playerStringNames);
-            intent.putExtra("playerSexes", playerBooleanSexes);
-
+            intent.putExtra("playerNames",playerStringNames);
+            intent.putExtra("playerIcons",playerBitmapIconPaths);
+            intent.putExtra("playerSexes",playerBooleanSexes);
 
             startActivity(intent);
         }
     }
+
+    private void refreshPlayerList(){
+        if(characterTextPath.exists()){
+
+            ArrayList<String> untokenedPlayerNames= new ArrayList<String>();
+            BufferedReader nameReader;
+            try {
+                FileInputStream fis= new FileInputStream(characterTextPath);
+                DataInputStream in = new DataInputStream(fis);
+                nameReader = new BufferedReader(new InputStreamReader(in));
+                String line;
+
+                while((line = nameReader.readLine())!= null){
+                    if(!line.matches("")) {
+                        untokenedPlayerNames.add(line);
+                    }
+
+                }
+                fis.close();
+                in.close();
+
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            characterNames = new String[untokenedPlayerNames.size()];
+            characterBitmapPaths = new String[untokenedPlayerNames.size()];
+            characterSexes = new boolean[untokenedPlayerNames.size()];
+
+            File myImagePath;
+
+            for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
+                StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
+                if(tokens.hasMoreTokens()){
+                    characterNames[i] = tokens.nextToken();
+
+
+                    myImagePath = new File(characterDirectory,tokens.nextToken());
+                    characterBitmapPaths[i] = myImagePath.getPath();
+
+
+                    if(tokens.nextToken().matches("true")){
+                        characterSexes[i] = true;
+                    }
+                    else{
+                        characterSexes[i] = false;
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    private int checkForExistingCharacters(String string){
+
+        int returnInt = -1;
+
+        for(int i = 0;i<characterNames.length;i++){
+            if(characterNames[i].matches(string)){
+                returnInt  = i ;
+            }
+        }
+
+        return returnInt;
+    }
+
+
 
 }

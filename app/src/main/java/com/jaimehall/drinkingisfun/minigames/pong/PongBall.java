@@ -68,10 +68,14 @@ public class PongBall {
             if(y>pongMiniGame.getHeight()){
                 pongMiniGame.gameOver();
             }
+            if(y<0){
+                pongMiniGame.gameOver(2);
+            }
             if(Rect.intersects(getCoordinates(),pongMiniGame.getPlayerPaddle().getCoordinates())){
                 if(Math.signum(yVel) == Math.signum(1)){
                     yVel = -yVel;
                     pongMiniGame.resetGhostBall();
+                    pongMiniGame.ballHit();
                 }
             }
             if(Rect.intersects(getCoordinates(),pongMiniGame.getEnemyPaddle().getCoordinates())){

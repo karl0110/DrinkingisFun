@@ -18,7 +18,7 @@ public class PongMiniGame extends MiniGame {
     private PongBall pongBall;
     private PongBall ghostPongBall;
     private float width,height;
-    private float timer;
+    private int ballHit;
 
 
     public PongMiniGame(Game game,float width, float height) {
@@ -35,15 +35,19 @@ public class PongMiniGame extends MiniGame {
     }
 
     public void gameOver(){
-        if(timer >=10){
+        if(ballHit >=8){
             game.finishMiniGame(2);
         }
-        else if(timer >5){
+        else if(ballHit >4){
             game.finishMiniGame(1);
         }
-        else if(timer >0){
+        else if(ballHit >0){
             game.finishMiniGame(0);
         }
+    }
+
+    public void gameOver(int i){
+        game.finishMiniGame(i);
     }
 
     public void tutorialFinished(){
@@ -56,7 +60,7 @@ public class PongMiniGame extends MiniGame {
         ghostPongBall = new PongBall(this,width/2,height/2,30,30,-30,0.1f,true);
         enemyPaddle=new EnemyPaddle(this,(width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
-        timer=0;
+        ballHit = 0;
         tickCounter=0;
         tutorialFinished=false;
     }
@@ -89,7 +93,6 @@ public class PongMiniGame extends MiniGame {
     public void tick() {
         if(!tutorialFinished)tickCounter++;
         if(tutorialFinished){
-            timer+=0.0333333333;
 
             enemyPaddle.tick();
             playerPaddle.tick();
@@ -117,6 +120,10 @@ public class PongMiniGame extends MiniGame {
 
     public float getHeight() {
         return height;
+    }
+
+    public void ballHit(){
+        ballHit++;
     }
 
 

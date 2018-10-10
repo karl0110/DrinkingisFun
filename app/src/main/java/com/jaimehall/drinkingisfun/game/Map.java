@@ -121,6 +121,7 @@ public class Map {
         Bitmap miniGameBorder = bitmapLoader.getBitmap(R.drawable.minigameumrandung);
         Bitmap greenBorder = bitmapLoader.getBitmap(R.drawable.grueneumrandung);
         Bitmap blueBorder = bitmapLoader.getBitmap(R.drawable.blaueumrandung);
+        Bitmap goldBorder = bitmapLoader.getBitmap(R.drawable.goldeneumrandung);
 
         Bitmap background = bitmapLoader.getBitmap(R.drawable.uebergehenderhintergrund);
 
@@ -138,7 +139,8 @@ public class Map {
         tileMap[7][2] = new NormalTile(7*tileWidth, 2*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,1,tokenedStringEasyTasks,0);
         tileMap[8][0] = new NormalTile(8*tileWidth, 0*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,0,tokenedStringEasyTasks,0);
         tileMap[8][1] = new NormalTile(8*tileWidth, 1*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,0,tokenedStringEasyTasks,0);
-        tileMap[9][0] = new NormalTile(9*tileWidth, 0*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 0,3,tokenedStringEasyTasks,0);
+        tileMap[9][0] = new NormalTile(9*tileWidth, 0*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 10,0,tokenedStringEasyTasks,0);
+        tileMap[10][0] = new Goal(10*tileWidth, 0*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 0);
 
 
         tileMap[1][3] = new NormalTile(1 * tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 2,3,tokenedStringMediumTasks,1);
@@ -153,7 +155,8 @@ public class Map {
         tileMap[8][2] = new NormalTile(8*tileWidth, 2*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
         tileMap[8][3] = new NormalTile(8*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
         tileMap[8][4] = new NormalTile(8*tileWidth, 4*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
-        tileMap[9][3] = new NormalTile(9*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 0,3,tokenedStringMediumTasks,1);
+        tileMap[9][3] = new NormalTile(9*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 10,3,tokenedStringMediumTasks,1);
+        tileMap[10][3] = new Goal(10*tileWidth, 3*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 1);
 
 
         tileMap[1][4] = new NormalTile(1 * tileWidth, 4*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 2,5,tokenedStringHardTasks,2);
@@ -166,7 +169,8 @@ public class Map {
         tileMap[7][6] = new NormalTile(7*tileWidth, 6*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 8,6,tokenedStringHardTasks,2);
         tileMap[8][5] = new NormalTile(8*tileWidth, 5*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,6,tokenedStringHardTasks,2);
         tileMap[8][6] = new NormalTile(8*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,6,tokenedStringHardTasks,2);
-        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 0,3,tokenedStringHardTasks,2);
+        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 10,6,tokenedStringHardTasks,2);
+        tileMap[10][6] = new Goal(10*tileWidth, 6*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 2);
 
         Bitmap arrowRight = bitmapLoader.getBitmap(R.drawable.pfeilrechts);
         Bitmap arrowRightUp = bitmapLoader.getBitmap(R.drawable.pfeilrechtsoben);

@@ -1,13 +1,16 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
+import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 import com.jaimehall.drinkingisfun.helpers.TextRect;
 
 import java.util.StringTokenizer;
@@ -21,41 +24,42 @@ public class Player {
 	private String playerName;
 	private boolean isFemale;
 	private long score = 0;
-	private Bitmap playerImage;
+	private Bitmap playerIcon;
 	private Rect coordinates;
-    private Paint iconPaint;
-	private int playerColor;
 
 	
-	public Player(Tile location,String playerName, Boolean isFemale,Bitmap image){
+	public Player(Tile location,String playerName, Boolean isFemale,String playerIconPath,BitmapLoader bitmapLoader){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
 
-		int r = (int)(Math.random()*255);
-		int g = (int)(Math.random()*255);
-		int b = (int)(Math.random()*255);
+        if(playerIconPath.matches("Color")) {
+            Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler),200,200,false);
 
-		playerColor = Color.argb(255,r,g,b);
+            int r = (int) (Math.random() * 255);
+            int g = (int) (Math.random() * 255);
+            int b = (int) (Math.random() * 255);
 
-		Bitmap playerBackground = Bitmap.createBitmap(image.getWidth(),image.getHeight(), Bitmap.Config.ARGB_8888);
+            int playerColor = Color.argb(255, r, g, b);
 
-		Canvas canvas = new Canvas(playerBackground);
-		Paint paint = new Paint();
-		paint.setColor(playerColor);
-		canvas.drawRect(0,0,image.getWidth(),image.getHeight(),paint);
+            Bitmap playerBackground = Bitmap.createBitmap(playerIconBackground.getWidth(), playerIconBackground.getHeight(), Bitmap.Config.ARGB_8888);
 
-		playerImage = combineTwoBitmaps(playerBackground,image);
+            Canvas canvas = new Canvas(playerBackground);
+            Paint paint = new Paint();
+            paint.setColor(playerColor);
+            canvas.drawRect(0, 0, playerIconBackground.getWidth(), playerIconBackground.getHeight(), paint);
 
-        iconPaint = new Paint();
-        iconPaint.setStyle(Paint.Style.FILL);
-        iconPaint.setColor(playerColor);
+            playerIcon = combineTwoBitmaps(playerBackground, playerIconBackground);
+        }
+        else{
+            playerIcon = bitmapLoader.getBitmapFromPath(playerIconPath);
+        }
 
 	}
 
 
 	public void render(Canvas canvas){
-		canvas.drawRect(coordinates,iconPaint);
+		canvas.drawBitmap(playerIcon,null,coordinates,null);
 
 	}
 
@@ -115,13 +119,15 @@ public class Player {
 		}
 	}
 
-	private Bitmap combineTwoBitmaps(Bitmap bmp1,Bitmap bmp2){
-		Bitmap bitmapOverlay = Bitmap.createBitmap(bmp1.getWidth(),bmp1.getHeight(),bmp1.getConfig());
-		Canvas canvas = new Canvas(bitmapOverlay);
-		canvas.drawBitmap(bmp1,new Matrix(),null);
-		canvas.drawBitmap(bmp2,0,0,null);
-		return bitmapOverlay;
-	}
+    private Bitmap combineTwoBitmaps(Bitmap bmp1,Bitmap bmp2){
+        Bitmap bitmapOverlay = Bitmap.createBitmap(bmp1.getWidth(),bmp1.getHeight(),bmp1.getConfig());
+        Canvas canvas = new Canvas(bitmapOverlay);
+        canvas.drawBitmap(bmp1,new Matrix(),null);
+        canvas.drawBitmap(bmp2,0,0,null);
+        return bitmapOverlay;
+    }
+
+
 
 	public Tile getLocation() {
 		return location;
@@ -157,6 +163,6 @@ public class Player {
 	}
 
 	public Bitmap getImage() {
-		return playerImage;
+		return playerIcon;
 	}
 }

@@ -29,6 +29,10 @@ public class BitmapLoader implements Runnable{
         return bitmap;
     }
 
+    public Bitmap getBitmapFromPath(String path){
+        return BitmapFactory.decodeFile(path);
+    }
+
 
     @Override
     public void run() {
