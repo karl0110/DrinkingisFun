@@ -21,9 +21,12 @@ import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
 
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 
@@ -139,8 +142,9 @@ public class CharacterCreationActivity extends Activity {
             }
         }
 
+        BufferedWriter nameWriter;
         FileOutputStream outputStreamImage;
-        FileOutputStream outputStreamText;
+
         try{
             outputStreamImage = new FileOutputStream(myImagePath);
             playerIconImage.compress(Bitmap.CompressFormat.PNG,100,outputStreamImage);
@@ -148,9 +152,12 @@ public class CharacterCreationActivity extends Activity {
 
             String textToWrite = (":"+playerName+":"+imageName+":");
 
-            outputStreamText = new FileOutputStream(characterTextPath);
-            outputStreamText.write(textToWrite.getBytes());
-            outputStreamText.close();
+            nameWriter = new BufferedWriter(new FileWriter(characterTextPath,true));
+            nameWriter.newLine();
+            nameWriter.write(textToWrite);
+
+            nameWriter.close();
+
 
         } catch(Exception e){
             Log.e("SAVE_IMAGE", e.getMessage(), e);

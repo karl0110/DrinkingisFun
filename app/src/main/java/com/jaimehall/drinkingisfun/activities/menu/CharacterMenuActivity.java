@@ -26,10 +26,11 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class CharacterMenuActivity extends Activity {
 
-    private ArrayList<String> playerNames= new ArrayList<String>();
+    private String[] playerNames;
     private File characterDirectory;
     private File characterTextPath;
 
@@ -52,7 +53,17 @@ public class CharacterMenuActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("resuming");
+        refreshPlayerList();
+    }
+
+    public void deleteAllCharacters(View view){
+
+        try {
+            characterTextPath.delete();
+            characterTextPath.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         refreshPlayerList();
     }
 
@@ -60,13 +71,14 @@ public class CharacterMenuActivity extends Activity {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
         characterTextPath = new File(characterDirectory,"playerInformation");
+        System.out.println(characterTextPath.getAbsolutePath());
+
 
         if(characterTextPath.exists()){
-            System.out.println("reading characters");
+
             linearLayout.removeAllViews();
-            playerNames.clear();
 
-
+            ArrayList<String> untokenedPlayerNames= new ArrayList<String>();
             BufferedReader nameReader = null;
             try {
                 FileInputStream fis= new FileInputStream(characterTextPath);
@@ -75,23 +87,38 @@ public class CharacterMenuActivity extends Activity {
                 String line;
 
                 while((line = nameReader.readLine())!= null){
-                    playerNames.add(line);
+                    if(!line.matches("")) {
+                        untokenedPlayerNames.add(line);
+                    }
 
                 }
                 fis.close();
                 in.close();
-                System.out.println("lines:"+playerNames.size());
+
 
             }catch(IOException e){
                 e.printStackTrace();
             }
 
+            playerNames = new String[untokenedPlayerNames.size()];
+
+            for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
+                StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
+                if(tokens.hasMoreTokens()){
+                    playerNames[i] = tokens.nextToken();
+                }
+
+            }
+
+
             LinearLayout.LayoutParams buttonLayout = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            for(int i = 0;i<playerNames.size();i++){
+            for(int i = 0;i<playerNames.length;i++){
                 Button button = new Button(this);
-                button.setText(playerNames.get(i));
+                button.setText(playerNames[i]);
                 button.setLayoutParams(buttonLayout);
+                button.setTextSize(30f);
+                button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 linearLayout.addView(button);
 
             }
@@ -100,9 +127,7 @@ public class CharacterMenuActivity extends Activity {
 
 
         }
-        else{
-            System.out.println("File doesnt exist");
-        }
+
 
 
 
