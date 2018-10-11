@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -41,9 +42,9 @@ public class CharacterCreationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_creation);
 
-        playerIcon = findViewById(R.id.playerIconImageButton);
-        playerNameEditText = findViewById(R.id.playerNameEditText);
-        playerSexCheckBox = findViewById(R.id.characterSexCheckBox);
+        playerIcon = findViewById(R.id.imageButtonCreateCharacterName);
+        playerNameEditText = findViewById(R.id.editTextCreateCharacterName);
+        playerSexCheckBox = findViewById(R.id.checkBoxCreateCharacterSex);
         playerIconImage = null;
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -94,10 +95,6 @@ public class CharacterCreationActivity extends Activity {
                     playerIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,playerIcon.getWidth(),1.0f));
 
                 }
-                else{
-                    Toast.makeText(this,"Fail",Toast.LENGTH_SHORT);
-                }
-
 
             }
 
@@ -162,6 +159,7 @@ public class CharacterCreationActivity extends Activity {
         }
 
         Intent intent = new Intent(this,CharacterMenuActivity.class);
+        finish();
         startActivity(intent);
     }
 

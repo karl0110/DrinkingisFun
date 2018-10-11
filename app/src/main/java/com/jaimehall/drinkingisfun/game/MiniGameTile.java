@@ -17,7 +17,6 @@ public class MiniGameTile extends Tile {
     public MiniGameTile(float x, float y, float width , float height, Bitmap border,Bitmap background, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
         super(x,y,width,height,border,background,map,tileDifficulty);
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
-        isMiniGame = true;
     }
 
     public void renderMap(Canvas canvas){
@@ -37,10 +36,22 @@ public class MiniGameTile extends Tile {
     }
 
     @Override
+    public boolean isMiniGame() {
+        return true;
+    }
+
+    @Override
+    public boolean isGoal() {
+        return false;
+    }
+
+    @Override
     public void findNextTile(Bitmap arrowRight,Bitmap arrowRightUp,Bitmap arrowRightDown) {
+
         nextEasierTile = map.getTileFromTileMap(coordinatesOfNextTiles[0][0],coordinatesOfNextTiles[0][1]);
         nextTile = map.getTileFromTileMap(coordinatesOfNextTiles[1][0],coordinatesOfNextTiles[1][1]);
         nextHarderTile = map.getTileFromTileMap(coordinatesOfNextTiles[2][0],coordinatesOfNextTiles[2][1]);
+
         if(nextEasierTile != null){
             this.arrowRightUp = arrowRightUp;
             arrowUpRect = new Rect((int)(x+width-(arrowRightUp.getWidth()/2)),(int)(y-(arrowRightUp.getHeight()/2)),(int)(x+width+(arrowRightUp.getWidth()/2)),(int)(y+(arrowRightUp.getHeight()/2)));

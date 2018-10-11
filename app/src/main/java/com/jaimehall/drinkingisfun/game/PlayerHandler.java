@@ -15,6 +15,8 @@ import java.util.LinkedList;
 
 public class PlayerHandler {
 
+	private Game game;
+
 	private LinkedList<Player> players = new LinkedList<Player>();
 	private Player currentPlayer;
 	private Player nextPlayer;
@@ -29,6 +31,7 @@ public class PlayerHandler {
 	private boolean playerChanged = true;
 	
 	public PlayerHandler(Game game, float width, float height, BitmapLoader bitmapLoader){ ;
+		this.game=game;
 
 	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
 	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
@@ -80,24 +83,34 @@ public class PlayerHandler {
 	}
 	
 	public void nextPlayer() {
-	    if(!currentPlayer.getLocation().isMiniGame){
-	        currentPlayer.addToScore((currentPlayer.getLocation().getTileDifficulty()+1)*(20*Math.random()));
-        }
+			if (!currentPlayer.getLocation().isMiniGame()) {
+				currentPlayer.addToScore((currentPlayer.getLocation().getTileDifficulty() + 1) * (20 * Math.random()));
+			}
 
-        int indexOfNextPlayer = players.indexOf(nextPlayer);
+			int indexOfNextPlayer;
+			if(players.size()==1){
+				indexOfNextPlayer	=0;
+			}
+			else{
+				 indexOfNextPlayer= players.indexOf(nextPlayer);
+			}
 
-        if (indexOfNextPlayer == players.size() - 1) {
-            nextPlayer = players.get(0);
 
-        } else {
-            currentPlayer = nextPlayer;
-            nextPlayer = players.get(indexOfNextPlayer + 1);
-        }
-        currentPlayer = players.get(indexOfNextPlayer);
+			if (indexOfNextPlayer == players.size() - 1) {
+				nextPlayer = players.get(0);
 
-        currentPlayerChanged();
-        indexOfDetailedPlayer=0;
-        playerChanged = true;
+			} else {
+				currentPlayer = nextPlayer;
+				nextPlayer = players.get(indexOfNextPlayer + 1);
+			}
+			currentPlayer = players.get(indexOfNextPlayer);
+
+			currentPlayerChanged();
+			indexOfDetailedPlayer = 0;
+			playerChanged = true;
+
+
+
     }
 
 
@@ -154,11 +167,10 @@ public class PlayerHandler {
 
 	}
 
-
-	public void removePlayer(Player player) {
-		this.players.remove(player);
-		
+	public LinkedList<Player> getPlayers() {
+		return players;
 	}
+
 
 	public Player getCurrentPlayer() {
 		return currentPlayer;

@@ -14,6 +14,7 @@ import com.jaimehall.drinkingisfun.helpers.Renderer;
 import com.jaimehall.drinkingisfun.minigames.MiniGameHandler;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Game extends SurfaceView {
 
@@ -57,7 +58,7 @@ public class Game extends SurfaceView {
 
 
         for (int i = 0; i < playerNames.length; i++) {
-            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames[i], playerSexes[i],playerIcons[i],bitmapLoader));
+            playerHandler.addPlayer(new Player(map.getTileFromTileMap(8, 3), playerNames[i], playerSexes[i],playerIcons[i],bitmapLoader));
         }
         playerHandler.currentPlayerChanged();
 
@@ -71,6 +72,21 @@ public class Game extends SurfaceView {
         renderer = new Renderer(this, bitmapLoader,getHolder(),map,playerHandler,camera,miniGameHandler);
 
 
+
+    }
+
+    public void finishGame(){
+
+
+        LinkedList<Player> finishedPlayers = playerHandler.getPlayers();
+
+        String[] playerNames = new String[finishedPlayers.size()];
+        long[] playerScores = new long[finishedPlayers.size()];
+        for(int i = 0; i<finishedPlayers.size();i++){
+            playerNames[i] = finishedPlayers.get(i).getPlayerName();
+            playerScores[i] = finishedPlayers.get(i).getScore();
+        }
+        ((GameActivity)getContext()).startGameOverAcitivty(playerNames,playerScores);
 
     }
 
@@ -149,16 +165,22 @@ public class Game extends SurfaceView {
 
                     } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 
-                        if (playerHandler.getCurrentPlayer().getLocation().isMiniGame) {
+                        if (playerHandler.getCurrentPlayer().getLocation().isMiniGame()) {
                             startMiniGame();
-                        } else {
+                        }
+                        else if(playerHandler.getCurrentPlayer().getLocation().isGoal()){
+
+                            finishGame();
+                        }
+                        else {
                             camera.prepareFocusChange();
                         }
                     }
                 } else if (gameState == State.PLAYERMENU) {
                     if (Rect.intersects(touchPoint, playerIconTouchRect)) {
                         gameState = State.MAINGAME;
-                    } else {
+                    }
+                    else {
                         playerHandler.touched(touchPoint);
                     }
                 }

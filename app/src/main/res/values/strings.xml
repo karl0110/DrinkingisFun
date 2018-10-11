@@ -178,5 +178,7 @@
     </string-array>
     <string name="title_activity_character_menu">CharacterMenuActivity</string>
     <string name="title_activity_character_creation">CharacterCreationActivity</string>
+    <string name="title_activity_game_over">GameOverActivity</string>
+    <string name="title_activity_character_editing">CharacterEditingActivity</string>
 
 </resources>

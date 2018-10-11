@@ -37,12 +37,23 @@
         </activity>
         <activity
             android:name=".activities.menu.CharacterMenuActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_character_menu" />
+            android:label="@string/title_activity_character_menu"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.menu.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.menu.CharacterCreationActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_character_creation"></activity>
+            android:label="@string/title_activity_character_creation"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.menu.CharacterMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.GameOverActivity"
+            android:label="@string/title_activity_game_over"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.menu.CharacterEditingActivity"
+            android:label="@string/title_activity_character_editing"></activity>
     </application>
 
 </manifest>

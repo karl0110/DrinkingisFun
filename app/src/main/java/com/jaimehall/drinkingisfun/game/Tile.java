@@ -17,12 +17,11 @@ public abstract class Tile {
     protected float x,y;
     protected Bitmap image;
     protected Map map;
-    protected boolean taskFinished = false;
-    protected boolean isMiniGame;
+    private boolean taskFinished = false;
     protected int tileDifficulty;
-    protected TextRect textRect;
-    protected int textRectPrep;
-    protected float baseX,baseY;
+    private TextRect textRect;
+    private int textRectPrep;
+    private float baseX,baseY;
 
     public Tile(float x,float y,float width,float height,Bitmap border,Bitmap background,Map map,int tileDifficulty){
         this.width=width;
@@ -76,6 +75,9 @@ public abstract class Tile {
 
     public abstract int getTileDifficulty() ;
 
+    public abstract boolean isMiniGame();
+    public abstract boolean isGoal();
+
     public Rect getCoordinates(){
         return new Rect((int)x,(int)y,(int)(x+width),(int)(y+height));
     }
@@ -105,13 +107,6 @@ public abstract class Tile {
         this.y = y;
     }
 
-    public boolean isMiniGame() {
-        return isMiniGame;
-    }
-
-    public void setMiniGame(boolean miniGame) {
-        isMiniGame = miniGame;
-    }
 
     public float getWidth() {
         return width;

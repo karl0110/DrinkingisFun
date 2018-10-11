@@ -64,7 +64,8 @@ public class Player {
 	}
 
 	public void tick(){
-		if(!location.isMiniGame){
+
+		if(!location.isMiniGame() && !location.isGoal()){
 			if(prevLocation!=location){
 				NormalTile normalLocation = (NormalTile)location;
 				String[] tokenedInformation = normalLocation.getRandomInformation();
@@ -112,10 +113,13 @@ public class Player {
 				prevLocation=location;
 			}
 		}
-		else{
+		else if(location.isMiniGame()){
 
 			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
 
+		}
+		else {
+			completeInformation = "Ihr seid am Ziel angekommen!";
 		}
 	}
 

@@ -202,10 +202,6 @@ public class Map {
     }
 
     public Tile getTileFromTileMap(int indexA, int indexB){
-        if(tileMap[indexA][indexB]==null){
-            System.out.println(indexA);
-            System.out.println(indexB);
-        }
 
         return tileMap[indexA][indexB];
     }

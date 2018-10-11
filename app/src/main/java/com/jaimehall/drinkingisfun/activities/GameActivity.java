@@ -76,11 +76,18 @@ public class GameActivity extends Activity {
 
     }
 
+    public void startGameOverAcitivty(String[] playerNames, long[] playerScores){
+        Intent intent = new Intent(this,GameOverActivity.class);
+        intent.putExtra("playerNames",playerNames);
+        intent.putExtra("playerScores",playerScores);
+        startActivity(intent);
+    }
 
 
         protected void onResume() {
             super.onResume();
             game.resume();
+            game.setSystemUiVisibility(uiOptions);
 
         }
 

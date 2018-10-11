@@ -41,7 +41,7 @@ public class PongMiniGame extends MiniGame {
         else if(ballHit >4){
             game.finishMiniGame(1);
         }
-        else if(ballHit >0){
+        else if(ballHit >=0){
             game.finishMiniGame(0);
         }
     }

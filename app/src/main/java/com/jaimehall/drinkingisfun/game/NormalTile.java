@@ -21,7 +21,6 @@ public class NormalTile extends Tile {
         super(x,y,width,height,border,background,map,tileDifficulty);
         this.xPosOfNextTile=xPosOfNextTile;
         this.yPosOfNextTile=yPosOfNextTile;
-        isMiniGame=false;
         this.information=information;
     }
 
@@ -43,13 +42,25 @@ public class NormalTile extends Tile {
     }
 
     @Override
+    public boolean isMiniGame() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoal() {
+        return false;
+    }
+
+    @Override
     public Tile getNextTile() {
         return nextTile;
     }
 
     @Override
     public void findNextTile(Bitmap arrowRight,Bitmap arrowRightUp,Bitmap arrowRightDown) {
+
         nextTile=map.getTileFromTileMap(xPosOfNextTile, yPosOfNextTile);
+
         if((y/height)>yPosOfNextTile){
             arrow = arrowRightUp;
             arrowDirection = "UP";

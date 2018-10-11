@@ -14,6 +14,16 @@ public class Goal extends Tile {
     }
 
     @Override
+    public boolean isMiniGame() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoal() {
+        return true;
+    }
+
+    @Override
     public Tile getNextTile() { return null; }
 
     @Override

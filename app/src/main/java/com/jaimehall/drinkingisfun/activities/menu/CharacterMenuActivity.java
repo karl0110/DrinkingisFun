@@ -66,12 +66,22 @@ public class CharacterMenuActivity extends Activity {
 
     public void deleteAllCharacters(View view){
 
+        File[] filesInCharacterDirectory =characterDirectory.listFiles();
+
+        for(int i = 0; i<filesInCharacterDirectory.length;i++){
+            if(!filesInCharacterDirectory[i].equals(characterTextPath)){
+                filesInCharacterDirectory[i].delete();
+            }
+        }
+
         try {
             characterTextPath.delete();
             characterTextPath.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         refreshPlayerList();
     }
 
@@ -126,14 +136,29 @@ public class CharacterMenuActivity extends Activity {
             LinearLayout.LayoutParams buttonLayout = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
             for(int i = 0;i<playerNames.length;i++){
+                final int index =i;
                 Button button = new Button(this);
                 button.setText(playerNames[i]);
                 button.setLayoutParams(buttonLayout);
                 button.setTextSize(30f);
                 button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startCharacterEditing(index);
+                    }
+                });
                 linearLayout.addView(button);
 
             }
         }
+    }
+
+    public void startCharacterEditing(int index){
+        Intent intent = new Intent(this,CharacterEditingActivity.class);
+        intent.putExtra("characterIcon",imagePaths[index]);
+        intent.putExtra("characterName",playerNames[index]);
+        intent.putExtra("characterSex",playerSexes[index]);
+        this.startActivity(intent);
     }
 }
