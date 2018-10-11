@@ -118,12 +118,12 @@ public class Map {
         }
 
 
-        Bitmap miniGameBorder = bitmapLoader.getBitmap(R.drawable.minigameumrandung);
-        Bitmap greenBorder = bitmapLoader.getBitmap(R.drawable.grueneumrandung);
-        Bitmap blueBorder = bitmapLoader.getBitmap(R.drawable.blaueumrandung);
-        Bitmap goldBorder = bitmapLoader.getBitmap(R.drawable.goldeneumrandung);
+        Bitmap miniGameBorder = bitmapLoader.getBitmap(R.drawable.minigameumrandung,500,281);
+        Bitmap greenBorder = bitmapLoader.getBitmap(R.drawable.grueneumrandung,500,281);
+        Bitmap blueBorder = bitmapLoader.getBitmap(R.drawable.blaueumrandung,500,281);
+        Bitmap goldBorder = bitmapLoader.getBitmap(R.drawable.goldeneumrandung,500,281);
 
-        Bitmap background = bitmapLoader.getBitmap(R.drawable.uebergehenderhintergrund);
+        Bitmap background = bitmapLoader.getBitmap(R.drawable.uebergehenderhintergrund,500,281);
 
 
         tileMap[0][3] = new MiniGameTile(0*tileWidth, 3*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{1,2},{1,3},{1,4}},1);
@@ -172,9 +172,9 @@ public class Map {
         tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 10,6,tokenedStringHardTasks,2);
         tileMap[10][6] = new Goal(10*tileWidth, 6*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 2);
 
-        Bitmap arrowRight = bitmapLoader.getBitmap(R.drawable.pfeilrechts);
-        Bitmap arrowRightUp = bitmapLoader.getBitmap(R.drawable.pfeilrechtsoben);
-        Bitmap arrowRightDown = bitmapLoader.getBitmap(R.drawable.pfeilrechtsunten);
+        Bitmap arrowRight = bitmapLoader.getBitmap(R.drawable.pfeilrechts,50,50);
+        Bitmap arrowRightUp = bitmapLoader.getBitmap(R.drawable.pfeilrechtsoben,50,50);
+        Bitmap arrowRightDown = bitmapLoader.getBitmap(R.drawable.pfeilrechtsunten,50,50);
 
         for(int xxx=0; xxx<tileMap.length;xxx++){
             for(int yyy =0; yyy<tileMap[0].length;yyy++){

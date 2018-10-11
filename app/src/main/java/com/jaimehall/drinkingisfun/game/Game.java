@@ -33,7 +33,6 @@ public class Game extends SurfaceView {
     private PlayerHandler playerHandler;
     private MiniGameHandler miniGameHandler;
 
-    private float deltaX1, deltaX2;
     private State gameState;
 
     public enum State {
@@ -58,7 +57,7 @@ public class Game extends SurfaceView {
 
 
         for (int i = 0; i < playerNames.length; i++) {
-            playerHandler.addPlayer(new Player(map.getTileFromTileMap(8, 3), playerNames[i], playerSexes[i],playerIcons[i],bitmapLoader));
+            playerHandler.addPlayer(new Player(map.getTileFromTileMap(0, 3), playerNames[i], playerSexes[i],playerIcons[i],bitmapLoader));
         }
         playerHandler.currentPlayerChanged();
 

@@ -40,12 +40,10 @@ public class Renderer implements Runnable {
         this.camera=camera;
         this.miniGameHandler = miniGameHandler;
 
-        Resources resources = game.getResources();
+        showPlayers = bitmapLoader.getBitmap(R.drawable.spieleranzeigen,100,100);
 
-        showPlayers = bitmapLoader.getBitmap(R.drawable.spieleranzeigen);
-
-        zoomButtonZoomedIn = BitmapFactory.decodeResource(resources, R.drawable.minuslupe);
-        zoomButtonZoomedOut = BitmapFactory.decodeResource(resources, R.drawable.pluslupe);
+        zoomButtonZoomedIn = bitmapLoader.getBitmap(R.drawable.minuslupe,100,100);
+        zoomButtonZoomedOut = bitmapLoader.getBitmap( R.drawable.pluslupe,1000,1000);
 
     }
 
@@ -69,19 +67,19 @@ public class Renderer implements Runnable {
 
                     camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
 
-                    playerHandler.renderPlayerIcons(canvas);
+                    playerHandler.renderPlayerIconsOnCurrentTile(canvas);
 
                     canvas.drawBitmap(zoomButtonZoomedIn, null, camera.getZoomButtonRenderingRect(), null);
                     canvas.drawBitmap(showPlayers, null, camera.getPlayerIconRenderingRect(), null);
 
                 } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
                     map.render(canvas);
-                    playerHandler.renderPlayerIcons(canvas);
+                    playerHandler.renderPlayerIconsWholeMap(canvas);
 
                     canvas.drawBitmap(zoomButtonZoomedOut, null, camera.getZoomButtonRenderingRect(), null);
                 } else {
                     map.render(canvas);
-                    playerHandler.renderPlayerIcons(canvas);
+                    playerHandler.renderPlayerIconsWholeMap(canvas);
                 }
 
             } else if (game.getGameState() == Game.State.MINIGAME) {

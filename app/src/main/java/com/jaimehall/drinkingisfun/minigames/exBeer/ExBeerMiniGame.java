@@ -46,18 +46,18 @@ public class ExBeerMiniGame extends MiniGame {
 
         imageRect = new Rect((int)(width/8),(int)(height/16)*3,(int)((width/8)*7),(int)((height/16)*14));
         buttonRect = new Rect((int)((width/8)*3),(int)((height/16)*14)+10,(int)((width/8)*5),(int)(height-10));
-        button = bitmapLoader.getBitmap(R.drawable.tapbutton);
+        button = bitmapLoader.getBitmap(R.drawable.tapbutton,200,200);
         bottle = new Bitmap[10];
-        bottle[0]=bitmapLoader.getBitmap(R.drawable.bottle0);
-        bottle[1]=bitmapLoader.getBitmap(R.drawable.bottle1);
-        bottle[2]=bitmapLoader.getBitmap(R.drawable.bottle2);
-        bottle[3]=bitmapLoader.getBitmap(R.drawable.bottle3);
-        bottle[4]=bitmapLoader.getBitmap(R.drawable.bottle4);
-        bottle[5]=bitmapLoader.getBitmap(R.drawable.bottle5);
-        bottle[6]=bitmapLoader.getBitmap(R.drawable.bottle6);
-        bottle[7]=bitmapLoader.getBitmap(R.drawable.bottle7);
-        bottle[8]=bitmapLoader.getBitmap(R.drawable.bottle8);
-        bottle[9]=bitmapLoader.getBitmap(R.drawable.bottle9);
+        bottle[0]=bitmapLoader.getBitmap(R.drawable.bottle0,450,900);
+        bottle[1]=bitmapLoader.getBitmap(R.drawable.bottle1,450,900);
+        bottle[2]=bitmapLoader.getBitmap(R.drawable.bottle2,450,900);
+        bottle[3]=bitmapLoader.getBitmap(R.drawable.bottle3,450,900);
+        bottle[4]=bitmapLoader.getBitmap(R.drawable.bottle4,450,900);
+        bottle[5]=bitmapLoader.getBitmap(R.drawable.bottle5,450,900);
+        bottle[6]=bitmapLoader.getBitmap(R.drawable.bottle6,450,900);
+        bottle[7]=bitmapLoader.getBitmap(R.drawable.bottle7,450,900);
+        bottle[8]=bitmapLoader.getBitmap(R.drawable.bottle8,450,900);
+        bottle[9]=bitmapLoader.getBitmap(R.drawable.bottle9,450,900);
 
         tutorialRect = new Rect(0,0,(int)width,(int)height);
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.exbeertutorial);

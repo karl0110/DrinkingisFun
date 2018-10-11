@@ -34,7 +34,7 @@ public class Player {
 		this.isFemale=isFemale;
 
         if(playerIconPath.matches("Color")) {
-            Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler),200,200,false);
+            Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler,300,300),200,200,false);
 
             int r = (int) (Math.random() * 255);
             int g = (int) (Math.random() * 255);

@@ -18,10 +18,12 @@ public class PlayerHandler {
 	private Game game;
 
 	private LinkedList<Player> players = new LinkedList<Player>();
+	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
 	private Player currentPlayer;
 	private Player nextPlayer;
-	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
+
 	private int indexOfDetailedPlayer=0;
+
 	private Rect touchLeftRect,touchRightRect;
 	private Rect menuBackgroundRect;
 	private Rect playerMenuLeft,playerMenuRight,playerMenuName,playerMenuPic,playerMenuScore;
@@ -49,7 +51,7 @@ public class PlayerHandler {
         textPaint.setTextAlign(Paint.Align.CENTER);
 
 
-        playerMenuBackground = bitmapLoader.getBitmap(R.drawable.spielermenu);
+        playerMenuBackground = bitmapLoader.getBitmap(R.drawable.spielermenu,500,281);
 	}
 
     public void renderPlayerMenu(Canvas canvas){
@@ -127,23 +129,37 @@ public class PlayerHandler {
 			}
 		}
 
-		float baseX = currentTile.getX()+((currentTile.getWidth()/32)*3);
-		float baseY = currentTile.getY()+((currentTile.getHeight()/32)*23);
 
-		for(int i=0;i<playersOnCurrentTile.size();i++){
-			float x =baseX+(i*((float)((currentTile.getWidth()/16)*1.6875)+currentTile.getWidth()/128));
-			Rect rect = new Rect((int)x,(int)baseY,(int)(x+((currentTile.getWidth()/16)*1.6875)),(int)(baseY+((currentTile.getHeight()/16)*3)));
-			playersOnCurrentTile.get(i).setCoordinates(rect);
+
+		for(int i=0;i<players.size();i++){
+            Tile playerTile = players.get(i).getLocation();
+
+            float tileWidth = playerTile.getWidth();
+            float tileHeight= playerTile.getHeight();
+
+            float baseX = playerTile.getX()+((tileWidth/32)*3);
+            float baseY = playerTile.getY()+((tileHeight/32)*23);
+
+			float x =baseX+(i*((float)((tileWidth/16)*1.6875)+tileWidth/128));
+			Rect rect = new Rect((int)x,(int)baseY,(int)(x+((tileWidth/16)*1.6875)),(int)(baseY+((tileHeight/16)*3)));
+
+			players.get(i).setCoordinates(rect);
 		}
 
 	}
 
-	public void renderPlayerIcons(Canvas canvas) {
+	public void renderPlayerIconsOnCurrentTile(Canvas canvas) {
 		for(int i =0;i<playersOnCurrentTile.size();i++){
 			playersOnCurrentTile.get(i).render(canvas);
 		}
 
 	}
+
+	public void renderPlayerIconsWholeMap(Canvas canvas){
+        for(int i =0;i<players.size();i++){
+            players.get(i).render(canvas);
+        }
+    }
 
 
 

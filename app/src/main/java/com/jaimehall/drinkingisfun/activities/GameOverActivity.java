@@ -31,6 +31,9 @@ public class GameOverActivity extends Activity {
         playerScores = intent.getLongArrayExtra("playerScores");
 
         quickSort(playerScores,playerNames,0,playerScores.length-1);
+        invert(playerScores);
+        invert(playerNames);
+
 
         linearLayout = findViewById(R.id.scoreboardLinearLayout);
 
@@ -56,7 +59,7 @@ public class GameOverActivity extends Activity {
 
             TextView scoreTextView = new TextView(this);
             scoreTextView.setLayoutParams(layoutParams);
-            String displayScoreText = "       Score: "+playerScores[i];
+            String displayScoreText = "    Score: "+playerScores[i];
             scoreTextView.setText(displayScoreText);
             scoreTextView.setTextSize(30);
             scoreTextView.setTextColor(Color.WHITE);
@@ -113,6 +116,22 @@ public class GameOverActivity extends Activity {
 
         sortArray[index2] = backupLong;
         additionalArray[index2] = backupString;
+    }
+
+    private void invert(Object[] array) {
+        for (int i = 0; i < array.length / 2; i++) {
+            Object temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
+    }
+
+    private void invert(long[] array){
+        for (int i = 0; i < array.length / 2; i++) {
+            long temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
     }
 
 }
