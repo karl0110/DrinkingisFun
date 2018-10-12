@@ -4,12 +4,7 @@ package com.jaimehall.drinkingisfun.activities.menu;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -24,14 +19,11 @@ import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
-import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -39,8 +31,12 @@ import java.util.StringTokenizer;
 
 public class PlayerSelectActivity extends Activity {
 
+    private final int SELECT_CHARACTERS = 34;
+
     private ArrayList<EditText> playerNames;
     private EditText tempEditText;
+    private int indexForPlayerNames =0;
+
     private ArrayList<CheckBox> playerSexes;
     private CheckBox tempCheckBox;
     private LinearLayout linearLayout;
@@ -133,12 +129,6 @@ public class PlayerSelectActivity extends Activity {
                     playButton.setText("Play");
                     playButton.setTextColor(Color.BLACK);
 
-                    if(checkForExistingCharacters(editable.toString()) != (-1)){
-                        secondEditText.setBackgroundColor(Color.rgb(220,20,20));
-                    }
-                    else{
-                        secondEditText.setBackgroundColor(Color.TRANSPARENT);
-                    }
                 }
             }
         });
@@ -159,12 +149,6 @@ public class PlayerSelectActivity extends Activity {
                 playButton.setText("Play");
                 playButton.setTextColor(Color.BLACK);
 
-                if(checkForExistingCharacters(editable.toString()) != (-1)){
-                    firstEditText.setBackgroundColor(Color.rgb(220,20,20));
-                }
-                else{
-                    firstEditText.setBackgroundColor(Color.TRANSPARENT);
-                }
             }
         });
 
@@ -175,6 +159,36 @@ public class PlayerSelectActivity extends Activity {
         refreshPlayerList();
 
 
+    }
+
+    public void startCharacterSelection(View view){
+        Intent intent = new Intent(this,CharacterSelectActivity.class);
+        startActivityForResult(intent,SELECT_CHARACTERS);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == SELECT_CHARACTERS){
+
+                addCharacters(data.getBooleanArrayExtra("charactersSelected"));
+                refreshPlayerList();
+            }
+        }
+    }
+
+    private void addCharacters(boolean[] selectedCharacters){
+        for(int i = 0;i<characterNames.length;i++){
+            if(selectedCharacters[i]){
+                while(playerNames.get(indexForPlayerNames).getText().length() != 0){
+                    indexForPlayerNames++;
+                }
+                playerNames.get(indexForPlayerNames).setText(characterNames[i]);
+                playerSexes.get(indexForPlayerNames).setChecked(characterSexes[i]);
+            }
+        }
     }
 
     public void addTempViewsToList(){
@@ -223,12 +237,7 @@ public class PlayerSelectActivity extends Activity {
                     playButton.setText("Play");
                     playButton.setTextColor(Color.BLACK);
 
-                    if(checkForExistingCharacters(editable.toString()) != (-1)){
-                        tempEditText.setBackgroundColor(Color.rgb(220,20,20));
-                    }
-                    else{
-                        tempEditText.setBackgroundColor(Color.TRANSPARENT);
-                    }
+
                 }
             }
         });
@@ -236,6 +245,7 @@ public class PlayerSelectActivity extends Activity {
     }
 
     public void startGame(View view){
+
         if(playerNames.get(0).getText().length()==0 || playerNames.get(1).getText().length()==0) {
             playButton.setText("Bitte gibt eure Namen ein");
             playButton.setTextColor(Color.RED);
@@ -257,7 +267,8 @@ public class PlayerSelectActivity extends Activity {
                     if(checkForExistingCharacters(playerNames.get(i).getText().toString()) != (-1)){
                         int characterIndex = checkForExistingCharacters(playerNames.get(i).getText().toString());
                         playerStringNames[i] = characterNames[characterIndex];
-                        playerBitmapIconPaths[i] = characterBitmapPaths[characterIndex];
+                        File tempIcon = new File(characterDirectory,characterBitmapPaths[characterIndex]);
+                        playerBitmapIconPaths[i] = tempIcon.getPath();
                         playerBooleanSexes[i] = characterSexes[characterIndex];
                     }
                     else{
@@ -308,17 +319,13 @@ public class PlayerSelectActivity extends Activity {
             characterBitmapPaths = new String[untokenedPlayerNames.size()];
             characterSexes = new boolean[untokenedPlayerNames.size()];
 
-            File myImagePath;
 
             for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
                 StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
                 if(tokens.hasMoreTokens()){
                     characterNames[i] = tokens.nextToken();
 
-
-                    myImagePath = new File(characterDirectory,tokens.nextToken());
-                    characterBitmapPaths[i] = myImagePath.getPath();
-
+                    characterBitmapPaths[i] = tokens.nextToken();
 
                     if(tokens.nextToken().matches("true")){
                         characterSexes[i] = true;

@@ -148,9 +148,8 @@ public class CharacterCreationActivity extends Activity {
             String textToWrite = (":"+playerName+":"+imageName+":"+isFemale);
 
             nameWriter = new BufferedWriter(new FileWriter(characterTextPath,true));
-            nameWriter.newLine();
             nameWriter.write(textToWrite);
-
+            nameWriter.newLine();
             nameWriter.close();
 
 

@@ -161,4 +161,6 @@ public class CharacterMenuActivity extends Activity {
         intent.putExtra("characterSex",playerSexes[index]);
         this.startActivity(intent);
     }
+
+
 }

@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,6 +49,8 @@ public class CharacterEditingActivity extends Activity {
     private File characterIcon;
     private String characterName;
 
+    private String imageName;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,19 +60,29 @@ public class CharacterEditingActivity extends Activity {
         playerNameEditText = findViewById(R.id.editTextEditCharacterName);
         playerSexCheckBox = findViewById(R.id.checkBoxEditCharacterSex);
 
+
+
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
         characterTextPath = new File(characterDirectory,"playerInformation");
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
+        playerIcon.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = playerIcon.getWidth();
+                if (width > 0) {
+                    playerIcon.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    imageName = intent.getStringExtra("characterIcon");
+                    characterIcon = new File(characterDirectory,imageName);
+                    playerIcon.setImageBitmap(BitmapFactory.decodeFile(characterIcon.getPath()));
+                    playerIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,playerIcon.getWidth(),1.0f));
 
-        characterIcon = new File(characterDirectory,intent.getStringExtra("characterIcon"));
-        System.out.println("Width:"+playerIcon.getWidth());
-        playerIcon.setImageBitmap(BitmapFactory.decodeFile(characterIcon.getPath()));
-        playerIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,playerIcon.getWidth(),1.0f));
+                }
 
-
+            }
+        });
 
 
         characterName = intent.getStringExtra("characterName");
@@ -78,13 +91,15 @@ public class CharacterEditingActivity extends Activity {
 
         playerSexCheckBox.setChecked(intent.getBooleanExtra("characterSex",false));
 
+
         playerIconImage = null;
 
 
 
 
-
     }
+
+
 
     public void selectPlayerIcon(View view){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -145,7 +160,9 @@ public class CharacterEditingActivity extends Activity {
 
     public void save(View view){
 
-        characterIcon.delete();
+        if(playerIconImage != null) {
+            characterIcon.delete();
+        }
 
         ArrayList<String> untokenedLines= new ArrayList<String>();
         BufferedReader nameReader;
@@ -179,7 +196,10 @@ public class CharacterEditingActivity extends Activity {
         }
 
 
-        String imageName = "icon_"+System.currentTimeMillis()+".png";
+        if(playerIconImage != null) {
+            imageName = "icon_" + System.currentTimeMillis() + ".png";
+        }
+
         String playerName = playerNameEditText.getText().toString();
         boolean isFemale = playerSexCheckBox.isChecked();
 
@@ -191,9 +211,11 @@ public class CharacterEditingActivity extends Activity {
         FileOutputStream outputStreamImage;
 
         try{
-            outputStreamImage = new FileOutputStream(myImagePath);
-            playerIconImage.compress(Bitmap.CompressFormat.PNG,100,outputStreamImage);
-            outputStreamImage.close();
+            if(playerIconImage != null) {
+                outputStreamImage = new FileOutputStream(myImagePath);
+                playerIconImage.compress(Bitmap.CompressFormat.PNG, 100, outputStreamImage);
+                outputStreamImage.close();
+            }
 
             characterTextPath.delete();
             characterTextPath.createNewFile();
@@ -208,6 +230,7 @@ public class CharacterEditingActivity extends Activity {
                 else{
                     nameWriter.write(untokenedLines.get(i));
                 }
+                nameWriter.newLine();
             }
             nameWriter.close();
 
@@ -216,9 +239,7 @@ public class CharacterEditingActivity extends Activity {
             Log.e("SAVE_IMAGE", e.getMessage(), e);
         }
 
-        Intent intent = new Intent(this,CharacterMenuActivity.class);
         finish();
-        startActivity(intent);
     }
 
     public void delete(View view){
@@ -267,6 +288,7 @@ public class CharacterEditingActivity extends Activity {
             for(int i=0;i<untokenedLines.size();i++){
                 if(i != indexLineToBeDeleted){
                     nameWriter.write(untokenedLines.get(i));
+                    nameWriter.newLine();
                 }
 
             }
