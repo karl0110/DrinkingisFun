@@ -10,6 +10,8 @@ PlayerName:, trink :AnzahlSchlucke: wenn du gerne Sport guckst.
 PlayerName:, wenn du ein Android-Handy hast, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, wenn du einen Soundcloud-Account hast, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, wenn du schon mehr als 3 mal von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Anfänger.
-PlayerName:, wenn du Pyromaniker bist, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du Pyromaniker bist(Wenn du gerne Sachen anzündest), darfst du :AnzahlSchlucke: trinken.
 PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal mit einem Familienmitglied gekifft hast.
 PlayerName:, die anderen Spieler entscheiden, wie viele Bier du verträgst (0,5 L). So viele Schlucke darfst du trinken.
+PlayerName:, wenn du dich gerade in einer Bar befindest, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du gerade im Park bist, darfst du :AnzahlSchlucke: trinken.

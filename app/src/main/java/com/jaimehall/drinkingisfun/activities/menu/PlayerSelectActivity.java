@@ -1,8 +1,6 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,15 +17,10 @@ import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
+import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class PlayerSelectActivity extends Activity {
 
@@ -45,17 +38,14 @@ public class PlayerSelectActivity extends Activity {
     private LinearLayout.LayoutParams checkBoxParams;
     private LinearLayout.LayoutParams horizontalLinearLayoutParams;
 
-
-    private String[] characterNames;
-    private String[] characterBitmapPaths;
-    private boolean[] characterSexes;
-    private File characterDirectory;
-    private File characterTextPath;
+    private CharacterIO characterIO;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_select);
+
+        characterIO = (CharacterIO) getIntent().getSerializableExtra("characterIO");
 
         playerNames=new ArrayList<>();
         playerSexes= new ArrayList<>();
@@ -121,7 +111,7 @@ public class PlayerSelectActivity extends Activity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if(editable.length()>0){
-                    if(playerInputCreated==false){
+                    if(!playerInputCreated){
                         addNewPlayerInput();
                         addTempViewsToList();
                         playerInputCreated=true;
@@ -152,17 +142,13 @@ public class PlayerSelectActivity extends Activity {
             }
         });
 
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
-        characterTextPath = new File(characterDirectory,"playerInformation");
-
-        refreshPlayerList();
 
 
     }
 
     public void startCharacterSelection(View view){
         Intent intent = new Intent(this,CharacterSelectActivity.class);
+        intent.putExtra("characterIO",characterIO);
         startActivityForResult(intent,SELECT_CHARACTERS);
 
     }
@@ -174,12 +160,14 @@ public class PlayerSelectActivity extends Activity {
             if(requestCode == SELECT_CHARACTERS){
 
                 addCharacters(data.getBooleanArrayExtra("charactersSelected"));
-                refreshPlayerList();
             }
         }
     }
 
     private void addCharacters(boolean[] selectedCharacters){
+        String[] characterNames = characterIO.getCharacterNames();
+        boolean[] characterSexes = characterIO.getCharacterSexes();
+
         for(int i = 0;i<characterNames.length;i++){
             if(selectedCharacters[i]){
                 while(playerNames.get(indexForPlayerNames).getText().length() != 0){
@@ -229,7 +217,7 @@ public class PlayerSelectActivity extends Activity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if(editable.length()>0){
-                    if(playerInputCreated==false){
+                    if(!playerInputCreated){
                         addNewPlayerInput();
                         addTempViewsToList();
                         playerInputCreated=true;
@@ -257,6 +245,10 @@ public class PlayerSelectActivity extends Activity {
                 arrayLength++;
             }
 
+            String[] characterNames = characterIO.getCharacterNames();
+            String[] characterBitmapPaths = characterIO.getCharacterIcons();
+            boolean[] characterSexes = characterIO.getCharacterSexes();
+
             String[] playerStringNames = new String[arrayLength];
             String[] playerBitmapIconPaths = new String[arrayLength];
             boolean[] playerBooleanSexes = new boolean[arrayLength];
@@ -264,10 +256,10 @@ public class PlayerSelectActivity extends Activity {
             for (int i = 0; i < arrayLength; i++) {
                 if(playerNames.get(i).getText().length()!=0) {
 
-                    if(checkForExistingCharacters(playerNames.get(i).getText().toString()) != (-1)){
-                        int characterIndex = checkForExistingCharacters(playerNames.get(i).getText().toString());
+                    if(characterIO.checkForExistingCharacters(playerNames.get(i).getText().toString()) != (-1)){
+                        int characterIndex = characterIO.checkForExistingCharacters(playerNames.get(i).getText().toString());
                         playerStringNames[i] = characterNames[characterIndex];
-                        File tempIcon = new File(characterDirectory,characterBitmapPaths[characterIndex]);
+                        File tempIcon = new File(characterIO.getCharacterDirectory(),characterBitmapPaths[characterIndex]);
                         playerBitmapIconPaths[i] = tempIcon.getPath();
                         playerBooleanSexes[i] = characterSexes[characterIndex];
                     }
@@ -291,67 +283,8 @@ public class PlayerSelectActivity extends Activity {
         }
     }
 
-    private void refreshPlayerList(){
-        if(characterTextPath.exists()){
-
-            ArrayList<String> untokenedPlayerNames= new ArrayList<String>();
-            BufferedReader nameReader;
-            try {
-                FileInputStream fis= new FileInputStream(characterTextPath);
-                DataInputStream in = new DataInputStream(fis);
-                nameReader = new BufferedReader(new InputStreamReader(in));
-                String line;
-
-                while((line = nameReader.readLine())!= null){
-                    if(!line.matches("")) {
-                        untokenedPlayerNames.add(line);
-                    }
-
-                }
-                fis.close();
-                in.close();
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-
-            characterNames = new String[untokenedPlayerNames.size()];
-            characterBitmapPaths = new String[untokenedPlayerNames.size()];
-            characterSexes = new boolean[untokenedPlayerNames.size()];
 
 
-            for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
-                StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
-                if(tokens.hasMoreTokens()){
-                    characterNames[i] = tokens.nextToken();
-
-                    characterBitmapPaths[i] = tokens.nextToken();
-
-                    if(tokens.nextToken().matches("true")){
-                        characterSexes[i] = true;
-                    }
-                    else{
-                        characterSexes[i] = false;
-                    }
-                }
-
-            }
-
-        }
-    }
-
-    private int checkForExistingCharacters(String string){
-
-        int returnInt = -1;
-
-        for(int i = 0;i<characterNames.length;i++){
-            if(characterNames[i].matches(string)){
-                returnInt  = i ;
-            }
-        }
-
-        return returnInt;
-    }
 
 
 

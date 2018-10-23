@@ -48,53 +48,56 @@ public class Renderer implements Runnable {
     }
 
     private void render(){
-        if(surfaceHolder.getSurface().isValid()) {
+
             Canvas canvas  = surfaceHolder.lockCanvas();
+            if(canvas !=null) {
 
-            if (game.getGameState() == Game.State.MAINGAME) {
-                /////Start of scaling and translating
-                canvas.scale(camera.getScaleX(), camera.getScaleY());
-                canvas.translate(-camera.getTranslateX(), -camera.getTranslateY());
-                /////End of scaling and translating
+                if (game.getGameState() == Game.State.MAINGAME) {
+                    /////Start of scaling and translating
+                    canvas.scale(camera.getScaleX(), camera.getScaleY());
+                    canvas.translate(-camera.getTranslateX(), -camera.getTranslateY());
+                    /////End of scaling and translating
 
 
-                /////////Start of scaled and translated rendering
+                    /////////Start of scaled and translated rendering
 
-                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
-                if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
+                    if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 
-                    map.render(canvas, camera.getCurrentFocusedTile());
+                        map.render(canvas, camera.getCurrentFocusedTile());
 
-                    camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
+                        camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
 
-                    playerHandler.renderPlayerIconsOnCurrentTile(canvas);
+                        playerHandler.renderPlayerIconsOnCurrentTile(canvas);
 
-                    canvas.drawBitmap(zoomButtonZoomedIn, null, camera.getZoomButtonRenderingRect(), null);
-                    canvas.drawBitmap(showPlayers, null, camera.getPlayerIconRenderingRect(), null);
+                        canvas.drawBitmap(zoomButtonZoomedIn, null, camera.getZoomButtonRenderingRect(), null);
+                        canvas.drawBitmap(showPlayers, null, camera.getPlayerIconRenderingRect(), null);
 
-                } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
-                    map.render(canvas);
-                    playerHandler.renderPlayerIconsWholeMap(canvas);
+                    } else if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
+                        map.render(canvas);
+                        playerHandler.renderPlayerIconsWholeMap(canvas);
 
-                    canvas.drawBitmap(zoomButtonZoomedOut, null, camera.getZoomButtonRenderingRect(), null);
-                } else {
-                    map.render(canvas);
-                    playerHandler.renderPlayerIconsWholeMap(canvas);
+                        canvas.drawBitmap(zoomButtonZoomedOut, null, camera.getZoomButtonRenderingRect(), null);
+                    } else {
+                        map.render(canvas);
+                        playerHandler.renderPlayerIconsWholeMap(canvas);
+                    }
+
+                } else if (game.getGameState() == Game.State.MINIGAME) {
+                    miniGameHandler.render(canvas);
+                } else if (game.getGameState() == Game.State.PLAYERMENU) {
+                    playerHandler.renderPlayerMenu(canvas);
+
                 }
 
-            } else if (game.getGameState() == Game.State.MINIGAME) {
-                miniGameHandler.render(canvas);
-            } else if (game.getGameState() == Game.State.PLAYERMENU) {
-                playerHandler.renderPlayerMenu(canvas);
+                //////////End of Rendering
+                //////Start of unscaled and unstranslated Rendering
 
+                //////End
+                surfaceHolder.unlockCanvasAndPost(canvas);
             }
 
-            //////////End of Rendering
-            //////Start of unscaled and unstranslated Rendering
 
-            //////End
-            surfaceHolder.unlockCanvasAndPost(canvas);
-        }
 
     }
 

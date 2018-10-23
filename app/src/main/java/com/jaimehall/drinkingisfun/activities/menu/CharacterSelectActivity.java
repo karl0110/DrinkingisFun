@@ -1,7 +1,5 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,27 +8,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
+import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class CharacterSelectActivity extends Activity {
 
-    private String[] characterNames;
-    private String[] characterBitmapPaths;
-    private boolean[] characterSexes;
-    private File characterDirectory;
-    private File characterTextPath;
 
     private CheckBox[] characterSelectedCheckBox;
 
@@ -40,16 +25,15 @@ public class CharacterSelectActivity extends Activity {
     private LinearLayout.LayoutParams checkBoxLayoutParams;
     private LinearLayout.LayoutParams horizontalLayoutParams;
 
+    private CharacterIO characterIO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_select);
 
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
-        characterTextPath = new File(characterDirectory,"playerInformation");
+        characterIO = (CharacterIO) getIntent().getSerializableExtra("characterIO");
 
-        refreshPlayerList();
 
         linearLayout = findViewById(R.id.linearLayoutCharacterSelect);
 
@@ -72,7 +56,6 @@ public class CharacterSelectActivity extends Activity {
 
         data.putExtra("charactersSelected",charactersSelected);
         setResult(RESULT_OK,data);
-        System.out.println("finishing up");
 
         finish();
     }
@@ -80,11 +63,12 @@ public class CharacterSelectActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        refreshPlayerList();
         refreshUi();
     }
 
     private void refreshUi(){
+        String[] characterNames = characterIO.getCharacterNames();
+
         linearLayout.removeAllViews();
         characterSelectedCheckBox = new CheckBox[characterNames.length];
 
@@ -124,59 +108,13 @@ public class CharacterSelectActivity extends Activity {
 
     public void startCharacterEditing(int index){
         Intent intent = new Intent(this,CharacterEditingActivity.class);
-        intent.putExtra("characterIcon",characterBitmapPaths[index]);
-        intent.putExtra("characterName",characterNames[index]);
-        intent.putExtra("characterSex",characterSexes[index]);
+        intent.putExtra("characterIO",characterIO);
+        intent.putExtra("characterIcon",characterIO.getCharacterIcons()[index]);
+        intent.putExtra("characterName",characterIO.getCharacterNames()[index]);
+        intent.putExtra("characterSex",characterIO.getCharacterSexes()[index]);
         this.startActivity(intent);
     }
 
-    private void refreshPlayerList(){
-        if(characterTextPath.exists()){
 
-            ArrayList<String> untokenedPlayerNames= new ArrayList<String>();
-            BufferedReader nameReader;
-            try {
-                FileInputStream fis= new FileInputStream(characterTextPath);
-                DataInputStream in = new DataInputStream(fis);
-                nameReader = new BufferedReader(new InputStreamReader(in));
-                String line;
-
-                while((line = nameReader.readLine())!= null){
-                    if(!line.matches("")) {
-                        untokenedPlayerNames.add(line);
-                    }
-
-                }
-                fis.close();
-                in.close();
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-
-            characterNames = new String[untokenedPlayerNames.size()];
-            characterBitmapPaths = new String[untokenedPlayerNames.size()];
-            characterSexes = new boolean[untokenedPlayerNames.size()];
-
-            for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
-                StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
-                if(tokens.hasMoreTokens()){
-                    characterNames[i] = tokens.nextToken();
-
-                    characterBitmapPaths[i] = tokens.nextToken();
-
-
-                    if(tokens.nextToken().matches("true")){
-                        characterSexes[i] = true;
-                    }
-                    else{
-                        characterSexes[i] = false;
-                    }
-                }
-
-            }
-
-        }
-    }
 
 }

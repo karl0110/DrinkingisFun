@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
+import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,37 +35,20 @@ public class CharacterCreationActivity extends Activity {
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
     private Bitmap playerIconImage;
-    private File characterDirectory;
-    private File characterTextPath;
+
+    private CharacterIO characterIO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_creation);
 
+        characterIO = (CharacterIO) getIntent().getSerializableExtra("characterIO");
+
         playerIcon = findViewById(R.id.imageButtonCreateCharacterName);
         playerNameEditText = findViewById(R.id.editTextCreateCharacterName);
         playerSexCheckBox = findViewById(R.id.checkBoxCreateCharacterSex);
         playerIconImage = null;
-
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
-
-        if(!characterDirectory.exists()){
-            characterDirectory.mkdir();
-        }
-
-        characterTextPath = new File(characterDirectory,"playerInformation");
-        if(!characterTextPath.exists()){
-            try {
-                characterTextPath.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
 
 
 
@@ -128,34 +112,7 @@ public class CharacterCreationActivity extends Activity {
         String playerName = playerNameEditText.getText().toString();
         boolean isFemale = playerSexCheckBox.isChecked();
 
-        File myImagePath = new File(characterDirectory,imageName);
-        if(!myImagePath.exists()){
-            try {
-                myImagePath.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        BufferedWriter nameWriter;
-        FileOutputStream outputStreamImage;
-
-        try{
-            outputStreamImage = new FileOutputStream(myImagePath);
-            playerIconImage.compress(Bitmap.CompressFormat.PNG,100,outputStreamImage);
-            outputStreamImage.close();
-
-            String textToWrite = (":"+playerName+":"+imageName+":"+isFemale);
-
-            nameWriter = new BufferedWriter(new FileWriter(characterTextPath,true));
-            nameWriter.write(textToWrite);
-            nameWriter.newLine();
-            nameWriter.close();
-
-
-        } catch(Exception e){
-            Log.e("SAVE_IMAGE", e.getMessage(), e);
-        }
+        characterIO.save(imageName,playerIconImage,playerName,isFemale);
 
         Intent intent = new Intent(this,CharacterMenuActivity.class);
         finish();

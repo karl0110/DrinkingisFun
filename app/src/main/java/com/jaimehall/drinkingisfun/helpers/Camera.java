@@ -1,12 +1,16 @@
 package com.jaimehall.drinkingisfun.helpers;
 
+import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 
+import com.jaimehall.drinkingisfun.activities.menu.SettingsActivity;
 import com.jaimehall.drinkingisfun.game.Game;
 import com.jaimehall.drinkingisfun.game.PlayerHandler;
 import com.jaimehall.drinkingisfun.game.Tile;
 
-public class Camera implements Runnable {
+public class Camera implements Runnable{
 
     private float width,height;
 
@@ -17,7 +21,7 @@ public class Camera implements Runnable {
     private PlayerHandler playerHandler;
 
     private double maxZoom;
-    private static final int zoomSpeed = 40;
+    private static int zoomSpeed;
 
     private int touchTimer;
 
@@ -61,6 +65,13 @@ public class Camera implements Runnable {
         this.width=width;
         this.height=height;
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(game.getContext());
+
+        double zoomSeconds = Double.parseDouble(sharedPreferences.getString(SettingsActivity.KEY_PREF_ZOOM_SPEED,"" ));
+        zoomSpeed = (int)(30*zoomSeconds);
+
+        System.out.println("Zoomspeed:          "+zoomSpeed);
+
         cameraState = CameraState.FOCUSED;
 
         playerIconRenderingRect = new Rect();
@@ -76,7 +87,12 @@ public class Camera implements Runnable {
         xZoomTranslateVariable = ((focusedTileWidth / 2) * focusedScaleX);
         yZoomTranslateVariable = ((focusedTileHeight / 2) * focusedScaleY);
 
+
+
+
     }
+
+
 
     public void run(){
         long lastTime = System.nanoTime();//Wird für einen Timer benötigt.

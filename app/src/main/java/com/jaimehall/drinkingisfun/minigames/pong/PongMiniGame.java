@@ -35,10 +35,10 @@ public class PongMiniGame extends MiniGame {
     }
 
     public void gameOver(){
-        if(ballHit >=8){
+        if(ballHit >=7){
             game.finishMiniGame(2);
         }
-        else if(ballHit >4){
+        else if(ballHit >=4){
             game.finishMiniGame(1);
         }
         else if(ballHit >=0){

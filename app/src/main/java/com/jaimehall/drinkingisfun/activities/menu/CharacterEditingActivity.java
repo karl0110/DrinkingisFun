@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
+import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,27 +45,25 @@ public class CharacterEditingActivity extends Activity {
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
     private Bitmap playerIconImage;
-    private File characterDirectory;
-    private File characterTextPath;
     private File characterIcon;
     private String characterName;
 
     private String imageName;
+
+    private CharacterIO characterIO;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_editing);
 
+        characterIO = (CharacterIO) getIntent().getSerializableExtra("characterIO");
+
         playerIcon = findViewById(R.id.imageButtonEditCharacterIcon);
         playerNameEditText = findViewById(R.id.editTextEditCharacterName);
         playerSexCheckBox = findViewById(R.id.checkBoxEditCharacterSex);
 
 
-
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        characterDirectory = cw.getDir("characters", Context.MODE_PRIVATE);
-        characterTextPath = new File(characterDirectory,"playerInformation");
 
         final Intent intent = getIntent();
 
@@ -75,7 +74,7 @@ public class CharacterEditingActivity extends Activity {
                 if (width > 0) {
                     playerIcon.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     imageName = intent.getStringExtra("characterIcon");
-                    characterIcon = new File(characterDirectory,imageName);
+                    characterIcon = new File(characterIO.getCharacterDirectory(),imageName);
                     playerIcon.setImageBitmap(BitmapFactory.decodeFile(characterIcon.getPath()));
                     playerIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,playerIcon.getWidth(),1.0f));
 
@@ -88,14 +87,9 @@ public class CharacterEditingActivity extends Activity {
         characterName = intent.getStringExtra("characterName");
         playerNameEditText.setText(characterName);
 
-
         playerSexCheckBox.setChecked(intent.getBooleanExtra("characterSex",false));
 
-
         playerIconImage = null;
-
-
-
 
     }
 
@@ -126,10 +120,6 @@ public class CharacterEditingActivity extends Activity {
                     playerIcon.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,playerIcon.getWidth(),1.0f));
 
                 }
-                else{
-                    Toast.makeText(this,"Fail",Toast.LENGTH_SHORT);
-                }
-
 
             }
 
@@ -162,82 +152,14 @@ public class CharacterEditingActivity extends Activity {
 
         if(playerIconImage != null) {
             characterIcon.delete();
-        }
-
-        ArrayList<String> untokenedLines= new ArrayList<String>();
-        BufferedReader nameReader;
-        try {
-            FileInputStream fis= new FileInputStream(characterTextPath);
-            DataInputStream in = new DataInputStream(fis);
-            nameReader = new BufferedReader(new InputStreamReader(in));
-            String line;
-
-            while((line = nameReader.readLine())!= null){
-                untokenedLines.add(line);
-
-            }
-            fis.close();
-            in.close();
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-        int indexLineToBeDeleted =0;
-
-        for(int i = 0; i<untokenedLines.size() ; i++) {
-            StringTokenizer tokens = new StringTokenizer(untokenedLines.get(i), ":");
-            if(tokens.hasMoreTokens()){
-               if(tokens.nextToken().matches(characterName)){
-                    indexLineToBeDeleted = i;
-               }
-            }
-
-        }
-
-
-        if(playerIconImage != null) {
             imageName = "icon_" + System.currentTimeMillis() + ".png";
         }
+
 
         String playerName = playerNameEditText.getText().toString();
         boolean isFemale = playerSexCheckBox.isChecked();
 
-        File myImagePath = new File(characterDirectory,imageName);
-
-
-
-        BufferedWriter nameWriter;
-        FileOutputStream outputStreamImage;
-
-        try{
-            if(playerIconImage != null) {
-                outputStreamImage = new FileOutputStream(myImagePath);
-                playerIconImage.compress(Bitmap.CompressFormat.PNG, 100, outputStreamImage);
-                outputStreamImage.close();
-            }
-
-            characterTextPath.delete();
-            characterTextPath.createNewFile();
-            nameWriter = new BufferedWriter(new FileWriter(characterTextPath,true));
-
-            String textToWrite = (":"+playerName+":"+imageName+":"+isFemale);
-
-            for(int i=0;i<untokenedLines.size();i++){
-                if(i == indexLineToBeDeleted){
-                    nameWriter.write(textToWrite);
-                }
-                else{
-                    nameWriter.write(untokenedLines.get(i));
-                }
-                nameWriter.newLine();
-            }
-            nameWriter.close();
-
-
-        } catch(Exception e){
-            Log.e("SAVE_IMAGE", e.getMessage(), e);
-        }
+        characterIO.replaceCharacter(characterName,playerName,isFemale,imageName,playerIconImage);
 
         finish();
     }
@@ -245,59 +167,7 @@ public class CharacterEditingActivity extends Activity {
     public void delete(View view){
         characterIcon.delete();
 
-        ArrayList<String> untokenedLines= new ArrayList<String>();
-        BufferedReader nameReader;
-        try {
-            FileInputStream fis= new FileInputStream(characterTextPath);
-            DataInputStream in = new DataInputStream(fis);
-            nameReader = new BufferedReader(new InputStreamReader(in));
-            String line;
-
-            while((line = nameReader.readLine())!= null){
-                untokenedLines.add(line);
-
-            }
-            fis.close();
-            in.close();
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-        int indexLineToBeDeleted =0;
-
-        for(int i = 0; i<untokenedLines.size() ; i++) {
-            StringTokenizer tokens = new StringTokenizer(untokenedLines.get(i), ":");
-            if(tokens.hasMoreTokens()) {
-                if (tokens.nextToken().matches(characterName)) {
-                    indexLineToBeDeleted = i;
-                }
-            }
-
-        }
-
-
-        BufferedWriter nameWriter;
-
-        try{
-            characterTextPath.delete();
-            characterTextPath.createNewFile();
-            nameWriter = new BufferedWriter(new FileWriter(characterTextPath,true));
-
-
-            for(int i=0;i<untokenedLines.size();i++){
-                if(i != indexLineToBeDeleted){
-                    nameWriter.write(untokenedLines.get(i));
-                    nameWriter.newLine();
-                }
-
-            }
-            nameWriter.close();
-
-
-        } catch(Exception e){
-            Log.e("SAVE_IMAGE", e.getMessage(), e);
-        }
+        characterIO.deleteCharacter(characterName);
 
         Intent intent = new Intent(this,CharacterMenuActivity.class);
         finish();

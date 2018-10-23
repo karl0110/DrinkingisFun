@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ListPreference
+        android:key="pref_key_zoom_speed"
+        android:summary="@string/pref_summary_zoom_speed"
+        android:title="@string/pref_title_zoom_speed"
+        android:dialogTitle="@string/pref_title_zoom_speed"
+        android:defaultValue="@string/pref_default_zoom_speed"
+        android:entries="@array/pref_entries_zoom_speed"
+        android:entryValues="@array/pref_values_zoom_speed"
+
+        />
+
+</PreferenceScreen>

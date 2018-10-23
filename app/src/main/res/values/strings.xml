@@ -93,12 +93,45 @@
     </string>
     <string name="title_activity_mini_game">MiniGameActivity</string>
     <string name="title_activity_mini_game_handler">MiniGameHandlerActivity</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Einstellungen</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_general">Spieleinstellungen</string>
+
+    <string name="pref_title_zoom_speed">Zoomgeschwindigkeit</string>
+    <string name="pref_summary_zoom_speed">Wie schnell soll das Spiel rein- und rauszoomen.</string>
+    <string name="pref_default_zoom_speed">1.2</string>
+
+    <string-array name="pref_entries_zoom_speed">
+        <item>0 s</item>
+        <item>0,2 s</item>
+        <item>0,4 s</item>
+        <item>0,6 s</item>
+        <item>0,8 s</item>
+        <item>1,0 s</item>
+        <item>1,2 s</item>
+        <item>1,4 s</item>
+        <item>1,6 s</item>
+        <item>1,8 s</item>
+        <item>2,0 s</item>
+    </string-array>
+
+    <string-array name="pref_values_zoom_speed">
+        <item>0</item>
+        <item>0.2</item>
+        <item>0.4</item>
+        <item>0.6</item>
+        <item>0.8</item>
+        <item>1.0</item>
+        <item>1.2</item>
+        <item>1.4</item>
+        <item>1.6</item>
+        <item>1.8</item>
+        <item>2.0</item>
+    </string-array>
+
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact

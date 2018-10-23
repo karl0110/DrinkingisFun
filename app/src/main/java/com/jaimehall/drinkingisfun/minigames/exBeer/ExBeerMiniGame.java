@@ -45,7 +45,7 @@ public class ExBeerMiniGame extends MiniGame {
        this.height = height;
 
         imageRect = new Rect((int)(width/8),(int)(height/16)*3,(int)((width/8)*7),(int)((height/16)*14));
-        buttonRect = new Rect((int)((width/8)*3),(int)((height/16)*14)+10,(int)((width/8)*5),(int)(height-10));
+        buttonRect = new Rect((int)((width/8)*2),(int)((height/16)*14)+10,(int)((width/8)*6),(int)(height-10));
         button = bitmapLoader.getBitmap(R.drawable.tapbutton,200,200);
         bottle = new Bitmap[10];
         bottle[0]=bitmapLoader.getBitmap(R.drawable.bottle0,450,900);
@@ -92,7 +92,7 @@ public class ExBeerMiniGame extends MiniGame {
             if (buttonRect.contains(touchPoint)) {
 
                 tapCounter++;
-                if (tapCounter >= 40) {
+                if (tapCounter >= 37) {
                     tapCounter = 0;
                     bottleFillStep--;
                 }
@@ -114,7 +114,7 @@ public class ExBeerMiniGame extends MiniGame {
             timerString = "Time left: "+displayTimer/10000+" s";
         }
         if(timer>=amountOfMilliSeconds || bottleFillStep == 0){
-            if(bottleFillStep > 5){
+            if(bottleFillStep > 3){
                 game.finishMiniGame(0);
             }
             else if(bottleFillStep >2){

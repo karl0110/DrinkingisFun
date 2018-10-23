@@ -8,9 +8,11 @@ PlayerName:, die anderen Spieler suchen sich ein Wort aus das du nicht mehr sage
 PlayerName:, du darfst so viel von deinem Getränk trinken, wie dein Handyakku Prozent hat. (50% = halbes Glas)
 PlayerName:, du darfst so viele Schlucke trinken, wie du Buchstaben des Alphabets rückwärts aufsagen kannst.
 PlayerName:, du darfst so viele Schlucke verteilen, wie du Biermarken in 10 Sekunden aufsagen kannst.
-PlayerName:, erzähl eine Geschichte, die anderen Spieler bewerten diese von 0 bis 5. So viele Schlucke darfst du trinken.
+PlayerName:, erzähl eine Geschichte (fiktiv oder nicht), die anderen Spieler bewerten diese von 0 bis 5. So viele Schlucke darfst du trinken.
 PlayerName:, wenn du es schonmal geschafft hast von Gras zu kotzen, darfst du :AnzahlSchlucke: verteilen.
 PlayerName:, wenn du schon mehr als 15 mal von Alkohol gekotzt hast, darfst die nächsten 2 Runden aus den Gläsern deiner Mitspieler trinken + Trink :AnzahlSchlucke:.
 PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal auf einem Familientreffen besoffen warst.
+PlayerName:, wenn du die Schuhgröße deines rechten Nachbarn erraten kannst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, für jeden Fahrradunfall auf Suff darfst du :AnzahlSchlucke: trinken. Ab 1,3 Promille ist Fahrrad fahren illegal!!! :)
 
 
