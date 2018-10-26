@@ -13,7 +13,7 @@ public class PongBall {
     private Paint ballPaint;
     private boolean isGhostBall;
 
-    public PongBall(PongMiniGame pongMiniGame,float x,float y,float radius,float xVel, float yVel,float acceleration,boolean isGhostBall){
+    PongBall(PongMiniGame pongMiniGame,float x,float y,float radius,float xVel, float yVel,float acceleration,boolean isGhostBall){
         this.x=x;
         this.y=y;
         this.xVel=xVel;
@@ -69,7 +69,7 @@ public class PongBall {
                 pongMiniGame.gameOver();
             }
             if(y<0){
-                pongMiniGame.gameOver(2);
+                pongMiniGame.gameOverFull();
             }
             if(Rect.intersects(getCoordinates(),pongMiniGame.getPlayerPaddle().getCoordinates())){
                 if(Math.signum(yVel) == Math.signum(1)){
@@ -96,7 +96,7 @@ public class PongBall {
 
     }
 
-    public Rect getCoordinates(){
+    private Rect getCoordinates(){
         return new Rect((int)x,(int)y,(int)(x+radius),(int)(y+radius));
     }
 
@@ -108,11 +108,11 @@ public class PongBall {
         return y;
     }
 
-    public float getxVel() {
+    float getxVel() {
         return xVel;
     }
 
-    public float getyVel() {
+    float getyVel() {
         return yVel;
     }
 
@@ -124,19 +124,12 @@ public class PongBall {
         this.y = y;
     }
 
-    public void setxVel(float xVel) {
+    void setxVel(float xVel) {
         this.xVel = xVel;
     }
 
-    public void setyVel(float yVel) {
+    void setyVel(float yVel) {
         this.yVel = yVel;
     }
 
-    public float getAcceleration() {
-        return acceleration;
-    }
-
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
 }

@@ -39,17 +39,20 @@
             android:label="@string/title_activity_character_creation"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.menu.CharacterMenuActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.GameOverActivity"
             android:label="@string/title_activity_game_over"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.menu.CharacterEditingActivity"
-            android:label="@string/title_activity_character_editing" />
+            android:label="@string/title_activity_character_editing"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.menu.CharacterSelectActivity"
-            android:label="@string/title_activity_character_select" />
+            android:label="@string/title_activity_character_select"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.menu.SettingsActivity"
             android:label="@string/title_activity_settings"

@@ -3,7 +3,6 @@ package com.jaimehall.drinkingisfun.minigames.pong;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -34,7 +33,7 @@ public class PongMiniGame extends MiniGame {
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.pongtutorial);
     }
 
-    public void gameOver(){
+    void gameOver(){
         if(ballHit >=7){
             game.finishMiniGame(2);
         }
@@ -46,8 +45,8 @@ public class PongMiniGame extends MiniGame {
         }
     }
 
-    public void gameOver(int i){
-        game.finishMiniGame(i);
+    void gameOverFull(){
+        game.finishMiniGame(2);
     }
 
     public void tutorialFinished(){
@@ -65,7 +64,7 @@ public class PongMiniGame extends MiniGame {
         tutorialFinished=false;
     }
 
-    public void resetGhostBall(){
+    void resetGhostBall(){
         ghostPongBall.setX(pongBall.getX());
         ghostPongBall.setxVel((pongBall.getxVel()*2));
         ghostPongBall.setY(pongBall.getY());
@@ -122,17 +121,15 @@ public class PongMiniGame extends MiniGame {
         return height;
     }
 
-    public void ballHit(){
+    void ballHit(){
         ballHit++;
     }
 
-
-
-    public EnemyPaddle getEnemyPaddle() {
+    EnemyPaddle getEnemyPaddle() {
         return enemyPaddle;
     }
 
-    public PlayerPaddle getPlayerPaddle() {
+    PlayerPaddle getPlayerPaddle() {
         return playerPaddle;
     }
 

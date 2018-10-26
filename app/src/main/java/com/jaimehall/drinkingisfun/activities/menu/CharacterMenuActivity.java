@@ -1,6 +1,9 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -61,6 +64,19 @@ public class CharacterMenuActivity extends Activity {
             button.setText(playerNames[i]);
             button.setLayoutParams(buttonLayout);
             button.setTextSize(30f);
+
+            int darkRed = getResources().getColor(R.color.darkRed);
+
+            button.setTextColor(darkRed);
+
+            ShapeDrawable sd = new ShapeDrawable();
+            sd.setShape(new RoundRectShape(new float[]{100,100,100,100,100,100,100,100},null,null));
+            sd.getPaint().setColor(darkRed);
+            sd.getPaint().setStrokeWidth(20f);
+            sd.getPaint().setStyle(Paint.Style.STROKE);
+            button.setBackground(sd);
+
+
             button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             button.setOnClickListener(new View.OnClickListener() {
                     @Override

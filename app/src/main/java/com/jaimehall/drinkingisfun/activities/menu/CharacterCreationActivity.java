@@ -1,31 +1,21 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class CharacterCreationActivity extends Activity {
 

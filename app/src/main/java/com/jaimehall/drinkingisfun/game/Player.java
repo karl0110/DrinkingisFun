@@ -1,7 +1,6 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -9,29 +8,26 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.jaimehall.drinkingisfun.R;
-import com.jaimehall.drinkingisfun.activities.GameActivity;
 import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
-import com.jaimehall.drinkingisfun.helpers.TextRect;
-
-import java.util.StringTokenizer;
+import com.jaimehall.drinkingisfun.helpers.TextHandler;
 
 
 public class Player {
 
 	private Tile location;
-	private Tile prevLocation;
-	private String completeInformation;
 	private String playerName;
 	private boolean isFemale;
 	private long score = 0;
 	private Bitmap playerIcon;
 	private Rect coordinates;
+	private TextHandler textHandler;
 
 	
-	public Player(Tile location,String playerName, Boolean isFemale,String playerIconPath,BitmapLoader bitmapLoader){
+	Player(Tile location, String playerName, Boolean isFemale, String playerIconPath, BitmapLoader bitmapLoader, TextHandler textHandler){
 		this.location=location;
 		this.playerName=playerName;
 		this.isFemale=isFemale;
+		this.textHandler=textHandler;
 
         if(playerIconPath.matches("Color")) {
             Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler,300,300),200,200,false);
@@ -60,68 +56,8 @@ public class Player {
 
 	public void render(Canvas canvas){
 		canvas.drawBitmap(playerIcon,null,coordinates,null);
-
 	}
 
-	public void tick(){
-
-		if(!location.isMiniGame() && !location.isGoal()){
-			if(prevLocation!=location){
-				NormalTile normalLocation = (NormalTile)location;
-				String[] tokenedInformation = normalLocation.getRandomInformation();
-				StringBuilder completeBufferedInformation = new StringBuilder();
-
-				for(int i = 0;i<tokenedInformation.length;i++){
-					if(tokenedInformation[i].matches("PlayerName")){
-						completeBufferedInformation.append(playerName);
-
-					}
-					else if(tokenedInformation[i].matches("EinzahlGeschlecht")){
-						if(isFemale){
-							completeBufferedInformation.append("sie");
-						}
-						else{
-							completeBufferedInformation.append("er");
-						}
-					}
-					else if(tokenedInformation[i].matches("MehrzahlGeschlecht")){
-						if(isFemale){
-							completeBufferedInformation.append("ihrer");
-						}
-						else{
-							completeBufferedInformation.append("seiner");
-						}
-					}
-					else if(tokenedInformation[i].matches("AnzahlSchlucke")){
-						int anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
-						while(anzahlSchlucke==0){
-							anzahlSchlucke = Math.round((int)(Math.random()*((NormalTile) location).getTileDifficulty()));
-						}
-						if(anzahlSchlucke != 1){
-                            completeBufferedInformation.append(anzahlSchlucke+ " Schlucke");
-                        }
-                        else{
-                            completeBufferedInformation.append(anzahlSchlucke+ " Schluck");
-                        }
-
-					}
-					else{
-						completeBufferedInformation.append(tokenedInformation[i]);
-					}
-				}
-				completeInformation=completeBufferedInformation.toString();
-				prevLocation=location;
-			}
-		}
-		else if(location.isMiniGame()){
-
-			completeInformation = playerName+", mach dich bereit ein Minispiel zu spielen!";
-
-		}
-		else {
-			completeInformation = "Ihr seid am Ziel angekommen!";
-		}
-	}
 
     private Bitmap combineTwoBitmaps(Bitmap bmp1,Bitmap bmp2){
         Bitmap bitmapOverlay = Bitmap.createBitmap(bmp1.getWidth(),bmp1.getHeight(),bmp1.getConfig());
@@ -131,30 +67,31 @@ public class Player {
         return bitmapOverlay;
     }
 
+    String getTask(){
+	    return textHandler.getCompleteTask(this);
+    }
+
 
 
 	public Tile getLocation() {
 		return location;
 	}
 
-	public void setLocation(Tile location) {
+	void setLocation(Tile location) {
 		this.location = location;
 	}
 
-	public String getCompleteInformation() {
-		return completeInformation;
-	}
 
-	public void setCoordinates(Rect coordinates) {
+	void setCoordinates(Rect coordinates) {
 		this.coordinates = coordinates;
 
 	}
 
-    public Rect getCoordinates() {
-        return coordinates;
-    }
+	public boolean isFemale() {
+		return isFemale;
+	}
 
-    public void addToScore(double scoreAdd){
+    void addToScore(double scoreAdd){
 	    score+=scoreAdd;
     }
 
@@ -162,11 +99,11 @@ public class Player {
 		return playerName;
 	}
 
-	public long getScore() {
+	long getScore() {
 		return score;
 	}
 
-	public Bitmap getImage() {
+	Bitmap getImage() {
 		return playerIcon;
 	}
 }

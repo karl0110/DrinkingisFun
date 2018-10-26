@@ -5,12 +5,11 @@ import android.graphics.Canvas;
 
 public class Goal extends Tile {
 
-    public Goal(float x, float y,float width, float height,Bitmap border,Bitmap background,Map map,int tileDifficulty ){
-        super(x,y,width,height,border,background,map,tileDifficulty);
+    Goal(float x, float y,float width, float height,Map map,int tileDifficulty ){
+        super(x,y,width,height,map,tileDifficulty);
     }
 
     public void renderMap(Canvas canvas) {
-        canvas.drawBitmap(image,null,getCoordinates(),null);
     }
 
     @Override

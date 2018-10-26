@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewConfiguration;
 
@@ -57,6 +58,10 @@ public class GameActivity extends Activity {
 
         setContentView(game);
 
+        game.setSystemUiVisibility(uiOptions);
+        setScreenOrientationLandscape();
+
+
         game.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -67,14 +72,18 @@ public class GameActivity extends Activity {
                                 }
         );
 
-        game.setSystemUiVisibility(uiOptions);
-        setScreenOrientationLandscape();
+
+
 
         CustomGestureListener customGestureListener = new CustomGestureListener();
 
         mGestureDetector = new GestureDetector(this,customGestureListener);
 
+
+
     }
+
+
 
     public void startGameOverAcitivty(String[] playerNames, long[] playerScores){
         Intent intent = new Intent(this,GameOverActivity.class);
@@ -139,7 +148,7 @@ public class GameActivity extends Activity {
     class CustomGestureListener implements GestureDetector.OnGestureListener{
         @Override
         public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            game.fling(motionEvent,motionEvent1,v,v1);
+            game.fling(motionEvent,motionEvent1);
             return true;
         }
 

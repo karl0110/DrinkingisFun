@@ -1,22 +1,20 @@
 package com.jaimehall.drinkingisfun.minigames.pong;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
 public abstract class Paddle {
 
-    protected float x,y,xVel,xAcc;
+    float x,xVel,xAcc;
+    private float y;
     protected float width,height;
-    protected Paint paddlePaint;
-    protected PongMiniGame pongMiniGame;
-    protected float targetX;
+    private Paint paddlePaint;
+    float targetX;
 
-    public Paddle(float x,float y, float width,float height,int paddleColor,PongMiniGame pongMiniGame){
+    Paddle(float x,float y, float width,float height,int paddleColor){
         this.x=x;
         this.y=y;
-        this.pongMiniGame=pongMiniGame;
         this.width=width;
         this.height=height;
         paddlePaint=new Paint();
@@ -31,7 +29,7 @@ public abstract class Paddle {
     }
     public abstract void tick();
 
-    public Rect getCoordinates() {
+    Rect getCoordinates() {
         return new Rect((int)x,(int)y,(int)(x+width),(int)(y+height));
     }
 

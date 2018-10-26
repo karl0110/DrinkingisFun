@@ -1,0 +1,3 @@
+Die Person die am weitesten weg gereist ist, darf :AnzahlSchlucke: trinken.
+Wenn eine Kerze im Raum ist, dürfen alle Spieler/innen :AnzahlSchlucke: trinken.
+Wenn ihr in einer Bar seid, dürfen alle Spieler/innen :AnzahlSchlucke: trinken.

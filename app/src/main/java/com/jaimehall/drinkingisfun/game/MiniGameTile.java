@@ -3,7 +3,6 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.RectF;
 
 public class MiniGameTile extends Tile {
 
@@ -14,25 +13,21 @@ public class MiniGameTile extends Tile {
     private Bitmap arrowRight,arrowRightUp,arrowRightDown;
     private Rect arrowRightRect,arrowUpRect,arrowDownRect;
 
-    public MiniGameTile(float x, float y, float width , float height, Bitmap border,Bitmap background, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
-        super(x,y,width,height,border,background,map,tileDifficulty);
+    MiniGameTile(float x, float y, float width , float height, Map map, int[][] coordinatesOfNextTiles,int tileDifficulty){
+        super(x,y,width,height,map,tileDifficulty);
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
     }
 
     public void renderMap(Canvas canvas){
-        canvas.drawBitmap(image,null,getCoordinates(),null);
         if(arrowRightUp != null){
             canvas.drawBitmap(arrowRightUp,null,arrowUpRect,null);
         }
         if(arrowRight != null){
             canvas.drawBitmap(arrowRight,null,arrowRightRect,null);
-
         }
         if(arrowRightDown != null){
             canvas.drawBitmap(arrowRightDown,null,arrowDownRect,null);
-
         }
-
     }
 
     @Override
@@ -66,7 +61,7 @@ public class MiniGameTile extends Tile {
         }
     }
 
-    public Tile getNextEasierTile() {
+    Tile getNextEasierTile() {
         return nextEasierTile;
     }
 
@@ -74,11 +69,8 @@ public class MiniGameTile extends Tile {
         return nextTile;
     }
 
-    public Tile getNextHarderTile() {
+    Tile getNextHarderTile() {
         return nextHarderTile;
     }
 
-    public int getTileDifficulty(){
-        return tileDifficulty;
-    }
 }

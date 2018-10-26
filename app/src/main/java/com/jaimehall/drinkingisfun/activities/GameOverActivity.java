@@ -15,10 +15,6 @@ import com.jaimehall.drinkingisfun.activities.menu.MainActivity;
 
 public class GameOverActivity extends Activity {
 
-    private LinearLayout linearLayout;
-
-    private String[] playerNames;
-    private long[] playerScores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +23,15 @@ public class GameOverActivity extends Activity {
 
         Intent intent = getIntent();
 
-        playerNames = intent.getStringArrayExtra("playerNames");
-        playerScores = intent.getLongArrayExtra("playerScores");
+        String[] playerNames = intent.getStringArrayExtra("playerNames");
+        long[] playerScores = intent.getLongArrayExtra("playerScores");
 
         quickSort(playerScores,playerNames,0,playerScores.length-1);
         invert(playerScores);
         invert(playerNames);
 
 
-        linearLayout = findViewById(R.id.scoreboardLinearLayout);
+        LinearLayout linearLayout = findViewById(R.id.scoreboardLinearLayout);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams horizontalLinearLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
@@ -95,15 +91,14 @@ public class GameOverActivity extends Activity {
     }
 
     private int partition(long[] sortArray, String[] additionalArray,int start,int end){
-        int pivot = end;
         int pIndex = start;
         for(int i = start; i<end;i++){
-            if(sortArray[i]<=sortArray[pivot]){
+            if(sortArray[i]<=sortArray[end]){
                 swap(sortArray,additionalArray,i,pIndex);
                 pIndex++;
             }
         }
-        swap(sortArray,additionalArray,pIndex,pivot);
+        swap(sortArray,additionalArray,pIndex,end);
         return pIndex;
     }
 

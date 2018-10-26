@@ -2,7 +2,6 @@ package com.jaimehall.drinkingisfun.activities.menu;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -116,8 +115,8 @@ public class PlayerSelectActivity extends Activity {
                         addTempViewsToList();
                         playerInputCreated=true;
                     }
-                    playButton.setText("Play");
-                    playButton.setTextColor(Color.BLACK);
+                    playButton.setText(R.string.activity_player_select_play);
+                    playButton.setTextColor(getResources().getColor(R.color.colorPrimary));
 
                 }
             }
@@ -136,8 +135,8 @@ public class PlayerSelectActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                playButton.setText("Play");
-                playButton.setTextColor(Color.BLACK);
+                playButton.setText(R.string.activity_player_select_play);
+                playButton.setTextColor(getResources().getColor(R.color.colorPrimary));
 
             }
         });
@@ -222,8 +221,8 @@ public class PlayerSelectActivity extends Activity {
                         addTempViewsToList();
                         playerInputCreated=true;
                     }
-                    playButton.setText("Play");
-                    playButton.setTextColor(Color.BLACK);
+                    playButton.setText(R.string.activity_player_select_play);
+                    playButton.setTextColor(getResources().getColor(R.color.colorPrimary));
 
 
                 }
@@ -235,8 +234,8 @@ public class PlayerSelectActivity extends Activity {
     public void startGame(View view){
 
         if(playerNames.get(0).getText().length()==0 || playerNames.get(1).getText().length()==0) {
-            playButton.setText("Bitte gibt eure Namen ein");
-            playButton.setTextColor(Color.RED);
+            playButton.setText(R.string.activity_player_not_enough_players);
+            playButton.setTextColor(getResources().getColor(R.color.lightRed));
         }
         else{
             int arrayLength = 0;

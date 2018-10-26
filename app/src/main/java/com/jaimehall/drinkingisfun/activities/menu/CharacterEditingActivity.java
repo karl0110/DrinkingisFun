@@ -1,8 +1,6 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,32 +8,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
-import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class CharacterEditingActivity extends Activity {
 

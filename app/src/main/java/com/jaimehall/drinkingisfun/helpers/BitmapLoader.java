@@ -10,10 +10,13 @@ import com.jaimehall.drinkingisfun.R;
 public class BitmapLoader implements Runnable{
 
     private Bitmap bitmap;
+    private Bitmap background;
     private int id,width,height;
 
     private Thread thread;
     private Resources resources;
+
+    private boolean loadedBackground = false;
 
     public BitmapLoader(Resources resources){
         this.resources = resources;
@@ -32,14 +35,23 @@ public class BitmapLoader implements Runnable{
     }
 
     public Bitmap getBitmapFromPath(String path){
-        Bitmap bitmap =BitmapFactory.decodeFile(path);
 
-        return bitmap;
+        return BitmapFactory.decodeFile(path);
+    }
+
+    public Bitmap getBackgroundBitmap(int xPos,int yPos,float width,float height){
+        float x = xPos*width;
+        float y =yPos* height;
+        return Bitmap.createBitmap(background,(int)x,(int)y,(int)width,(int)height);
     }
 
 
     @Override
     public void run() {
+        if(!loadedBackground){
+            background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.maphintergrund),13000,2529,false);
+            loadedBackground=true;
+        }
         bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,id),width,height,false);
     }
 }

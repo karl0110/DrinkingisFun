@@ -1,7 +1,6 @@
 package com.jaimehall.drinkingisfun.minigames.pong;
 
 import android.graphics.Color;
-import android.graphics.Rect;
 
 public class EnemyPaddle extends Paddle {
 
@@ -10,7 +9,7 @@ public class EnemyPaddle extends Paddle {
 
 
 
-    public EnemyPaddle(PongMiniGame pongMiniGame,float x, float y,float width, float height,PongBall pongBall,PongBall ghostPongBall) {
+    EnemyPaddle(PongMiniGame pongMiniGame,float x, float y,float width, float height,PongBall pongBall,PongBall ghostPongBall) {
         super(x, y,width,height, Color.BLACK,pongMiniGame);
         this.pongBall=pongBall;
         this.ghostPongBall=ghostPongBall;

@@ -1,14 +1,10 @@
-package com.jaimehall.drinkingisfun.helpers;
+package com.jaimehall.drinkingisfun.game;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 
 import com.jaimehall.drinkingisfun.activities.menu.SettingsActivity;
-import com.jaimehall.drinkingisfun.game.Game;
-import com.jaimehall.drinkingisfun.game.PlayerHandler;
-import com.jaimehall.drinkingisfun.game.Tile;
 
 public class Camera implements Runnable{
 
@@ -25,6 +21,7 @@ public class Camera implements Runnable{
 
     private int touchTimer;
 
+    private Rect cameraRect;
     private Rect zoomButtonRenderingRect;
     private Rect playerIconRenderingRect;
 
@@ -59,7 +56,7 @@ public class Camera implements Runnable{
     }
 
 
-    public Camera(Game game, PlayerHandler playerHandler,float width, float height){
+    Camera(Game game, PlayerHandler playerHandler,float width, float height){
         this.game=game;
         this.playerHandler=playerHandler;
         this.width=width;
@@ -70,15 +67,15 @@ public class Camera implements Runnable{
         double zoomSeconds = Double.parseDouble(sharedPreferences.getString(SettingsActivity.KEY_PREF_ZOOM_SPEED,"" ));
         zoomSpeed = (int)(30*zoomSeconds);
 
-        System.out.println("Zoomspeed:          "+zoomSpeed);
 
         cameraState = CameraState.FOCUSED;
 
         playerIconRenderingRect = new Rect();
         zoomButtonRenderingRect= new Rect();
+        cameraRect = new Rect();
         currentFocusedTileChanged();
 
-        maxZoom =height/(focusedTileHeight *7);
+        maxZoom =height/(focusedTileHeight *9);
 
 
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
@@ -126,7 +123,7 @@ public class Camera implements Runnable{
         }
     }
 
-    public void pause(){
+    void pause(){
         running = false;
 
         try {
@@ -137,7 +134,7 @@ public class Camera implements Runnable{
         }
     }
 
-    public void resume(){
+    void resume(){
         running = true;
         thread = new Thread(this);
         thread.start();//Der erstellte Thread wird gestartet.(Die Methode run() wird ausgeführt).
@@ -150,8 +147,6 @@ public class Camera implements Runnable{
     }
 
     private void tickMainGame(){
-        playerHandler.tick();
-
         if(cameraState == CameraState.FOCUSED){
             scaleX = focusedScaleX;
             scaleY = focusedScaleY;
@@ -241,9 +236,13 @@ public class Camera implements Runnable{
                 currentFocusedTileChanged();
             }
         }
+
+        float x = width/scaleX;
+        float y = height/scaleX;
+        cameraRect.set((int)translateX,(int)translateY,(int)(translateX+x),(int)(translateY+y));
     }
 
-    public void currentFocusedTileChanged(){
+    void currentFocusedTileChanged(){
         currentFocusedTile = playerHandler.getCurrentPlayer().getLocation();
         nextFocusedTile = playerHandler.getNextPlayer().getLocation();
 
@@ -262,7 +261,7 @@ public class Camera implements Runnable{
 
     }
 
-    public void prepareZoomEvent(){
+    void prepareZoomEvent(){
         frameZoomEvent = 0;
 
         if(cameraState == CameraState.FOCUSED){
@@ -302,7 +301,7 @@ public class Camera implements Runnable{
     }
 
 
-    public void prepareFocusChange(){
+    void prepareFocusChange(){
         frameFocusChange = 0;
 
         float startXFocusChange = currentFocusedTile.getCoordinates().centerX();
@@ -334,51 +333,55 @@ public class Camera implements Runnable{
         }
     }
 
-    public float getScaleX() {
+    Rect getCameraRect(){
+        return cameraRect;
+    }
+
+    float getScaleX() {
         return scaleX;
     }
 
-    public float getScaleY() {
+    float getScaleY() {
         return scaleY;
     }
 
-    public float getTranslateX() {
+    float getTranslateX() {
         return translateX;
     }
 
-    public float getTranslateY() {
+    float getTranslateY() {
         return translateY;
     }
 
-    public void addToTranslateX(float amount) {
+    void addToTranslateX(float amount) {
         this.translateX += amount;
     }
 
-    public CameraState getCameraState() {
+    CameraState getCameraState() {
         return cameraState;
     }
 
-    public Rect getZoomButtonRenderingRect() {
+    Rect getZoomButtonRenderingRect() {
         return zoomButtonRenderingRect;
     }
 
-    public Rect getPlayerIconRenderingRect() {
+    Rect getPlayerIconRenderingRect() {
         return playerIconRenderingRect;
     }
 
-    public void setCameraState(CameraState cameraState) {
+    void setCameraState(CameraState cameraState) {
         this.cameraState = cameraState;
     }
 
-    public int getTouchTimer() {
+    int getTouchTimer() {
         return touchTimer;
     }
 
-    public void setTouchTimer(int touchTimer) {
+    void setTouchTimer(int touchTimer) {
         this.touchTimer = touchTimer;
     }
 
-    public Tile getCurrentFocusedTile() {
+    Tile getCurrentFocusedTile() {
         return currentFocusedTile;
     }
 

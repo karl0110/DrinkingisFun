@@ -3,30 +3,26 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.RectF;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class NormalTile extends Tile {
 
     private int xPosOfNextTile,yPosOfNextTile;
     private Tile nextTile;
-    private String[][] information;
     private Bitmap arrow;
     private Rect arrowRect;
     private String arrowDirection;
+    private boolean isBlueTile;
 
-    public NormalTile(float x,float y, float width, float height,Bitmap border,Bitmap background, Map map,int xPosOfNextTile,int yPosOfNextTile, String[][] information,int tileDifficulty){
-        super(x,y,width,height,border,background,map,tileDifficulty);
+    NormalTile(float x,float y, float width, float height, Map map,int xPosOfNextTile,int yPosOfNextTile, int tileDifficulty,boolean isBlueTile){
+        super(x,y,width,height,map,tileDifficulty);
         this.xPosOfNextTile=xPosOfNextTile;
         this.yPosOfNextTile=yPosOfNextTile;
-        this.information=information;
+        this.isBlueTile=isBlueTile;
+
     }
 
 
     public void renderMap(Canvas canvas){
-        canvas.drawBitmap(image,null,getCoordinates(),null);
         switch(arrowDirection){
             case("UP"):
                 canvas.drawBitmap(arrow,null,arrowRect,null);
@@ -79,14 +75,8 @@ public class NormalTile extends Tile {
         }
     }
 
-    public String[] getRandomInformation() {
-        double index = Math.random()*(information.length-1);
-        return information[(int) Math.round(index)];
+
+    public boolean isBlueTile() {
+        return isBlueTile;
     }
-
-    public int getTileDifficulty() {
-
-        return (tileDifficulty+1)*2;
-    }
-
 }

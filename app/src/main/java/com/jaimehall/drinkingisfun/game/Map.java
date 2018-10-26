@@ -1,176 +1,72 @@
 package com.jaimehall.drinkingisfun.game;
 
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class Map {
 
     private Tile[][] tileMap;
     private float tileWidth,tileHeight;
 
-    public Map(Game game, BitmapLoader bitmapLoader){
-        tileMap= new Tile[20][7];
+    Map(BitmapLoader bitmapLoader, BackgroundHandler backgroundHandler){
+        tileMap= new Tile[26][9];
         tileWidth = 500;
         tileHeight = 281;
 
-        createTileMap(game, bitmapLoader);
+        createTileMap(bitmapLoader, backgroundHandler);
     }
 
-    private void createTileMap(Game game,BitmapLoader bitmapLoader){
+    private void createTileMap(BitmapLoader bitmapLoader, BackgroundHandler backgroundHandler){
 
-        ArrayList<String> unSplitStringsEasyTasks= new ArrayList<String>();
-        ArrayList<String> unSplitStringsMediumTasks= new ArrayList<String>();
-        ArrayList<String> unSplitStringsHardTasks= new ArrayList<String>();
-
-        AssetManager am = game.getContext().getAssets();
-
-        BufferedReader brEasy = null;
-        BufferedReader brMedium = null;
-        BufferedReader brHard = null;
-        try  {
-
-            brEasy = new BufferedReader(new InputStreamReader(am.open("einfacheAufgaben.txt")));
-            brMedium = new BufferedReader(new InputStreamReader(am.open("mittlereAufgaben.txt")));
-            brHard = new BufferedReader(new InputStreamReader(am.open("schwereAufgaben.txt")));
-            String lineEasy;
-            while ((lineEasy=brEasy.readLine()) != null) {
-                unSplitStringsEasyTasks.add(lineEasy);
-            }
-            String lineMedium;
-            while ((lineMedium = brMedium.readLine()) != null) {
-                unSplitStringsMediumTasks.add(lineMedium);
-            }
-            String lineHard;
-            while ((lineHard = brHard.readLine()) != null) {
-                unSplitStringsHardTasks.add(lineHard);
-            }
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-        finally{
-            if(brEasy!=null){
-                try{
-                    brEasy.close();
-                }
-                catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-            if(brMedium!=null){
-                try{
-                    brEasy.close();
-                }
-                catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-            if(brHard!=null){
-                try{
-                    brEasy.close();
-                }
-                catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        String[][] tokenedStringEasyTasks = new String[unSplitStringsEasyTasks.size()][];
-        String[][] tokenedStringMediumTasks= new String[unSplitStringsMediumTasks.size()][];
-        String[][] tokenedStringHardTasks= new String[unSplitStringsHardTasks.size()][];
-
-        for(int i = 0; i<unSplitStringsEasyTasks.size() ; i++){
-            StringTokenizer tokens = new StringTokenizer(unSplitStringsEasyTasks.get(i),":");
-            tokenedStringEasyTasks[i] = new String[tokens.countTokens()];
-            int r = 0;
-            while(tokens.hasMoreTokens()){
-                tokenedStringEasyTasks[i][r]=tokens.nextToken();
-                r++;
-            }
-        }
-        for(int i = 0; i<unSplitStringsMediumTasks.size() ; i++){
-            StringTokenizer tokens = new StringTokenizer(unSplitStringsMediumTasks.get(i),":");
-            tokenedStringMediumTasks[i] = new String[tokens.countTokens()];
-            int r = 0;
-            while(tokens.hasMoreTokens()){
-                tokenedStringMediumTasks[i][r]=tokens.nextToken();
-                r++;
-            }
-        }
-        for(int i = 0; i<unSplitStringsHardTasks.size() ; i++){
-            StringTokenizer tokens = new StringTokenizer(unSplitStringsHardTasks.get(i),":");
-            tokenedStringHardTasks[i] = new String[tokens.countTokens()];
-            int r = 0;
-            while(tokens.hasMoreTokens()){
-                tokenedStringHardTasks[i][r]=tokens.nextToken();
-                r++;
-            }
-        }
+        tileMap[2][4] = new MiniGameTile(2*tileWidth, 4*tileHeight, tileWidth, tileHeight,this, new int[][]{{3,3},{3,4},{3,5}},1);
 
 
-        Bitmap miniGameBorder = bitmapLoader.getBitmap(R.drawable.minigameumrandung,500,281);
-        Bitmap greenBorder = bitmapLoader.getBitmap(R.drawable.grueneumrandung,500,281);
-        Bitmap blueBorder = bitmapLoader.getBitmap(R.drawable.blaueumrandung,500,281);
-        Bitmap goldBorder = bitmapLoader.getBitmap(R.drawable.goldeneumrandung,500,281);
-
-        Bitmap background = bitmapLoader.getBitmap(R.drawable.uebergehenderhintergrund,500,281);
-
-
-        tileMap[0][3] = new MiniGameTile(0*tileWidth, 3*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{1,2},{1,3},{1,4}},1);
-
-
-        tileMap[1][2] = new NormalTile(1 * tileWidth, 2*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 2,1,tokenedStringEasyTasks,0);
-        tileMap[2][1] = new NormalTile(2*tileWidth, 1*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 3,0,tokenedStringEasyTasks,0);
-        tileMap[3][0] = new NormalTile(3*tileWidth, 0*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 4,0,tokenedStringEasyTasks,0);
-        tileMap[4][0] = new NormalTile(4*tileWidth, 0*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 5,0,tokenedStringEasyTasks,0);
-        tileMap[5][0] = new NormalTile(5*tileWidth, 0*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 6,0,tokenedStringEasyTasks,0);
-        tileMap[6][0] = new MiniGameTile(6*tileWidth, 0*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{0,0},{7,0},{7,1}},0);
-        tileMap[7][0] = new NormalTile(7*tileWidth, 0*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,0,tokenedStringEasyTasks,0);
-        tileMap[7][2] = new NormalTile(7*tileWidth, 2*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,1,tokenedStringEasyTasks,0);
-        tileMap[8][0] = new NormalTile(8*tileWidth, 0*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,0,tokenedStringEasyTasks,0);
-        tileMap[8][1] = new NormalTile(8*tileWidth, 1*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,0,tokenedStringEasyTasks,0);
-        tileMap[9][0] = new NormalTile(9*tileWidth, 0*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 10,0,tokenedStringEasyTasks,0);
-        tileMap[10][0] = new Goal(10*tileWidth, 0*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 0);
+        tileMap[3][3] = new NormalTile(3 * tileWidth, 3*tileHeight, tileWidth, tileHeight,this, 4,2,0,false);
+        tileMap[4][2] = new NormalTile(4*tileWidth, 2*tileHeight, tileWidth, tileHeight,this, 5,1,0,true);
+        tileMap[5][1] = new NormalTile(5*tileWidth, 1*tileHeight, tileWidth, tileHeight,this, 6,1,0,false);
+        tileMap[6][1] = new NormalTile(6*tileWidth, 1*tileHeight, tileWidth, tileHeight,this, 7,1,0,false);
+        tileMap[7][1] = new NormalTile(7*tileWidth, 1*tileHeight, tileWidth, tileHeight,this, 8,1,0,false);
+        tileMap[8][1] = new MiniGameTile(8*tileWidth, 1*tileHeight, tileWidth, tileHeight,this, new int[][]{{0,0},{9,1},{9,2}},0);
+        tileMap[9][1] = new NormalTile(9*tileWidth, 1*tileHeight, tileWidth, tileHeight, this, 10,1,0,false);
+        tileMap[9][3] = new NormalTile(9*tileWidth, 3*tileHeight, tileWidth, tileHeight, this, 10,2,0,false);
+        tileMap[10][1] = new NormalTile(10*tileWidth, 1*tileHeight, tileWidth, tileHeight, this, 11,1,0,false);
+        tileMap[10][2] = new NormalTile(10*tileWidth, 2*tileHeight, tileWidth, tileHeight, this, 11,1,0,true);
+        tileMap[11][1] = new NormalTile(11*tileWidth, 1*tileHeight, tileWidth, tileHeight, this, 12,1,0,false);
+        tileMap[12][1] = new Goal(12*tileWidth, 1*tileHeight, tileWidth, tileHeight,this, 0);
 
 
-        tileMap[1][3] = new NormalTile(1 * tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 2,3,tokenedStringMediumTasks,1);
-        tileMap[2][3] = new NormalTile(2*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 3,3,tokenedStringMediumTasks,1);
-        tileMap[3][3] = new NormalTile(3*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 4,3,tokenedStringMediumTasks,1);
-        tileMap[4][3] = new NormalTile(4*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 5,3,tokenedStringMediumTasks,1);
-        tileMap[5][3] = new NormalTile(5*tileWidth, 3*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 6,3,tokenedStringMediumTasks,1);
-        tileMap[6][3] = new MiniGameTile(6*tileWidth, 3*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{7,2},{7,3},{7,4}},1);
-        tileMap[7][1] = new NormalTile(7*tileWidth, 1*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 8,2,tokenedStringMediumTasks,1);
-        tileMap[7][3] = new NormalTile(7*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,3,tokenedStringMediumTasks,1);
-        tileMap[7][5] = new NormalTile(7*tileWidth, 5*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,4,tokenedStringMediumTasks,1);
-        tileMap[8][2] = new NormalTile(8*tileWidth, 2*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
-        tileMap[8][3] = new NormalTile(8*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
-        tileMap[8][4] = new NormalTile(8*tileWidth, 4*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,3,tokenedStringMediumTasks,1);
-        tileMap[9][3] = new NormalTile(9*tileWidth, 3*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 10,3,tokenedStringMediumTasks,1);
-        tileMap[10][3] = new Goal(10*tileWidth, 3*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 1);
+        tileMap[3][4] = new NormalTile(3 * tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 4,4,1,false);
+        tileMap[4][4] = new NormalTile(4*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 5,4,1,false);
+        tileMap[5][4] = new NormalTile(5*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 6,4,1,false);
+        tileMap[6][4] = new NormalTile(6*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 7,4,1,true);
+        tileMap[7][4] = new NormalTile(7*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 8,4,1,false);
+        tileMap[8][4] = new MiniGameTile(8*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, new int[][]{{9,3},{9,4},{9,5}},1);
+        tileMap[9][2] = new NormalTile(9*tileWidth, 2*tileHeight, tileWidth, tileHeight, this, 10,3,1,false);
+        tileMap[9][4] = new NormalTile(9*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 10,4,1,false);
+        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, this, 10,5,1,false);
+        tileMap[10][3] = new NormalTile(10*tileWidth, 3*tileHeight, tileWidth, tileHeight, this, 11,4,1,false);
+        tileMap[10][4] = new NormalTile(10*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 11,4,1,false);
+        tileMap[10][5] = new NormalTile(10*tileWidth, 5*tileHeight, tileWidth, tileHeight, this, 11,4,1,false);
+        tileMap[11][4] = new NormalTile(11*tileWidth, 4*tileHeight, tileWidth, tileHeight, this, 12,4,1,false);
+        tileMap[12][4] = new Goal(12*tileWidth, 4*tileHeight, tileWidth, tileHeight,this, 1);
 
 
-        tileMap[1][4] = new NormalTile(1 * tileWidth, 4*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 2,5,tokenedStringHardTasks,2);
-        tileMap[2][5] = new NormalTile(2*tileWidth, 5*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 3,6,tokenedStringHardTasks,2);
-        tileMap[3][6] = new NormalTile(3*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 4,6,tokenedStringHardTasks,2);
-        tileMap[4][6] = new NormalTile(4*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 5,6,tokenedStringHardTasks,2);
-        tileMap[5][6] = new NormalTile(5*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 6,6,tokenedStringHardTasks,2);
-        tileMap[6][6] = new MiniGameTile(6*tileWidth, 6*tileHeight, tileWidth, tileHeight, miniGameBorder,background,this, new int[][]{{7,5},{7,6},{0,0}},2);
-        tileMap[7][4] = new NormalTile(7*tileWidth, 4*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 8,5,tokenedStringHardTasks,2);
-        tileMap[7][6] = new NormalTile(7*tileWidth, 6*tileHeight, tileWidth, tileHeight, blueBorder,background,this, 8,6,tokenedStringHardTasks,2);
-        tileMap[8][5] = new NormalTile(8*tileWidth, 5*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,6,tokenedStringHardTasks,2);
-        tileMap[8][6] = new NormalTile(8*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 9,6,tokenedStringHardTasks,2);
-        tileMap[9][6] = new NormalTile(9*tileWidth, 6*tileHeight, tileWidth, tileHeight, greenBorder,background,this, 10,6,tokenedStringHardTasks,2);
-        tileMap[10][6] = new Goal(10*tileWidth, 6*tileHeight, tileWidth, tileHeight, goldBorder,background,this, 2);
+        tileMap[3][5] = new NormalTile(3 * tileWidth, 5*tileHeight, tileWidth, tileHeight, this, 4,6,2,false);
+        tileMap[4][6] = new NormalTile(4*tileWidth, 6*tileHeight, tileWidth, tileHeight, this, 5,7,2,false);
+        tileMap[5][7] = new NormalTile(5*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 6,7,2,false);
+        tileMap[6][7] = new NormalTile(6*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 7,7,2,false);
+        tileMap[7][7] = new NormalTile(7*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 8,7,2,true);
+        tileMap[8][7] = new MiniGameTile(8*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, new int[][]{{9,6},{9,7},{0,0}},2);
+        tileMap[9][5] = new NormalTile(9*tileWidth, 5*tileHeight, tileWidth, tileHeight, this, 10,6,2,false);
+        tileMap[9][7] = new NormalTile(9*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 10,7,2,false);
+        tileMap[10][6] = new NormalTile(10*tileWidth, 6*tileHeight, tileWidth, tileHeight, this, 11,7,2,false);
+        tileMap[10][7] = new NormalTile(10*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 11,7,2,false);
+        tileMap[11][7] = new NormalTile(11*tileWidth, 7*tileHeight, tileWidth, tileHeight, this, 12,7,2,false);
+        tileMap[12][7] = new Goal(12*tileWidth, 7*tileHeight, tileWidth, tileHeight,this, 2);
 
         Bitmap arrowRight = bitmapLoader.getBitmap(R.drawable.pfeilrechts,50,50);
         Bitmap arrowRightUp = bitmapLoader.getBitmap(R.drawable.pfeilrechtsoben,50,50);
@@ -179,10 +75,16 @@ public class Map {
         for(int xxx=0; xxx<tileMap.length;xxx++){
             for(int yyy =0; yyy<tileMap[0].length;yyy++){
 
+                backgroundHandler.setBackgroundTile(new BackgroundTile(xxx*tileWidth,yyy*tileHeight,tileWidth,tileHeight,bitmapLoader.getBackgroundBitmap(xxx,yyy,tileWidth,tileHeight)),xxx,yyy);
+
                 if(tileMap[xxx][yyy]!=null)tileMap[xxx][yyy].findNextTile(arrowRight,arrowRightUp,arrowRightDown);
 
             }
         }
+
+        System.out.println("finishedLoading");
+
+
     }
 
     public void render(Canvas canvas){
@@ -197,11 +99,8 @@ public class Map {
         }
     }
 
-    public void render(Canvas canvas,Tile currentFocusedTile){
-        currentFocusedTile.renderFocusedTile(canvas);
-    }
 
-    public Tile getTileFromTileMap(int indexA, int indexB){
+    Tile getTileFromTileMap(int indexA, int indexB){
 
         return tileMap[indexA][indexB];
     }

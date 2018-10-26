@@ -15,14 +15,13 @@ public abstract class MiniGame {
     protected Game game;
     protected boolean tutorialFinished =false;
     protected int tickCounter = 0;
+    protected Bitmap tutorial;
 
     protected Rect tutorialRect;
-    protected Bitmap tutorial;
     protected Paint tutorialPaint;
 
     public MiniGame(Game game){
         this.game=game;
-        this.tutorial=tutorial;
         resources = game.getResources();
 
 
@@ -34,6 +33,5 @@ public abstract class MiniGame {
     public abstract void tick();
     public abstract void touched(MotionEvent motionEvent);
     public abstract void reset();
-    public abstract boolean isPortrait();
 
 }

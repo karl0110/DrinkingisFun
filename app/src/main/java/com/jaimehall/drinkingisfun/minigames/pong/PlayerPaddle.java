@@ -1,15 +1,13 @@
 package com.jaimehall.drinkingisfun.minigames.pong;
 
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class PlayerPaddle extends Paddle {
 
 
-    public PlayerPaddle(PongMiniGame pongMiniGame,float x, float y,float width,float height) {
-        super(x, y,width,height, Color.BLACK,pongMiniGame);
+    PlayerPaddle(PongMiniGame pongMiniGame,float x, float y,float width,float height) {
+        super(x, y,width,height, Color.BLACK);
         targetX = pongMiniGame.getWidth()/2;
     }
 
@@ -32,7 +30,7 @@ public class PlayerPaddle extends Paddle {
 
     }
 
-    public void touched(MotionEvent motionEvent){
+    void touched(MotionEvent motionEvent){
 
         targetX=motionEvent.getX();
 

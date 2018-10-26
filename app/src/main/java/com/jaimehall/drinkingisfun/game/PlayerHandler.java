@@ -12,12 +12,10 @@ import java.util.LinkedList;
 
 
 
+ class PlayerHandler {
 
-public class PlayerHandler {
 
-	private Game game;
-
-	private LinkedList<Player> players = new LinkedList<Player>();
+	private LinkedList<Player> players = new LinkedList<>();
 	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
 	private Player currentPlayer;
 	private Player nextPlayer;
@@ -26,21 +24,18 @@ public class PlayerHandler {
 
 	private Rect touchLeftRect,touchRightRect;
 	private Rect menuBackgroundRect;
-	private Rect playerMenuLeft,playerMenuRight,playerMenuName,playerMenuPic,playerMenuScore;
+	private Rect playerMenuName,playerMenuPic,playerMenuScore;
 	private Paint textPaint;
 	private Bitmap playerMenuBackground;
 
-	private boolean playerChanged = true;
-	
-	public PlayerHandler(Game game, float width, float height, BitmapLoader bitmapLoader){ ;
-		this.game=game;
+	PlayerHandler( float width, float height, BitmapLoader bitmapLoader){
 
 	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
 	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
         menuBackgroundRect = new Rect(0,0,(int)width,(int)height);
 
-        playerMenuLeft = new Rect((int)(width/10),(int)(height/7),(int)((width/25)*11),(int)((height/7)*6));
-        playerMenuRight = new Rect((int)((width/25)*14),(int)(height/7),(int)((width/10)*9),(int)((height/7)*6));
+        Rect playerMenuLeft = new Rect((int)(width/10),(int)(height/7),(int)((width/25)*11),(int)((height/7)*6));
+        Rect playerMenuRight = new Rect((int)((width/25)*14),(int)(height/7),(int)((width/10)*9),(int)((height/7)*6));
         playerMenuName = new Rect(playerMenuLeft.left,playerMenuLeft.top,playerMenuLeft.left+playerMenuLeft.width(),playerMenuLeft.top+(playerMenuLeft.height()/4));
         playerMenuPic = new Rect(playerMenuLeft.left,playerMenuLeft.top+(playerMenuLeft.width()/4),playerMenuLeft.left+playerMenuLeft.width(),playerMenuLeft.top+playerMenuLeft.height());
         playerMenuScore = new Rect(playerMenuRight.left,playerMenuRight.top,playerMenuRight.left+playerMenuRight.width(),playerMenuRight.top+(playerMenuRight.height()/2));
@@ -54,7 +49,7 @@ public class PlayerHandler {
         playerMenuBackground = bitmapLoader.getBitmap(R.drawable.spielermenu,500,281);
 	}
 
-    public void renderPlayerMenu(Canvas canvas){
+    void renderPlayerMenu(Canvas canvas){
         canvas.drawBitmap(playerMenuBackground,null,menuBackgroundRect,null);
 
         Player detailedPlayer = players.get(indexOfDetailedPlayer);
@@ -65,7 +60,7 @@ public class PlayerHandler {
 
     }
 
-	public void touched(Rect touchPoint){
+	void touched(Rect touchPoint){
 	    if(Rect.intersects(touchPoint,touchRightRect)){
 	        if(indexOfDetailedPlayer==0){
 	            indexOfDetailedPlayer=players.size()-1;
@@ -84,9 +79,9 @@ public class PlayerHandler {
         }
 	}
 	
-	public void nextPlayer() {
+	void nextPlayer() {
 			if (!currentPlayer.getLocation().isMiniGame()) {
-				currentPlayer.addToScore((currentPlayer.getLocation().getTileDifficulty() + 1) * (20 * Math.random()));
+				currentPlayer.addToScore((currentPlayer.getLocation().getTileDifficulty()*2 + 1) * (20 * Math.random()));
 			}
 
 			int indexOfNextPlayer;
@@ -109,14 +104,11 @@ public class PlayerHandler {
 
 			currentPlayerChanged();
 			indexOfDetailedPlayer = 0;
-			playerChanged = true;
-
-
 
     }
 
 
-	public void currentPlayerChanged(){
+	void currentPlayerChanged(){
         Tile currentTile = currentPlayer.getLocation();
 
 	    playersOnCurrentTile.clear();
@@ -148,14 +140,14 @@ public class PlayerHandler {
 
 	}
 
-	public void renderPlayerIconsOnCurrentTile(Canvas canvas) {
+	void renderPlayerIconsOnCurrentTile(Canvas canvas) {
 		for(int i =0;i<playersOnCurrentTile.size();i++){
 			playersOnCurrentTile.get(i).render(canvas);
 		}
 
 	}
 
-	public void renderPlayerIconsWholeMap(Canvas canvas){
+	void renderPlayerIconsWholeMap(Canvas canvas){
         for(int i =0;i<players.size();i++){
             players.get(i).render(canvas);
         }
@@ -163,12 +155,7 @@ public class PlayerHandler {
 
 
 
-	public void tick() {
-		currentPlayer.tick();
-	}
-
-
-	public void addPlayer(Player player) {
+	void addPlayer(Player player) {
 		if(players.size()==0){
             this.players.add(player);
             currentPlayer=player;
@@ -183,34 +170,19 @@ public class PlayerHandler {
 
 	}
 
-	public LinkedList<Player> getPlayers() {
+	LinkedList<Player> getPlayers() {
 		return players;
 	}
 
 
-	public Player getCurrentPlayer() {
+	Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 
-	public void setCurrentPlayer(Player currentPlayer) {
-		this.currentPlayer = currentPlayer;
-	}
-
-	public Player getNextPlayer() {
+	Player getNextPlayer() {
 		return nextPlayer;
 	}
 
-	public void setNextPlayer(Player nextPlayer) {
-		this.nextPlayer = nextPlayer;
-	}
-
-    public boolean isPlayerChanged() {
-        return playerChanged;
-    }
-
-    public void setPlayerChanged(boolean playerChanged) {
-        this.playerChanged = playerChanged;
-    }
 
 
 }
