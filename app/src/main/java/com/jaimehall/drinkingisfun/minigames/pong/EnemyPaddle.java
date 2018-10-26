@@ -9,8 +9,8 @@ public class EnemyPaddle extends Paddle {
 
 
 
-    EnemyPaddle(PongMiniGame pongMiniGame,float x, float y,float width, float height,PongBall pongBall,PongBall ghostPongBall) {
-        super(x, y,width,height, Color.BLACK,pongMiniGame);
+    EnemyPaddle(float x, float y,float width, float height,PongBall pongBall,PongBall ghostPongBall) {
+        super(x, y,width,height, Color.BLACK);
         this.pongBall=pongBall;
         this.ghostPongBall=ghostPongBall;
     }

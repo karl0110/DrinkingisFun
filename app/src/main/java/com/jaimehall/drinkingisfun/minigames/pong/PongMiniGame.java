@@ -26,7 +26,7 @@ public class PongMiniGame extends MiniGame {
         this.height=height;
         pongBall = new PongBall(this,width/2,height/2,height/64,15,-15,0.1f,false);
         ghostPongBall = new PongBall(this,width/2,height/2,30,30,-30,0.1f,true);
-        enemyPaddle=new EnemyPaddle(this,(width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
+        enemyPaddle=new EnemyPaddle((width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
 
         tutorialRect = new Rect(0,0,(int)width,(int)height);
@@ -57,7 +57,7 @@ public class PongMiniGame extends MiniGame {
     public void reset() {
         pongBall = new PongBall(this,width/2,height/2,height/64,15,-15,0.1f,false);
         ghostPongBall = new PongBall(this,width/2,height/2,30,30,-30,0.1f,true);
-        enemyPaddle=new EnemyPaddle(this,(width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
+        enemyPaddle=new EnemyPaddle((width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
         ballHit = 0;
         tickCounter=0;
