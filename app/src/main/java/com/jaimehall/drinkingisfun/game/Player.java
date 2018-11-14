@@ -16,17 +16,17 @@ public class Player {
 
 	private Tile location;
 	private String playerName;
-	private boolean isFemale;
+	private String sex;
 	private long score = 0;
 	private Bitmap playerIcon;
 	private Rect coordinates;
 	private TextHandler textHandler;
 
 	
-	Player(Tile location, String playerName, Boolean isFemale, String playerIconPath, BitmapLoader bitmapLoader, TextHandler textHandler){
+	Player(Tile location, String playerName, String sex, String playerIconPath, BitmapLoader bitmapLoader, TextHandler textHandler){
 		this.location=location;
 		this.playerName=playerName;
-		this.isFemale=isFemale;
+		this.sex=sex;
 		this.textHandler=textHandler;
 
         if(playerIconPath.matches("Color")) {
@@ -87,8 +87,8 @@ public class Player {
 
 	}
 
-	public boolean isFemale() {
-		return isFemale;
+	public String getSex() {
+		return sex;
 	}
 
     void addToScore(double scoreAdd){

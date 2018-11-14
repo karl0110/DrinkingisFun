@@ -12,15 +12,15 @@ public class Map {
     private Tile[][] tileMap;
     private float tileWidth,tileHeight;
 
-    Map(BitmapLoader bitmapLoader, BackgroundHandler backgroundHandler){
+    Map(BitmapLoader bitmapLoader){
         tileMap= new Tile[26][9];
-        tileWidth = 500;
-        tileHeight = 281;
+        tileWidth = 250;
+        tileHeight = 140;
 
-        createTileMap(bitmapLoader, backgroundHandler);
+        createTileMap(bitmapLoader);
     }
 
-    private void createTileMap(BitmapLoader bitmapLoader, BackgroundHandler backgroundHandler){
+    private void createTileMap(BitmapLoader bitmapLoader){
 
         tileMap[2][4] = new MiniGameTile(2*tileWidth, 4*tileHeight, tileWidth, tileHeight,this, new int[][]{{3,3},{3,4},{3,5}},1);
 
@@ -75,8 +75,6 @@ public class Map {
         for(int xxx=0; xxx<tileMap.length;xxx++){
             for(int yyy =0; yyy<tileMap[0].length;yyy++){
 
-                backgroundHandler.setBackgroundTile(new BackgroundTile(xxx*tileWidth,yyy*tileHeight,tileWidth,tileHeight,bitmapLoader.getBackgroundBitmap(xxx,yyy,tileWidth,tileHeight)),xxx,yyy);
-
                 if(tileMap[xxx][yyy]!=null)tileMap[xxx][yyy].findNextTile(arrowRight,arrowRightUp,arrowRightDown);
 
             }
@@ -88,8 +86,8 @@ public class Map {
     }
 
     public void render(Canvas canvas){
-        for(int xx=19; xx>=0;xx--){
-            for(int yy =6; yy>=0;yy--){
+        for(int xx=25; xx>=0;xx--){
+            for(int yy =8; yy>=0;yy--){
 
                 if(tileMap[xx][yy]!= null)tileMap[xx][yy].renderMap(canvas);
 

@@ -18,8 +18,12 @@ public class BitmapLoader implements Runnable{
 
     private boolean loadedBackground = false;
 
+    private BitmapFactory.Options options;
+
     public BitmapLoader(Resources resources){
         this.resources = resources;
+        options = new BitmapFactory.Options();
+        options.inPreferredConfig=Bitmap.Config.RGB_565;
         thread = new Thread(this);
 
     }
@@ -36,22 +40,21 @@ public class BitmapLoader implements Runnable{
 
     public Bitmap getBitmapFromPath(String path){
 
-        return BitmapFactory.decodeFile(path);
+        return BitmapFactory.decodeFile(path,options);
     }
 
-    public Bitmap getBackgroundBitmap(int xPos,int yPos,float width,float height){
+    public Bitmap getBackgroundBitmap(int xPos,float width,float height){
         float x = xPos*width;
-        float y =yPos* height;
-        return Bitmap.createBitmap(background,(int)x,(int)y,(int)width,(int)height);
+        return Bitmap.createBitmap(background,(int)x,0,(int)width,(int)height);
     }
 
 
     @Override
     public void run() {
         if(!loadedBackground){
-            background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.maphintergrund),13000,2529,false);
+            background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.maphintergrund,options),6500,1260,false);
             loadedBackground=true;
         }
-        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,id),width,height,false);
+        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,id,options),width,height,false);
     }
 }

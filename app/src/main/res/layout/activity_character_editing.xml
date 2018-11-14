@@ -95,15 +95,12 @@
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="413dp" />
 
-            <CheckBox
-                android:id="@+id/checkBoxEditCharacterSex"
-                android:layout_width="match_parent"
+            <com.jaimehall.drinkingisfun.helpers.SexButton
+                android:id="@+id/sexButtonEditCharacterSex"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/activity_character_editing_sex"
-                android:textAlignment="textStart"
-                android:textColor="@color/darkRed"
-                android:textSize="20sp" />
+                />
 
         </LinearLayout>
     </ScrollView>

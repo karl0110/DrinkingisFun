@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.activities.GameActivity;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
+import com.jaimehall.drinkingisfun.helpers.SexButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,12 +29,13 @@ public class PlayerSelectActivity extends Activity {
     private EditText tempEditText;
     private int indexForPlayerNames =0;
 
-    private ArrayList<CheckBox> playerSexes;
-    private CheckBox tempCheckBox;
+    private ArrayList<SexButton> playerSexes;
+    private SexButton tempSexButton;
+
     private LinearLayout linearLayout;
     private Button playButton;
     private LinearLayout.LayoutParams editTextParams;
-    private LinearLayout.LayoutParams checkBoxParams;
+    private LinearLayout.LayoutParams sexButtonParams;
     private LinearLayout.LayoutParams horizontalLinearLayoutParams;
 
     private CharacterIO characterIO;
@@ -53,7 +54,7 @@ public class PlayerSelectActivity extends Activity {
         playButton = findViewById(R.id.playerSelectPlayButton);
 
         editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,1.0f);
-        checkBoxParams = new LinearLayout.LayoutParams(1,LinearLayout.LayoutParams.WRAP_CONTENT,1.0f);
+        sexButtonParams = new LinearLayout.LayoutParams(1,LinearLayout.LayoutParams.WRAP_CONTENT,1.0f);
         horizontalLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
 
         final EditText firstEditText = new EditText(getApplicationContext());
@@ -68,13 +69,13 @@ public class PlayerSelectActivity extends Activity {
         secondEditText.setLayoutParams(editTextParams);
         secondEditText.setEms(10);
 
-        CheckBox firstCheckBox = new CheckBox(getApplicationContext());
-        playerSexes.add(firstCheckBox);
-        firstCheckBox.setLayoutParams(checkBoxParams);
+        SexButton firstSexButton = new SexButton(getApplicationContext());
+        playerSexes.add(firstSexButton);
+        firstSexButton.setLayoutParams(sexButtonParams);
 
-        final CheckBox secondCheckBox = new CheckBox(getApplicationContext());
-        playerSexes.add(secondCheckBox);
-        secondCheckBox.setLayoutParams(checkBoxParams);
+        final SexButton secondSexButton = new SexButton(getApplicationContext());
+        playerSexes.add(secondSexButton);
+        secondSexButton.setLayoutParams(sexButtonParams);
 
         LinearLayout firstHorizontalLayout = new LinearLayout(this);
         firstHorizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -82,7 +83,7 @@ public class PlayerSelectActivity extends Activity {
         firstHorizontalLayout.setLayoutParams(horizontalLinearLayoutParams);
 
         firstHorizontalLayout.addView(firstEditText);
-        firstHorizontalLayout.addView(firstCheckBox);
+        firstHorizontalLayout.addView(firstSexButton);
 
         LinearLayout secondHorizontalLayout = new LinearLayout(this);
         secondHorizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -90,7 +91,7 @@ public class PlayerSelectActivity extends Activity {
         secondHorizontalLayout.setLayoutParams(horizontalLinearLayoutParams);
 
         secondHorizontalLayout.addView(secondEditText);
-        secondHorizontalLayout.addView(secondCheckBox);
+        secondHorizontalLayout.addView(secondSexButton);
 
         linearLayout.addView(firstHorizontalLayout);
         linearLayout.addView(secondHorizontalLayout);
@@ -165,7 +166,7 @@ public class PlayerSelectActivity extends Activity {
 
     private void addCharacters(boolean[] selectedCharacters){
         String[] characterNames = characterIO.getCharacterNames();
-        boolean[] characterSexes = characterIO.getCharacterSexes();
+        String[] characterSexes = characterIO.getCharacterSexes();
 
         for(int i = 0;i<characterNames.length;i++){
             if(selectedCharacters[i]){
@@ -173,14 +174,14 @@ public class PlayerSelectActivity extends Activity {
                     indexForPlayerNames++;
                 }
                 playerNames.get(indexForPlayerNames).setText(characterNames[i]);
-                playerSexes.get(indexForPlayerNames).setChecked(characterSexes[i]);
+                playerSexes.get(indexForPlayerNames).setSex(characterSexes[i]);
             }
         }
     }
 
     public void addTempViewsToList(){
         playerNames.add(tempEditText);
-        playerSexes.add(tempCheckBox);
+        playerSexes.add(tempSexButton);
     }
 
     public void addNewPlayerInput(){
@@ -189,8 +190,8 @@ public class PlayerSelectActivity extends Activity {
         tempEditText.setLayoutParams(editTextParams);
         tempEditText.setEms(10);
 
-        tempCheckBox = new CheckBox(getApplicationContext());
-        tempCheckBox.setLayoutParams(checkBoxParams);
+        tempSexButton = new SexButton(getApplicationContext());
+        tempSexButton.setLayoutParams(sexButtonParams);
 
         LinearLayout horizontalLayout = new LinearLayout(this);
         horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -198,7 +199,7 @@ public class PlayerSelectActivity extends Activity {
         horizontalLayout.setLayoutParams(horizontalLinearLayoutParams);
 
         horizontalLayout.addView(tempEditText);
-        horizontalLayout.addView(tempCheckBox);
+        horizontalLayout.addView(tempSexButton);
 
         linearLayout.addView(horizontalLayout);
 
@@ -246,11 +247,11 @@ public class PlayerSelectActivity extends Activity {
 
             String[] characterNames = characterIO.getCharacterNames();
             String[] characterBitmapPaths = characterIO.getCharacterIcons();
-            boolean[] characterSexes = characterIO.getCharacterSexes();
+            String[] characterSexes = characterIO.getCharacterSexes();
 
             String[] playerStringNames = new String[arrayLength];
             String[] playerBitmapIconPaths = new String[arrayLength];
-            boolean[] playerBooleanSexes = new boolean[arrayLength];
+            String[] playerStringSexes = new String[arrayLength];
 
             for (int i = 0; i < arrayLength; i++) {
                 if(playerNames.get(i).getText().length()!=0) {
@@ -260,12 +261,12 @@ public class PlayerSelectActivity extends Activity {
                         playerStringNames[i] = characterNames[characterIndex];
                         File tempIcon = new File(characterIO.getCharacterDirectory(),characterBitmapPaths[characterIndex]);
                         playerBitmapIconPaths[i] = tempIcon.getPath();
-                        playerBooleanSexes[i] = characterSexes[characterIndex];
+                        playerStringSexes[i] = characterSexes[characterIndex];
                     }
                     else{
                         playerStringNames[i] = playerNames.get(i).getText().toString();
                         playerBitmapIconPaths[i] = "Color";
-                        playerBooleanSexes[i] = playerSexes.get(i).isChecked();
+                        playerStringSexes[i] = playerSexes.get(i).getSex();
                     }
 
                 }
@@ -276,7 +277,7 @@ public class PlayerSelectActivity extends Activity {
 
             intent.putExtra("playerNames",playerStringNames);
             intent.putExtra("playerIcons",playerBitmapIconPaths);
-            intent.putExtra("playerSexes",playerBooleanSexes);
+            intent.putExtra("playerSexes",playerStringSexes);
 
             startActivity(intent);
         }

@@ -77,7 +77,6 @@ public class Camera implements Runnable{
 
         maxZoom =height/(focusedTileHeight *9);
 
-
         zoomFactorXStepFocusChange = (focusedScaleX - maxZoom) / zoomSpeed;
         zoomFactorYStepFocusChange = (focusedScaleY - maxZoom) / zoomSpeed;
 
@@ -154,7 +153,7 @@ public class Camera implements Runnable{
             translateY = currentFocusedTile.getY();
         }
         else if (cameraState == CameraState.ZOOMEDOUT) {
-            zoomButtonRenderingRect.set((int) (0 + translateX), 0, (int) (500 + translateX), 500);
+            zoomButtonRenderingRect.set((int) (0 + translateX), 0, (int) (200 + translateX), 200);
         }
         else if(cameraState == CameraState.ZOOMINGOUT){
             if (frameZoomEvent < zoomSpeed) {
@@ -248,6 +247,7 @@ public class Camera implements Runnable{
 
         focusedTileWidth = currentFocusedTile.getWidth();
         focusedTileHeight = currentFocusedTile.getHeight();
+
 
         focusedScaleX = width / focusedTileWidth;
         focusedScaleY = height / focusedTileHeight;

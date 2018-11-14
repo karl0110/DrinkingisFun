@@ -8,20 +8,20 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
+import com.jaimehall.drinkingisfun.helpers.SexButton;
 
 
 public class CharacterCreationActivity extends Activity {
 
     private ImageButton playerIcon;
     private EditText playerNameEditText;
-    private CheckBox playerSexCheckBox;
+    private SexButton playerSexButton;
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
     private Bitmap playerIconImage;
@@ -37,7 +37,7 @@ public class CharacterCreationActivity extends Activity {
 
         playerIcon = findViewById(R.id.imageButtonCreateCharacterName);
         playerNameEditText = findViewById(R.id.editTextCreateCharacterName);
-        playerSexCheckBox = findViewById(R.id.checkBoxCreateCharacterSex);
+        playerSexButton = findViewById(R.id.sexButtonCreateCharacterSex);
         playerIconImage = null;
 
 
@@ -100,9 +100,9 @@ public class CharacterCreationActivity extends Activity {
     public void save(View view){
         String imageName = "icon_"+System.currentTimeMillis()+".png";
         String playerName = playerNameEditText.getText().toString();
-        boolean isFemale = playerSexCheckBox.isChecked();
+        String playerSex = playerSexButton.getSex();
 
-        characterIO.save(imageName,playerIconImage,playerName,isFemale);
+        characterIO.save(imageName,playerIconImage,playerName,playerSex);
 
         Intent intent = new Intent(this,CharacterMenuActivity.class);
         finish();

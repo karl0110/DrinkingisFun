@@ -52,7 +52,7 @@ public class GameActivity extends Activity {
 
         String[] playerNames = intent.getStringArrayExtra("playerNames");
         String[] playerIcons = intent.getStringArrayExtra("playerIcons");
-        boolean[] playerSexes = intent.getBooleanArrayExtra("playerSexes");
+        String[] playerSexes = intent.getStringArrayExtra("playerSexes");
 
         game = new Game(this , playerNames,playerIcons, playerSexes, height, width);
 

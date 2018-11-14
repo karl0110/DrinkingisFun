@@ -25,7 +25,7 @@ public class CharacterIO implements Serializable {
 
     private String[] characterNames;
     private String[] characterIcons;
-    private boolean[] characterSexes;
+    private String[] characterSexes;
 
     public CharacterIO(Context context){
 
@@ -150,26 +150,22 @@ public class CharacterIO implements Serializable {
 
         characterNames = new String[untokenedPlayerNames.size()];
         characterIcons = new String[untokenedPlayerNames.size()];
-        characterSexes = new boolean[untokenedPlayerNames.size()];
+        characterSexes = new String[untokenedPlayerNames.size()];
 
         for(int i = 0; i<untokenedPlayerNames.size() ; i++) {
             StringTokenizer tokens = new StringTokenizer(untokenedPlayerNames.get(i), ":");
             if(tokens.hasMoreTokens()){
                 characterNames[i] = tokens.nextToken();
                 characterIcons[i] = tokens.nextToken();
-                if(tokens.nextToken().matches("true")){
-                    characterSexes[i] = true;
-                }
-                else{
-                    characterSexes[i] = false;
-                }
+                characterSexes[i] = tokens.nextToken();
+
             }
 
         }
 
     }
 
-    public void save(String characterIcon,Bitmap characterIconBitmap,String characterName,boolean characterSex){
+    public void save(String characterIcon,Bitmap characterIconBitmap,String characterName,String characterSex){
 
         File myImagePath = new File(characterDirectory,characterIcon);
         if(!myImagePath.exists()){
@@ -201,7 +197,7 @@ public class CharacterIO implements Serializable {
         }
     }
 
-    public void replaceCharacter(String replaceCharacterName,String newCharacterName,boolean newCharacterSex,String characterImage,Bitmap characterIcon){
+    public void replaceCharacter(String replaceCharacterName,String newCharacterName,String newCharacterSex,String characterImage,Bitmap characterIcon){
 
         ArrayList<String> untokenedLines= new ArrayList<String>();
         BufferedReader nameReader;
@@ -291,7 +287,7 @@ public class CharacterIO implements Serializable {
         return characterIcons;
     }
 
-    public boolean[] getCharacterSexes() {
+    public String[] getCharacterSexes() {
         return characterSexes;
     }
 

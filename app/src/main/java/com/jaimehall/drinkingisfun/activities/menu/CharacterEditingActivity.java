@@ -10,13 +10,13 @@ import android.app.Activity;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
+import com.jaimehall.drinkingisfun.helpers.SexButton;
 
 import java.io.File;
 
@@ -24,7 +24,7 @@ public class CharacterEditingActivity extends Activity {
 
     private ImageButton playerIcon;
     private EditText playerNameEditText;
-    private CheckBox playerSexCheckBox;
+    private SexButton playerSexButton;
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
     private Bitmap playerIconImage;
@@ -44,7 +44,7 @@ public class CharacterEditingActivity extends Activity {
 
         playerIcon = findViewById(R.id.imageButtonEditCharacterIcon);
         playerNameEditText = findViewById(R.id.editTextEditCharacterName);
-        playerSexCheckBox = findViewById(R.id.checkBoxEditCharacterSex);
+        playerSexButton = findViewById(R.id.sexButtonEditCharacterSex);
 
 
 
@@ -66,11 +66,10 @@ public class CharacterEditingActivity extends Activity {
             }
         });
 
-
-        characterName = intent.getStringExtra("characterName");
+        characterName = intent.getStringExtra("characterName");;
         playerNameEditText.setText(characterName);
 
-        playerSexCheckBox.setChecked(intent.getBooleanExtra("characterSex",false));
+        playerSexButton.setSex(intent.getStringExtra("characterSex"));
 
         playerIconImage = null;
 
@@ -140,9 +139,9 @@ public class CharacterEditingActivity extends Activity {
 
 
         String playerName = playerNameEditText.getText().toString();
-        boolean isFemale = playerSexCheckBox.isChecked();
+        String sex = playerSexButton.getSex();
 
-        characterIO.replaceCharacter(characterName,playerName,isFemale,imageName,playerIconImage);
+        characterIO.replaceCharacter(characterName,playerName,sex,imageName,playerIconImage);
 
         finish();
     }

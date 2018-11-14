@@ -33,6 +33,7 @@ public class Renderer implements Runnable {
 
     Renderer(Game game,LoadingScreen loadingScreen){
         this.surfaceHolder = game.getHolder();
+        surfaceHolder.setFormat(0x00000004);
         this.loadingScreen = loadingScreen;
         this.game = game;
 
@@ -82,8 +83,7 @@ public class Renderer implements Runnable {
                             Tile currentFocusedTile = camera.getCurrentFocusedTile();
 
                             int x = (int) (currentFocusedTile.getX() / currentFocusedTile.getWidth());
-                            int y = (int) (currentFocusedTile.getY() / currentFocusedTile.getHeight());
-                            backgroundHandler.renderFocusedTile(canvas, x, y);
+                            backgroundHandler.renderFocusedTile(canvas, x);
 
                             camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
 

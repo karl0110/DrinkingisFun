@@ -22,7 +22,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
     private String[] playerNames;
     private String[] playerIcons;
-    private boolean[] playerSexes;
+    private String[] playerSexes;
 
     private Camera camera;
     private Renderer renderer;
@@ -45,7 +45,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
 
 
-    public Game(Context context, String[] playerNames,String[] playerIcons, boolean[] playerSexes, float width, float height) {
+    public Game(Context context, String[] playerNames,String[] playerIcons, String[] playerSexes, float width, float height) {
         super(context);
         this.width=width;
         this.height=height;
@@ -91,11 +91,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
             playerHandler = new PlayerHandler( width, height, bitmapLoader);
             loadingScreen.progressOne();
 
-            BackgroundHandler backgroundHandler = new BackgroundHandler();
+            BackgroundHandler backgroundHandler = new BackgroundHandler(bitmapLoader,250,1260);
             loadingScreen.progressOne();
             loadingScreen.progressOne();
 
-            Map map = new Map(bitmapLoader, backgroundHandler);
+            Map map = new Map(bitmapLoader);
             loadingScreen.progressOne();
 
             TextHandler textHandler = new TextHandler(this);

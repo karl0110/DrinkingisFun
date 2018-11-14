@@ -194,16 +194,30 @@ public class TextHandler {
                 completeBufferedInformation.append(currentPlayer.getPlayerName());
 
             } else if (unprocessedTask[i].matches("EinzahlGeschlecht")) {
-                if (currentPlayer.isFemale()) {
-                    completeBufferedInformation.append("sie");
-                } else {
-                    completeBufferedInformation.append("er");
+
+                switch(currentPlayer.getSex()){
+                    case "male":
+                        completeBufferedInformation.append("er");
+                        break;
+                    case "female":
+                        completeBufferedInformation.append("sie");
+                        break;
+                    case "unknown":
+                        completeBufferedInformation.append("es");
+                        break;
                 }
             } else if (unprocessedTask[i].matches("MehrzahlGeschlecht")) {
-                if (currentPlayer.isFemale()) {
-                    completeBufferedInformation.append("ihrer");
-                } else {
-                    completeBufferedInformation.append("seiner");
+
+                switch(currentPlayer.getSex()){
+                    case "male":
+                        completeBufferedInformation.append("seiner");
+                        break;
+                    case "female":
+                        completeBufferedInformation.append("ihrer");
+                        break;
+                    case "unknown":
+                        completeBufferedInformation.append("seiner");
+                        break;
                 }
             } else if (unprocessedTask[i].matches("AnzahlSchlucke")) {
                 long anzahlSchlucke = Math.round( (Math.random() * (currentPlayer.getLocation().getTileDifficulty()+1*drinkMultiplier)));

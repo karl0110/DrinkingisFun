@@ -26,12 +26,12 @@
 
     <string name="activity_character_creation_title">Neuer Charakter</string>
     <string name="activity_character_creation_name_hint">Name</string>
-    <string name="activity_character_creation_sex">     Weiblich</string>
+    <string name="activity_character_creation_sex">     Geschlecht</string>
     <string name="activity_character_creation_save">Speichern</string>
 
     <string name="activity_character_editing_title">Charakter Bearbeiten</string>
     <string name="activity_character_editing_name_hint">Name</string>
-    <string name="activity_character_editing_sex">     Weiblich</string>
+    <string name="activity_character_editing_sex">     Geschlecht</string>
     <string name="activity_character_editing_save">Speichern</string>
     <string name="activity_character_editing_delete">Löschen</string>
 
@@ -42,7 +42,7 @@
 
     <string name="activity_player_select_title_string">Spieler</string>
     <string name="activity_player_select_player_name">Spielernamen</string>
-    <string name="activity_player_select_female">Weiblich</string>
+    <string name="activity_player_select_female">Geschlecht</string>
     <string name="activity_player_select_add_characters">Charakter Hinzufügen</string>
     <string name="activity_player_select_play">Spielen</string>
     <string name="activity_player_not_enough_players">Bitte gebt eure Namen ein</string>

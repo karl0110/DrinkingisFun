@@ -34,7 +34,7 @@ public abstract class Tile {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setFakeBoldText(true);
-        paint.setTextSize(25);
+        paint.setTextSize(15);
         paint.setAntiAlias(true);
         paint.setTextAlign(Paint.Align.CENTER);
 

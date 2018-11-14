@@ -43,6 +43,7 @@ public class CharacterMenuActivity extends Activity {
     public void deleteAllCharacters(View view){
 
         characterIO.deleteAllCharacters();
+        refreshUI();
     }
 
     public void onResume(){
