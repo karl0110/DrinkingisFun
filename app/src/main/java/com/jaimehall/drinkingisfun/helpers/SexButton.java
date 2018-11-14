@@ -48,7 +48,7 @@ public class SexButton extends ImageButton implements View.OnClickListener {
     }
 
     private Bitmap getRandomIcon(){
-        Random generator = new Random();
+        Random generator = new Random((long)(Math.random()*456345));
         int randomIndex = generator.nextInt(icons.size());
         return icons.get(randomIndex);
     }
