@@ -31,9 +31,9 @@ public class BackgroundHandler {
 
     public void render(Canvas canvas){
         for(int x = 0;x<backgroundColumns.length;x++){
-            if(Rect.intersects(camera.getCameraRect(),backgroundColRects[x])) {
+            //if(Rect.intersects(camera.getCameraRect(),backgroundColRects[x])) {
                 canvas.drawBitmap(backgroundColumns[x], null,backgroundColRects[x], null);
-            }
+           // }
         }
 
     }

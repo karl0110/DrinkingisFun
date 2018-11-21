@@ -28,7 +28,10 @@ import java.util.LinkedList;
 	private Paint textPaint;
 	private Bitmap playerMenuBackground;
 
+	private Renderer renderer;
+
 	PlayerHandler( float width, float height, BitmapLoader bitmapLoader){
+
 
 	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
 	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
@@ -47,7 +50,14 @@ import java.util.LinkedList;
 
 
         playerMenuBackground = bitmapLoader.getBitmap(R.drawable.spielermenu,500,281);
+
+
 	}
+
+	public void init(Renderer renderer){
+        this.renderer=renderer;
+        //renderer.updateRenderBitmap();
+    }
 
     void renderPlayerMenu(Canvas canvas){
         canvas.drawBitmap(playerMenuBackground,null,menuBackgroundRect,null);
@@ -105,6 +115,8 @@ import java.util.LinkedList;
 			currentPlayerChanged();
 			indexOfDetailedPlayer = 0;
 
+			//renderer.updateRenderBitmap();
+
     }
 
 
@@ -137,6 +149,8 @@ import java.util.LinkedList;
 
 			players.get(i).setCoordinates(rect);
 		}
+
+
 
 	}
 

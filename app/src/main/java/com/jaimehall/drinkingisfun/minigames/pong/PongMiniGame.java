@@ -83,16 +83,16 @@ public class PongMiniGame extends MiniGame {
         pongBall.render(canvas);
         enemyPaddle.render(canvas);
         playerPaddle.render(canvas);
+
         if(!tutorialFinished){
-            canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
+            super.renderTutorial(canvas);
         }
     }
 
     @Override
     public void tick() {
-        if(!tutorialFinished)tickCounter++;
+        super.tickUniversalMinigame();
         if(tutorialFinished){
-
             enemyPaddle.tick();
             playerPaddle.tick();
             ghostPongBall.tick();
@@ -106,7 +106,7 @@ public class PongMiniGame extends MiniGame {
         if(tutorialFinished){
             playerPaddle.touched(motionEvent);
         }
-       if(!tutorialFinished && tickCounter>50){
+       if(!tutorialFinished && tickCounter>120){
            tutorialFinished=true;
         }
     }

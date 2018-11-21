@@ -26,6 +26,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
     private Camera camera;
     private Renderer renderer;
+    private CameraRenderer cameraRenderer;
 
     private Context context;
 
@@ -57,13 +58,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         loadingScreen = new LoadingScreen(width,height,12);
         renderer = new Renderer(this,loadingScreen);
 
+
         getHolder().addCallback(this);
+
+        init();
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        renderer.resume();
-        init();
+        //renderer.resume();
+
     }
 
     @Override
@@ -119,9 +123,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
             camera = new Camera(this, playerHandler, width, height);
 
             renderer.init( bitmapLoader,  playerHandler, camera, miniGameHandler, backgroundHandler);
+
             loadingScreen.progressOne();
 
+            playerHandler.init(renderer);
+
             initFinished = true;
+            cameraRenderer = new CameraRenderer(renderer,camera,width,height);
             resume();
         }
     }
@@ -193,12 +201,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
     public void fling(MotionEvent motionEvent, MotionEvent motionEvent1){
         if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
             if (motionEvent.getX() > motionEvent1.getX()) {
+
                 camera.addToTranslateX(400);
+
+                if(camera.getTranslateX()>(6500-cameraRenderer.getCameraRect().width())){
+                    camera.setTranslateX(6500-cameraRenderer.getCameraRect().width());
+                }
             } else if (motionEvent.getX() < motionEvent1.getX()) {
 
-                if (camera.getTranslateX() != 0) {
-                    camera.addToTranslateX(-400);
+                camera.addToTranslateX(-400);
+
+                if(camera.getTranslateX()<0){
+                    camera.setTranslateX(0);
                 }
+
             }
         }
 
@@ -237,12 +253,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
                     }
                 }
 
-                camera.setTouchTimer(20);
+
+                camera.setTouchTimer(30);
             }
 
-            if (gameState == State.MINIGAME) {
-                miniGameHandler.touched(motionEvent);
-            }
+        if (gameState == State.MINIGAME) {
+            miniGameHandler.touched(motionEvent);
+            camera.setTouchTimer(30);
+        }
+
+
         }
 
 
@@ -251,6 +271,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         camera.pause();
         renderer.pause();
         miniGameHandler.pause();
+        cameraRenderer.pause();
     }
 
 
@@ -259,6 +280,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
             renderer.resume();
             camera.resume();
             miniGameHandler.resume();
+            cameraRenderer.resume();
         }
 
     }

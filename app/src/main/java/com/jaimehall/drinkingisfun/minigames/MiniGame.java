@@ -34,4 +34,12 @@ public abstract class MiniGame {
     public abstract void touched(MotionEvent motionEvent);
     public abstract void reset();
 
+    protected void renderTutorial(Canvas canvas){
+        canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
+    }
+
+    protected void tickUniversalMinigame(){
+        tickCounter++;
+    }
+
 }

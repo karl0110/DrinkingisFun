@@ -21,7 +21,7 @@ public class Camera implements Runnable{
 
     private int touchTimer;
 
-    private Rect cameraRect;
+   // private Rect cameraRect;
     private Rect zoomButtonRenderingRect;
     private Rect playerIconRenderingRect;
 
@@ -72,7 +72,7 @@ public class Camera implements Runnable{
 
         playerIconRenderingRect = new Rect();
         zoomButtonRenderingRect= new Rect();
-        cameraRect = new Rect();
+        //cameraRect = new Rect();
         currentFocusedTileChanged();
 
         maxZoom =height/(focusedTileHeight *9);
@@ -236,9 +236,7 @@ public class Camera implements Runnable{
             }
         }
 
-        float x = width/scaleX;
-        float y = height/scaleX;
-        cameraRect.set((int)translateX,(int)translateY,(int)(translateX+x),(int)(translateY+y));
+
     }
 
     void currentFocusedTileChanged(){
@@ -333,9 +331,9 @@ public class Camera implements Runnable{
         }
     }
 
-    Rect getCameraRect(){
-        return cameraRect;
-    }
+    //Rect getCameraRect(){
+        //return cameraRect;
+   // }
 
     float getScaleX() {
         return scaleX;
@@ -351,6 +349,10 @@ public class Camera implements Runnable{
 
     float getTranslateY() {
         return translateY;
+    }
+
+    public void setTranslateX(float translateX) {
+        this.translateX = translateX;
     }
 
     void addToTranslateX(float amount) {

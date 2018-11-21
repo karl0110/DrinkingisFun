@@ -85,7 +85,7 @@ public class ExBeerMiniGame extends MiniGame {
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(!tutorialFinished&& tickCounter>=60){
+        if(!tutorialFinished&& tickCounter>=120){
             tutorialFinished();
         }
         else {
@@ -107,7 +107,7 @@ public class ExBeerMiniGame extends MiniGame {
     }
 
     public void tick(){
-        if(!tutorialFinished)tickCounter++;
+        super.tickUniversalMinigame();
         if(tutorialFinished){
             timer = System.currentTimeMillis() - startTime;
             double displayTimer = Math.round((amountOfMilliSeconds-timer)*10);
@@ -139,7 +139,7 @@ public class ExBeerMiniGame extends MiniGame {
         canvas.drawBitmap(button,null,buttonRect,null);
 
         if(!tutorialFinished){
-            canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
+            super.renderTutorial(canvas);
         }
 
     }
