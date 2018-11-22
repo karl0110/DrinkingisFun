@@ -85,10 +85,8 @@ public class ExBeerMiniGame extends MiniGame {
 
     public void touched(MotionEvent mE){
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
-        if(!tutorialFinished&& tickCounter>=120){
-            tutorialFinished();
-        }
-        else {
+
+        if(tutorialFinished){
             if (buttonRect.contains(touchPoint)) {
 
                 tapCounter++;
@@ -100,7 +98,7 @@ public class ExBeerMiniGame extends MiniGame {
         }
     }
 
-    void tutorialFinished(){
+    public void tutorialFinished(){
         startTime = System.currentTimeMillis();
         tutorialFinished=true;
 

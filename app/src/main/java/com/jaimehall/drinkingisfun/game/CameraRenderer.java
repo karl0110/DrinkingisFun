@@ -1,7 +1,6 @@
 package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 
@@ -39,22 +38,42 @@ public class CameraRenderer implements Runnable {
             float translateX = camera.getTranslateX();
             float translateY = camera.getTranslateY();
 
-            float x = width/scaleX;
-            float y = height/scaleX;
+            float scaledWidth = width/scaleX;
+            float scaledHeight = height/scaleX;
 
 
-            cameraRect.set((int) translateX, (int) translateY, (int) (translateX + x), (int) (translateY + y));
+            cameraRect.set((int) translateX, (int) translateY, (int) (translateX + scaledWidth), (int) (translateY + scaledHeight));
 
-            Matrix m = new Matrix();
 
-            m.setTranslate(-translateX, -translateY);
-            m.setScale(scaleX, scaleY);
+            int x = cameraRect.left-canvasRect.left;
+            if(x<0){
+                x=0;
+            }
+            int y = cameraRect.top-canvasRect.top;
+            if(y<0){
+                y=0;
+            }
 
-            cameraBitmap= Bitmap.createBitmap(canvasBitmap, cameraRect.left, cameraRect.top, cameraRect.width(), cameraRect.height(),m,false);
+            if((((x)+cameraRect.width())<=canvasBitmap.getWidth())  && (((y)+cameraRect.height())<=canvasBitmap.getHeight())){
 
-            renderer.setRenderBitmap(cameraBitmap);
+                Matrix m = new Matrix();
+
+                m.setTranslate(-translateX, -translateY);
+                m.setScale(scaleX, scaleY);
+
+                cameraBitmap = Bitmap.createBitmap(canvasBitmap,x ,y , cameraRect.width(), cameraRect.height(), m, false);
+                renderer.setRenderBitmap(cameraBitmap);
+            }
         }
 
+    }
+
+    private void tick(){
+        if(camera.getCameraState() != Camera.CameraState.ZOOMEDOUT) {
+            if ((canvasRect.width() * canvasRect.height()) < ((cameraRect.width() * cameraRect.height()) * 2.5)) {
+                updateCanvasBitmap();
+            }
+        }
     }
 
     public void updateCanvasBitmap(){
@@ -67,6 +86,7 @@ public class CameraRenderer implements Runnable {
         float y = height/scaleX;
 
         cameraRect.set((int) translateX, (int) translateY, (int) (translateX + x), (int) (translateY + y));
+        //System.out.println("Camera Rect:    "+cameraRect.toString());
 
         float canvasRectLeft = cameraRect.left-(cameraRect.width()/2);
         if(canvasRectLeft<0){
@@ -86,14 +106,16 @@ public class CameraRenderer implements Runnable {
         }
 
         canvasRect.set((int)canvasRectLeft,(int)canvasRectTop,(int)canvasRectRight,(int)canvasRectBottom);
+        //System.out.println("Canvas Rect:    "+canvasRect.toString());
 
         if(canvasRect.width()>0 && canvasRect.height()>0) {
             canvasBitmap = renderer.getRenderedBitmap(canvasRect);
+            System.out.println("Canvas Bitmap Width:    "+canvasBitmap.getWidth()+"     Height:     "+canvasBitmap.getHeight());
         }
     }
 
     public void run(){
-
+        updateCanvasBitmap();
 
         long lastTime = System.nanoTime();//Wird für einen Timer benötigt.
         final double amountOfTicks = 30.0;//Wie oft die Methode tick() in einer Sekunde aufgerufen werden soll.
@@ -112,6 +134,7 @@ public class CameraRenderer implements Runnable {
             if (delta >= 1) {//Guckt ob die Methode tick() jetzt aufgerufen werden soll.
                 delta--;//Setzt den tick() Aufruf-Timer zurück.
                 frames++;////Addiert zum Frame-Zähler 1 dazu.
+                tick();
             }
 
             if (System.currentTimeMillis() - timer > 1000) {//Wenn eine Sekunde vergangen ist.

@@ -260,12 +260,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
                 }
 
 
-                camera.setTouchTimer(30);
+                camera.setTouchTimer(60);
             }
 
         if (gameState == State.MINIGAME) {
             miniGameHandler.touched(motionEvent);
-            camera.setTouchTimer(30);
+            camera.setTouchTimer(60);
         }
 
 
@@ -283,8 +283,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
     public void resume() {
         if(initFinished) {
-            renderer.resume();
             camera.resume();
+            renderer.resume();
             miniGameHandler.resume();
             cameraRenderer.resume();
         }

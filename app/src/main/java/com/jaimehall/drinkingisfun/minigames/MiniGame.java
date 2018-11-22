@@ -33,6 +33,7 @@ public abstract class MiniGame {
     public abstract void tick();
     public abstract void touched(MotionEvent motionEvent);
     public abstract void reset();
+    public abstract void tutorialFinished();
 
     protected void renderTutorial(Canvas canvas){
         canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
@@ -40,6 +41,9 @@ public abstract class MiniGame {
 
     protected void tickUniversalMinigame(){
         tickCounter++;
+        if(!tutorialFinished&& tickCounter>=120){
+            tutorialFinished();
+        }
     }
 
 }

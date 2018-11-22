@@ -78,7 +78,10 @@ public class Camera implements Runnable{
         xZoomTranslateVariable = ((focusedTileWidth / 2) * focusedScaleX);
         yZoomTranslateVariable = ((focusedTileHeight / 2) * focusedScaleY);
 
-
+        scaleX = focusedScaleX;
+        scaleY = focusedScaleY;
+        translateX = currentFocusedTile.getX();
+        translateY = currentFocusedTile.getY();
 
 
     }
@@ -242,8 +245,6 @@ public class Camera implements Runnable{
         focusedScaleX = width / focusedTileWidth;
         focusedScaleY = height / focusedTileHeight;
 
-        float currentTileX = currentFocusedTile.getX();
-        float currentTileY = currentFocusedTile.getY();
 
     }
 

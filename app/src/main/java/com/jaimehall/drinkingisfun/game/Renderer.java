@@ -44,8 +44,8 @@ public class Renderer implements Runnable {
         this.loadingScreen = loadingScreen;
         this.game = game;
 
-        playerIconRenderingRect =new Rect(0,0,(int)(width/16),(int)(height/9));
-        zoomButtonRenderingRect = new Rect((int)(width-(width/16)),0,(int)width,(int)(height/9));
+        zoomButtonRenderingRect =new Rect(0,0,(int)(width/16),(int)(height/9));
+        playerIconRenderingRect = new Rect((int)(width-(width/16)),0,(int)width,(int)(height/9));
 
     }
 
