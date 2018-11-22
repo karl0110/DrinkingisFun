@@ -50,7 +50,7 @@ public class PongMiniGame extends MiniGame {
     }
 
     public void tutorialFinished(){
-
+        tutorialFinished=true;
     }
 
     @Override
@@ -103,12 +103,11 @@ public class PongMiniGame extends MiniGame {
 
     @Override
     public void touched(MotionEvent motionEvent) {
+        super.universalMinigameTouch();
         if(tutorialFinished){
             playerPaddle.touched(motionEvent);
         }
-       if(!tutorialFinished && tickCounter>120){
-           tutorialFinished=true;
-        }
+
     }
 
 

@@ -14,7 +14,7 @@ import java.util.LinkedList;
 
  class PlayerHandler {
 
-     private Game game;
+ 	private Game game;
 
 	private LinkedList<Player> players = new LinkedList<>();
 	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
@@ -90,23 +90,23 @@ import java.util.LinkedList;
 				currentPlayer.addToScore((currentPlayer.getLocation().getTileDifficulty()*2 + 1) * (20 * Math.random()));
 			}
 
-			int indexOfNextPlayer;
-			if(players.size()==1){
-				indexOfNextPlayer	=0;
-			}
-			else{
-				 indexOfNextPlayer= players.indexOf(nextPlayer);
-			}
+			int indexOfNextPlayer= players.indexOf(nextPlayer);
+
 
 
 			if (indexOfNextPlayer == players.size() - 1) {
 				nextPlayer = players.get(0);
 
 			} else {
+
 				currentPlayer = nextPlayer;
+
 				nextPlayer = players.get(indexOfNextPlayer + 1);
 			}
 			currentPlayer = players.get(indexOfNextPlayer);
+
+
+
 
 			currentPlayerChanged();
 			indexOfDetailedPlayer = 0;
@@ -146,7 +146,6 @@ import java.util.LinkedList;
 			players.get(i).setCoordinates(rect);
 		}
 
-        game.updateCameraRenderer();
 
 	}
 

@@ -41,6 +41,10 @@ public abstract class MiniGame {
 
     protected void tickUniversalMinigame(){
         tickCounter++;
+
+    }
+
+    protected void universalMinigameTouch(){
         if(!tutorialFinished&& tickCounter>=120){
             tutorialFinished();
         }

@@ -115,7 +115,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
             miniGameHandler = new MiniGameHandler(this, height, width, bitmapLoader);
             loadingScreen.progressOne();
 
-            playerIconTouchRect = new Rect((int) ((width / 8) * 7), 0, (int) width, ((int) (height / 8)));
+            playerIconTouchRect = new Rect((int) (width-(width / 8) ), 0, (int) width, ((int) (height / 8)));
 
             zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
 
@@ -130,16 +130,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
             playerHandler.currentPlayerChanged();
 
+            camera.init();
+
 
             initFinished = true;
             resume();
         }
     }
-
-    public void updateCameraRenderer(){
-        cameraRenderer.updateCanvasBitmap();
-    }
-
 
     public void finishGame(){
 
@@ -197,11 +194,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
                 break;
         }
 
-        playerHandler.nextPlayer();
-        camera.currentFocusedTileChanged();
         camera.setCameraState(Camera.CameraState.FOCUSED);
 
+        camera.currentFocusedTileChanged();
+        nextPlayer();
+        camera.currentFocusedTileChanged();
+
+
         ((GameActivity) context).setScreenOrientationLandscape();
+
+        camera.setTouchTimer(60);
     }
 
     public void fling(MotionEvent motionEvent, MotionEvent motionEvent1){
@@ -210,8 +212,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
                 camera.addToTranslateX(400);
 
-                if(camera.getTranslateX()>(6500-cameraRenderer.getCameraRect().width())){
-                    camera.setTranslateX(6500-cameraRenderer.getCameraRect().width());
+                if((camera.getTranslateX()+cameraRenderer.getCameraRect().width())>6500){
+                    camera.setTranslateX(6500);
                 }
             } else if (motionEvent.getX() < motionEvent1.getX()) {
 
@@ -223,6 +225,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
             }
         }
+
+    }
+
+    public void nextPlayer(){
+
+        playerHandler.nextPlayer();
+
+        renderer.updateCurrentTask();
+
+        cameraRenderer.updateCanvasBitmap();
 
     }
 
@@ -269,7 +281,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         }
 
 
-        }
+    }
 
 
     public void pause() {

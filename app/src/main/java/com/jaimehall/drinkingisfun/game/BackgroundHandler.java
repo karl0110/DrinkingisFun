@@ -36,9 +36,8 @@ public class BackgroundHandler {
         for(int x = 0;x<backgroundTiles.length;x++){
             for(int y = 0;y<backgroundTiles[0].length;y++) {
                 if (Rect.intersects(spaceToDraw, backgroundTileRects[x][y])) {
-                    canvas.translate(-spaceToDraw.left,-spaceToDraw.top);
+
                     canvas.drawBitmap(backgroundTiles[x][y], null, backgroundTileRects[x][y], null);
-                    canvas.translate(spaceToDraw.left,spaceToDraw.top);
                 }
             }
         }

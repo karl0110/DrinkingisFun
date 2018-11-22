@@ -84,6 +84,8 @@ public class ExBeerMiniGame extends MiniGame {
     }
 
     public void touched(MotionEvent mE){
+        super.universalMinigameTouch();
+
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
 
         if(tutorialFinished){

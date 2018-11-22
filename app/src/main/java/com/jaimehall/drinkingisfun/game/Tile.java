@@ -16,12 +16,6 @@ public abstract class Tile {
     Map map;
     int tileDifficulty;
 
-    private TextRect textRect;
-    private int textRectPrep;
-    private float baseX,baseY;
-    private Player prevPlayer = null;
-    private String currentTask;
-
     public Tile(float x, float y, float width, float height, Map map, int tileDifficulty){
         this.width=width;
         this.height=height;
@@ -30,37 +24,11 @@ public abstract class Tile {
         this.map=map;
         this.tileDifficulty=tileDifficulty;
 
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        paint.setFakeBoldText(true);
-        paint.setTextSize(15);
-        paint.setAntiAlias(true);
-        paint.setTextAlign(Paint.Align.CENTER);
-
-        textRect = new TextRect(paint);
     }
 
     public abstract void renderMap(Canvas canvas);
 
-    void renderText(Canvas canvas,Player currentFocusedPlayer){
-        if(prevPlayer != currentFocusedPlayer){
-            currentTask = currentFocusedPlayer.getTask();
-            prevPlayer = currentFocusedPlayer;
-        }
 
-        if(textRectPrep != textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)))){
-            System.out.println("updating textrect");
-
-            baseX = x + (width / 2);
-            baseY = y + ((height / 32) * 3);
-            textRectPrep = textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)));
-        }
-
-        textRect.draw(canvas, (int) baseX, (int) baseY);
-
-
-    }
 
     public abstract Tile getNextTile();
 

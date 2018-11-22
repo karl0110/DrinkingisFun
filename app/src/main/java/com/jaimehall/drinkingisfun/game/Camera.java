@@ -68,6 +68,9 @@ public class Camera implements Runnable{
 
         cameraState = CameraState.FOCUSED;
 
+    }
+
+    public void init(){
         currentFocusedTileChanged();
 
         maxZoom =height/(focusedTileHeight *9);
@@ -82,8 +85,6 @@ public class Camera implements Runnable{
         scaleY = focusedScaleY;
         translateX = currentFocusedTile.getX();
         translateY = currentFocusedTile.getY();
-
-
     }
 
 
@@ -184,8 +185,8 @@ public class Camera implements Runnable{
 
                 frameZoomEvent++;
             } else {
-                currentFocusedTileChanged();
                 cameraState = CameraState.FOCUSED;
+                currentFocusedTileChanged();
             }
         }
         else if(cameraState == CameraState.FIRSTHALFFOCUSCHANGE){
@@ -224,9 +225,9 @@ public class Camera implements Runnable{
                 frameFocusChange++;
             } else {
                 cameraState = CameraState.FOCUSED;
-
                 playerHandler.getCurrentPlayer().setLocation(currentFocusedTile.getNextTile());
-                playerHandler.nextPlayer();
+                currentFocusedTileChanged();
+                game.nextPlayer();
                 currentFocusedTileChanged();
             }
         }
@@ -296,15 +297,15 @@ public class Camera implements Runnable{
         float targetXFocusChange = nextFocusedTile.getCoordinates().centerX();
         float targetYFocusChange = nextFocusedTile.getCoordinates().centerY();
 
+
         if (startXFocusChange == targetXFocusChange && startYFocusChange == targetYFocusChange) {
 
             cameraState = CameraState.FOCUSED;
 
             playerHandler.getCurrentPlayer().setLocation(currentFocusedTile.getNextTile());
-            playerHandler.nextPlayer();
-
             currentFocusedTileChanged();
-
+            game.nextPlayer();
+            currentFocusedTileChanged();
 
         } else {
 

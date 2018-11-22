@@ -35,6 +35,7 @@ public class TextRect
     private String text = null;
     private boolean wasCut = false;
 
+
     /**
      * Create reusable text rectangle (use one instance per font).
      *
@@ -236,4 +237,7 @@ public class TextRect
     {
         return wasCut;
     }
+
 }
+
+

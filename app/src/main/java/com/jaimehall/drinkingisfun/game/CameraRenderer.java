@@ -33,17 +33,6 @@ public class CameraRenderer implements Runnable {
     private void render(){
 
         if(canvasBitmap!=null) {
-            float scaleX = camera.getScaleX();
-            float scaleY =camera.getScaleY();
-            float translateX = camera.getTranslateX();
-            float translateY = camera.getTranslateY();
-
-            float scaledWidth = width/scaleX;
-            float scaledHeight = height/scaleX;
-
-
-            cameraRect.set((int) translateX, (int) translateY, (int) (translateX + scaledWidth), (int) (translateY + scaledHeight));
-
 
             int x = cameraRect.left-canvasRect.left;
             if(x<0){
@@ -58,8 +47,8 @@ public class CameraRenderer implements Runnable {
 
                 Matrix m = new Matrix();
 
-                m.setTranslate(-translateX, -translateY);
-                m.setScale(scaleX, scaleY);
+                m.setTranslate(-camera.getTranslateX(), -camera.getTranslateY());
+                m.setScale(camera.getScaleX(), camera.getScaleY());
 
                 cameraBitmap = Bitmap.createBitmap(canvasBitmap,x ,y , cameraRect.width(), cameraRect.height(), m, false);
                 renderer.setRenderBitmap(cameraBitmap);
@@ -69,24 +58,30 @@ public class CameraRenderer implements Runnable {
     }
 
     private void tick(){
-        if(camera.getCameraState() != Camera.CameraState.ZOOMEDOUT) {
-            if ((canvasRect.width() * canvasRect.height()) < ((cameraRect.width() * cameraRect.height()) * 2.5)) {
-                updateCanvasBitmap();
-            }
-        }
-    }
-
-    public void updateCanvasBitmap(){
 
         float scaleX = camera.getScaleX();
         float translateX = camera.getTranslateX();
         float translateY = camera.getTranslateY();
 
-        float x = width/scaleX;
-        float y = height/scaleX;
+        float scaledWidth = width/scaleX;
+        float scaledHeight = height/scaleX;
 
-        cameraRect.set((int) translateX, (int) translateY, (int) (translateX + x), (int) (translateY + y));
-        //System.out.println("Camera Rect:    "+cameraRect.toString());
+        cameraRect.set((int) translateX, (int) translateY, (int) (translateX + scaledWidth), (int) (translateY + scaledHeight));
+
+        if(camera.getCameraState() != Camera.CameraState.ZOOMEDOUT) {
+            if ((canvasRect.width() * canvasRect.height()) < ((cameraRect.width() * cameraRect.height()) * 2.5)) {
+                updateCanvasBitmap();
+            }
+        }
+        else if (camera.getCameraState() != Camera.CameraState.FOCUSED){
+            if ((canvasRect.width() * canvasRect.height())*0.3 > ((cameraRect.width() * cameraRect.height()))) {
+                updateCanvasBitmap();
+            }
+        }
+    }
+
+    void updateCanvasBitmap(){
+
 
         float canvasRectLeft = cameraRect.left-(cameraRect.width()/2);
         if(canvasRectLeft<0){

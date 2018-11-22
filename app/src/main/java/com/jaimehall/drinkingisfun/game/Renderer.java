@@ -3,15 +3,19 @@ package com.jaimehall.drinkingisfun.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.SurfaceHolder;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
+import com.jaimehall.drinkingisfun.helpers.TextRect;
 import com.jaimehall.drinkingisfun.minigames.MiniGameHandler;
 
 public class Renderer implements Runnable {
+
+    private float width,height;
 
     private Thread thread;
     private boolean running;
@@ -37,15 +41,32 @@ public class Renderer implements Runnable {
     private Rect zoomButtonRenderingRect;
     private Rect playerIconRenderingRect;
 
+    private TextRect textRect;
+    private String currentTask = "";
+    private int textRectPrep;
+
 
     Renderer(Game game,LoadingScreen loadingScreen,float width,float height){
         this.surfaceHolder = game.getHolder();
         surfaceHolder.setFormat(0x00000004);
         this.loadingScreen = loadingScreen;
         this.game = game;
+        this.width=width;
+        this.height=height;
 
         zoomButtonRenderingRect =new Rect(0,0,(int)(width/16),(int)(height/9));
         playerIconRenderingRect = new Rect((int)(width-(width/16)),0,(int)width,(int)(height/9));
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        paint.setFakeBoldText(true);
+        paint.setTextSize(15);
+        paint.setAntiAlias(true);
+        paint.setTextAlign(Paint.Align.CENTER);
+
+        textRect = new TextRect(paint);
+
 
     }
 
@@ -60,9 +81,10 @@ public class Renderer implements Runnable {
 
             showPlayers = bitmapLoader.getBitmap(R.drawable.spieleranzeigen, 100, 100);
 
-
             zoomButtonZoomedIn = bitmapLoader.getBitmap(R.drawable.minuslupe, 100, 100);
             zoomButtonZoomedOut = bitmapLoader.getBitmap(R.drawable.pluslupe, 1000, 1000);
+
+            updateCurrentTask();
 
 
             initPhase = false;
@@ -90,8 +112,16 @@ public class Renderer implements Runnable {
                         }
 
                         if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+
+
+
                             canvas.drawBitmap(zoomButtonZoomedIn, null, zoomButtonRenderingRect, null);
                             canvas.drawBitmap(showPlayers, null, playerIconRenderingRect, null);
+
+                            if(textRectPrep != textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)))){
+                                textRectPrep = textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)));
+                            }
+                            textRect.draw(canvas,  0,  0);
 
                         }
                         else if(camera.getCameraState() == Camera.CameraState.ZOOMEDOUT){
@@ -128,11 +158,12 @@ public class Renderer implements Runnable {
 
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
 
+        canvas.translate(-spaceToDraw.left,-spaceToDraw.top);
+
         backgroundHandler.render(canvas,spaceToDraw);
 
         if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 
-            camera.getCurrentFocusedTile().renderText(canvas, playerHandler.getCurrentPlayer());
             playerHandler.renderPlayerIconsOnCurrentTile(canvas);
 
         }
@@ -141,6 +172,12 @@ public class Renderer implements Runnable {
         }
 
         return returnBitmap;
+    }
+
+
+    public void updateCurrentTask(){
+        currentTask = playerHandler.getCurrentPlayer().getTask();
+
     }
 
     public void run(){
