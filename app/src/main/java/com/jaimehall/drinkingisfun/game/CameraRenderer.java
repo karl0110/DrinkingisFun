@@ -15,8 +15,10 @@ public class CameraRenderer implements Runnable {
     private boolean running;
 
     private Bitmap cameraBitmap;
-
     private Rect cameraRect;
+
+    private Bitmap canvasBitmap = null;
+    private Rect canvasRect;
 
     public CameraRenderer(Renderer renderer,Camera camera,float width,float height) {
         this.width=width;
@@ -24,21 +26,22 @@ public class CameraRenderer implements Runnable {
         this.renderer=renderer;
         this.camera=camera;
         cameraRect = new Rect();
+        canvasRect=new Rect();
     }
 
 
 
     private void render(){
 
-        float scaleX = camera.getScaleX();
-        float scaleY =camera.getScaleY();
-        float translateX = camera.getTranslateX();
-        float translateY = camera.getTranslateY();
+        if(canvasBitmap!=null) {
+            float scaleX = camera.getScaleX();
+            float scaleY =camera.getScaleY();
+            float translateX = camera.getTranslateX();
+            float translateY = camera.getTranslateY();
 
-        float x = width/scaleX;
-        float y = height/scaleX;
+            float x = width/scaleX;
+            float y = height/scaleX;
 
-        if((width/scaleX) > 0 &&(width/scaleX) < 6500) {
 
             cameraRect.set((int) translateX, (int) translateY, (int) (translateX + x), (int) (translateY + y));
 
@@ -47,11 +50,46 @@ public class CameraRenderer implements Runnable {
             m.setTranslate(-translateX, -translateY);
             m.setScale(scaleX, scaleY);
 
-            cameraBitmap= Bitmap.createBitmap(renderer.getRenderedBitmap(), cameraRect.left, cameraRect.top, cameraRect.width(), cameraRect.height(),m,false);
+            cameraBitmap= Bitmap.createBitmap(canvasBitmap, cameraRect.left, cameraRect.top, cameraRect.width(), cameraRect.height(),m,false);
 
             renderer.setRenderBitmap(cameraBitmap);
         }
 
+    }
+
+    public void updateCanvasBitmap(){
+
+        float scaleX = camera.getScaleX();
+        float translateX = camera.getTranslateX();
+        float translateY = camera.getTranslateY();
+
+        float x = width/scaleX;
+        float y = height/scaleX;
+
+        cameraRect.set((int) translateX, (int) translateY, (int) (translateX + x), (int) (translateY + y));
+
+        float canvasRectLeft = cameraRect.left-(cameraRect.width()/2);
+        if(canvasRectLeft<0){
+            canvasRectLeft=0;
+        }
+        float canvasRectTop = cameraRect.top-(cameraRect.height()/2);
+        if(canvasRectTop<0){
+            canvasRectTop=0;
+        }
+        float canvasRectRight = cameraRect.right+(cameraRect.width()/2);
+        if(canvasRectRight>6500){
+            canvasRectRight=6500;
+        }
+        float canvasRectBottom = cameraRect.bottom+(cameraRect.height()/2);
+        if(canvasRectBottom>1260){
+            canvasRectBottom=1260;
+        }
+
+        canvasRect.set((int)canvasRectLeft,(int)canvasRectTop,(int)canvasRectRight,(int)canvasRectBottom);
+
+        if(canvasRect.width()>0 && canvasRect.height()>0) {
+            canvasBitmap = renderer.getRenderedBitmap(canvasRect);
+        }
     }
 
     public void run(){

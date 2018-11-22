@@ -21,9 +21,7 @@ public class Camera implements Runnable{
 
     private int touchTimer;
 
-   // private Rect cameraRect;
-    private Rect zoomButtonRenderingRect;
-    private Rect playerIconRenderingRect;
+
 
     private double zoomFactorXFocusChange = 1.0;
     private double zoomFactorXStepFocusChange;
@@ -70,9 +68,6 @@ public class Camera implements Runnable{
 
         cameraState = CameraState.FOCUSED;
 
-        playerIconRenderingRect = new Rect();
-        zoomButtonRenderingRect= new Rect();
-        //cameraRect = new Rect();
         currentFocusedTileChanged();
 
         maxZoom =height/(focusedTileHeight *9);
@@ -151,9 +146,6 @@ public class Camera implements Runnable{
             scaleY = focusedScaleY;
             translateX = currentFocusedTile.getX();
             translateY = currentFocusedTile.getY();
-        }
-        else if (cameraState == CameraState.ZOOMEDOUT) {
-            zoomButtonRenderingRect.set((int) (0 + translateX), 0, (int) (200 + translateX), 200);
         }
         else if(cameraState == CameraState.ZOOMINGOUT){
             if (frameZoomEvent < zoomSpeed) {
@@ -253,10 +245,6 @@ public class Camera implements Runnable{
         float currentTileX = currentFocusedTile.getX();
         float currentTileY = currentFocusedTile.getY();
 
-        zoomButtonRenderingRect.set((int) (currentTileX), (int) (currentTileY), (int) (currentTileX + (focusedTileWidth / 16)), (int) ((focusedTileHeight / 8) + currentTileY));
-        playerIconRenderingRect.set((int) (currentTileX + ((focusedTileWidth / 16)*15)), (int) (currentTileY), (int)( currentTileX+focusedTileWidth), (int) ((focusedTileHeight / 8) + currentTileY));
-
-
     }
 
     void prepareZoomEvent(){
@@ -331,9 +319,6 @@ public class Camera implements Runnable{
         }
     }
 
-    //Rect getCameraRect(){
-        //return cameraRect;
-   // }
 
     float getScaleX() {
         return scaleX;
@@ -361,14 +346,6 @@ public class Camera implements Runnable{
 
     CameraState getCameraState() {
         return cameraState;
-    }
-
-    Rect getZoomButtonRenderingRect() {
-        return zoomButtonRenderingRect;
-    }
-
-    Rect getPlayerIconRenderingRect() {
-        return playerIconRenderingRect;
     }
 
     void setCameraState(CameraState cameraState) {

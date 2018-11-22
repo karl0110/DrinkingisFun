@@ -14,6 +14,7 @@ import java.util.LinkedList;
 
  class PlayerHandler {
 
+     private Game game;
 
 	private LinkedList<Player> players = new LinkedList<>();
 	private LinkedList<Player> playersOnCurrentTile = new LinkedList<>();
@@ -28,10 +29,9 @@ import java.util.LinkedList;
 	private Paint textPaint;
 	private Bitmap playerMenuBackground;
 
-	private Renderer renderer;
 
-	PlayerHandler( float width, float height, BitmapLoader bitmapLoader){
-
+	PlayerHandler( float width, float height, BitmapLoader bitmapLoader,Game game){
+        this.game=game;
 
 	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
 	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
@@ -54,10 +54,6 @@ import java.util.LinkedList;
 
 	}
 
-	public void init(Renderer renderer){
-        this.renderer=renderer;
-        //renderer.updateRenderBitmap();
-    }
 
     void renderPlayerMenu(Canvas canvas){
         canvas.drawBitmap(playerMenuBackground,null,menuBackgroundRect,null);
@@ -115,7 +111,7 @@ import java.util.LinkedList;
 			currentPlayerChanged();
 			indexOfDetailedPlayer = 0;
 
-			//renderer.updateRenderBitmap();
+
 
     }
 
@@ -150,7 +146,7 @@ import java.util.LinkedList;
 			players.get(i).setCoordinates(rect);
 		}
 
-
+        game.updateCameraRenderer();
 
 	}
 

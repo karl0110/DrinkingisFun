@@ -43,9 +43,10 @@ public class BitmapLoader implements Runnable{
         return BitmapFactory.decodeFile(path,options);
     }
 
-    public Bitmap getBackgroundBitmap(int xPos,float width,float height){
+    public Bitmap getBackgroundBitmap(int xPos,int yPos,float width,float height){
         float x = xPos*width;
-        return Bitmap.createBitmap(background,(int)x,0,(int)width,(int)height);
+        float y = yPos*height;
+        return Bitmap.createBitmap(background,(int)x,(int)y,(int)width,(int)height);
     }
 
 

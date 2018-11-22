@@ -56,7 +56,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         this.playerSexes=playerSexes;
 
         loadingScreen = new LoadingScreen(width,height,12);
-        renderer = new Renderer(this,loadingScreen);
+        renderer = new Renderer(this,loadingScreen,width,height);
 
 
         getHolder().addCallback(this);
@@ -92,10 +92,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
             gameState = State.MAINGAME;
 
-            playerHandler = new PlayerHandler( width, height, bitmapLoader);
+            playerHandler = new PlayerHandler( width, height, bitmapLoader,this);
             loadingScreen.progressOne();
 
-            BackgroundHandler backgroundHandler = new BackgroundHandler(bitmapLoader,250,1260);
+            BackgroundHandler backgroundHandler = new BackgroundHandler(bitmapLoader,250,140);
             loadingScreen.progressOne();
             loadingScreen.progressOne();
 
@@ -108,7 +108,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
             for (int i = 0; i < playerNames.length; i++) {
                 playerHandler.addPlayer(new Player(map.getTileFromTileMap(2, 4), playerNames[i], playerSexes[i], playerIcons[i], bitmapLoader, textHandler));
             }
-            playerHandler.currentPlayerChanged();
+
             loadingScreen.progressOne();
             loadingScreen.progressOne();
 
@@ -126,12 +126,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
             loadingScreen.progressOne();
 
-            playerHandler.init(renderer);
+            cameraRenderer = new CameraRenderer(renderer,camera,width,height);
+
+            playerHandler.currentPlayerChanged();
+
 
             initFinished = true;
-            cameraRenderer = new CameraRenderer(renderer,camera,width,height);
             resume();
         }
+    }
+
+    public void updateCameraRenderer(){
+        cameraRenderer.updateCanvasBitmap();
     }
 
 
