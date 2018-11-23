@@ -2,6 +2,7 @@ package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.BitmapLoader;
@@ -85,11 +86,11 @@ public class Map {
 
     }
 
-    public void render(Canvas canvas){
+    public void render(Canvas canvas,Rect spaceToDraw){
         for(int xx=25; xx>=0;xx--){
             for(int yy =8; yy>=0;yy--){
 
-                if(tileMap[xx][yy]!= null)tileMap[xx][yy].renderMap(canvas);
+                if(tileMap[xx][yy]!= null)tileMap[xx][yy].renderMap(canvas,spaceToDraw);
 
 
 

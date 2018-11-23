@@ -101,6 +101,8 @@ public class Camera implements Runnable{
             long now = System.nanoTime();//Timer Variable für die aktuelle Zeit.
             delta += (now - lastTime) / ns;//Berechnet mithilfe der Timer und ns Variablen, wann die tick() Methode aufgerufen werden soll.
             lastTime = now;//Stellt den Timer wieder zurück.
+
+
             if (delta >= 1) {//Guckt ob die Methode tick() jetzt aufgerufen werden soll.
 
                 if(game.getGameState() == Game.State.MAINGAME) {
@@ -115,7 +117,9 @@ public class Camera implements Runnable{
 
             if (System.currentTimeMillis() - timer > 1000) {//Wenn eine Sekunde vergangen ist.
                 timer += 1000;//addiert zum Timer eine Sekunde dazu.
-                System.out.println("MainGame Ticks: " + updates);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
+                if(game.getGameState() == Game.State.MAINGAME) {
+                    System.out.println("MainGame Ticks: " + updates);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
+                }
                 updates = 0;//setzt den Tick-Zähler zurück.
             }
         }

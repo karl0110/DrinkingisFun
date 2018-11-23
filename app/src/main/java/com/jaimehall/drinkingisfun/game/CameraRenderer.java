@@ -9,6 +9,7 @@ public class CameraRenderer implements Runnable {
     private float width,height;
     private Renderer renderer;
     private Camera camera;
+    private Game game;
 
     private Thread thread;
     private boolean running;
@@ -19,11 +20,12 @@ public class CameraRenderer implements Runnable {
     private Bitmap canvasBitmap = null;
     private Rect canvasRect;
 
-    public CameraRenderer(Renderer renderer,Camera camera,float width,float height) {
+    public CameraRenderer(Renderer renderer,Camera camera,float width,float height,Game game) {
         this.width=width;
         this.height=height;
         this.renderer=renderer;
         this.camera=camera;
+        this.game=game;
         cameraRect = new Rect();
         canvasRect=new Rect();
     }
@@ -68,13 +70,17 @@ public class CameraRenderer implements Runnable {
 
         cameraRect.set((int) translateX, (int) translateY, (int) (translateX + scaledWidth), (int) (translateY + scaledHeight));
 
-        if(camera.getCameraState() != Camera.CameraState.ZOOMEDOUT) {
-            if ((canvasRect.width() * canvasRect.height()) < ((cameraRect.width() * cameraRect.height()) * 2.5)) {
+
+        //Creating bigger Canvas Bitmap so Camera can zoom out
+        if(camera.getCameraState() == Camera.CameraState.ZOOMINGOUT) {
+            if (canvasRect.width()  < (cameraRect.width()  * 1.9)) {
                 updateCanvasBitmap();
             }
         }
-        else if (camera.getCameraState() != Camera.CameraState.FOCUSED){
-            if ((canvasRect.width() * canvasRect.height())*0.3 > ((cameraRect.width() * cameraRect.height()))) {
+
+        //Creating smaller Canvas Bitmap so Camera can zoom in
+        if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN){
+            if ((canvasRect.width() *2.1) > cameraRect.width()  ) {
                 updateCanvasBitmap();
             }
         }
@@ -121,21 +127,23 @@ public class CameraRenderer implements Runnable {
 
         while (running) {
 
-            render();
+            if(game.getGameState() == Game.State.MAINGAME) {
+                render();
 
-            long now = System.nanoTime();//Timer Variable für die aktuelle Zeit.
-            delta += (now - lastTime) / ns;//Berechnet mithilfe der Timer und ns Variablen, wann die tick() Methode aufgerufen werden soll.
-            lastTime = now;//Stellt den Timer wieder zurück.
-            if (delta >= 1) {//Guckt ob die Methode tick() jetzt aufgerufen werden soll.
-                delta--;//Setzt den tick() Aufruf-Timer zurück.
-                frames++;////Addiert zum Frame-Zähler 1 dazu.
-                tick();
-            }
+                long now = System.nanoTime();//Timer Variable für die aktuelle Zeit.
+                delta += (now - lastTime) / ns;//Berechnet mithilfe der Timer und ns Variablen, wann die tick() Methode aufgerufen werden soll.
+                lastTime = now;//Stellt den Timer wieder zurück.
+                if (delta >= 1) {//Guckt ob die Methode tick() jetzt aufgerufen werden soll.
+                    delta--;//Setzt den tick() Aufruf-Timer zurück.
+                    frames++;////Addiert zum Frame-Zähler 1 dazu.
+                    tick();
+                }
 
-            if (System.currentTimeMillis() - timer > 1000) {//Wenn eine Sekunde vergangen ist.
-                timer += 1000;//addiert zum Timer eine Sekunde dazu.
-                System.out.println(" CameraRendererFPS: " + frames);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
-                frames = 0;//setzt den Frame-Zähler zurück.
+                if (System.currentTimeMillis() - timer > 1000) {//Wenn eine Sekunde vergangen ist.
+                    timer += 1000;//addiert zum Timer eine Sekunde dazu.
+                    System.out.println(" CameraRendererFPS: " + frames);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
+                    frames = 0;//setzt den Frame-Zähler zurück.
+                }
             }
         }
     }

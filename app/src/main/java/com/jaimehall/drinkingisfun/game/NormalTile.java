@@ -22,17 +22,19 @@ public class NormalTile extends Tile {
     }
 
 
-    public void renderMap(Canvas canvas){
-        switch(arrowDirection){
-            case("UP"):
-                canvas.drawBitmap(arrow,null,arrowRect,null);
-                break;
-            case("RIGHT"):
-                canvas.drawBitmap(arrow,null,arrowRect,null);
-                break;
-            case("DOWN"):
-                canvas.drawBitmap(arrow,null,arrowRect,null);
-                break;
+    public void renderMap(Canvas canvas,Rect spaceToDraw){
+        if(Rect.intersects(spaceToDraw,getCoordinates())) {
+            switch (arrowDirection) {
+                case ("UP"):
+                    canvas.drawBitmap(arrow, null, arrowRect, null);
+                    break;
+                case ("RIGHT"):
+                    canvas.drawBitmap(arrow, null, arrowRect, null);
+                    break;
+                case ("DOWN"):
+                    canvas.drawBitmap(arrow, null, arrowRect, null);
+                    break;
+            }
         }
 
     }

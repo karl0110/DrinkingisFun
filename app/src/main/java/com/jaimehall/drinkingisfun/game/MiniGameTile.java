@@ -18,15 +18,17 @@ public class MiniGameTile extends Tile {
         this.coordinatesOfNextTiles=coordinatesOfNextTiles;
     }
 
-    public void renderMap(Canvas canvas){
-        if(arrowRightUp != null){
-            canvas.drawBitmap(arrowRightUp,null,arrowUpRect,null);
-        }
-        if(arrowRight != null){
-            canvas.drawBitmap(arrowRight,null,arrowRightRect,null);
-        }
-        if(arrowRightDown != null){
-            canvas.drawBitmap(arrowRightDown,null,arrowDownRect,null);
+    public void renderMap(Canvas canvas,Rect spaceToDraw){
+        if(Rect.intersects(spaceToDraw,getCoordinates())) {
+            if (arrowRightUp != null) {
+                canvas.drawBitmap(arrowRightUp, null, arrowUpRect, null);
+            }
+            if (arrowRight != null) {
+                canvas.drawBitmap(arrowRight, null, arrowRightRect, null);
+            }
+            if (arrowRightDown != null) {
+                canvas.drawBitmap(arrowRightDown, null, arrowDownRect, null);
+            }
         }
     }
 

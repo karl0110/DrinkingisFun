@@ -56,7 +56,9 @@ public class MiniGameHandler implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {//Wenn eine Sekunde vergangen ist.
                 timer += 1000;//addiert zum Timer eine Sekunde dazu.
-                System.out.println("MiniGame Ticks: " + updates);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
+                if(game.getGameState() == Game.State.MINIGAME) {
+                    System.out.println("MiniGame Ticks: " + updates);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
+                }
                 updates = 0;//setzt den Tick-Zähler zurück.
             }
         }

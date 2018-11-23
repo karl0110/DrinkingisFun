@@ -2,6 +2,7 @@ package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 public class Goal extends Tile {
 
@@ -9,7 +10,7 @@ public class Goal extends Tile {
         super(x,y,width,height,map,tileDifficulty);
     }
 
-    public void renderMap(Canvas canvas) {
+    public void renderMap(Canvas canvas,Rect spaceToDraw) {
     }
 
     @Override

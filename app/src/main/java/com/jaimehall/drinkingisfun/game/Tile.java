@@ -2,11 +2,8 @@ package com.jaimehall.drinkingisfun.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.jaimehall.drinkingisfun.helpers.TextRect;
 
 
 public abstract class Tile {
@@ -26,7 +23,7 @@ public abstract class Tile {
 
     }
 
-    public abstract void renderMap(Canvas canvas);
+    public abstract void renderMap(Canvas canvas,Rect spaceToDraw);
 
 
 

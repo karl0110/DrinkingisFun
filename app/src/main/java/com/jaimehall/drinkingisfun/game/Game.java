@@ -122,11 +122,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
             camera = new Camera(this, playerHandler, width, height);
 
-            renderer.init( bitmapLoader,  playerHandler, camera, miniGameHandler, backgroundHandler);
+            renderer.init( bitmapLoader,  playerHandler, camera, miniGameHandler, backgroundHandler,map);
 
             loadingScreen.progressOne();
 
-            cameraRenderer = new CameraRenderer(renderer,camera,width,height);
+            cameraRenderer = new CameraRenderer(renderer,camera,width,height,this);
 
             playerHandler.currentPlayerChanged();
 

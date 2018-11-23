@@ -26,6 +26,7 @@ public class Renderer implements Runnable {
     private PlayerHandler playerHandler;
     private Camera camera;
     private MiniGameHandler miniGameHandler;
+    private Map map;
 
 
     private Bitmap zoomButtonZoomedOut;
@@ -61,7 +62,7 @@ public class Renderer implements Runnable {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setFakeBoldText(true);
-        paint.setTextSize(15);
+        paint.setTextSize(100);
         paint.setAntiAlias(true);
         paint.setTextAlign(Paint.Align.CENTER);
 
@@ -70,9 +71,10 @@ public class Renderer implements Runnable {
 
     }
 
-    void init( BitmapLoader bitmapLoader, PlayerHandler playerHandler, Camera camera, MiniGameHandler miniGameHandler, BackgroundHandler backgroundHandler){
+    void init( BitmapLoader bitmapLoader, PlayerHandler playerHandler, Camera camera, MiniGameHandler miniGameHandler, BackgroundHandler backgroundHandler,Map map){
         if(initPhase) {
 
+            this.map=map;
             this.playerHandler = playerHandler;
             this.camera = camera;
             this.miniGameHandler = miniGameHandler;
@@ -113,15 +115,14 @@ public class Renderer implements Runnable {
 
                         if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 
-
-
                             canvas.drawBitmap(zoomButtonZoomedIn, null, zoomButtonRenderingRect, null);
                             canvas.drawBitmap(showPlayers, null, playerIconRenderingRect, null);
 
-                            if(textRectPrep != textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)))){
-                                textRectPrep = textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 32) * 12)));
+
+                            if(textRectPrep != textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 16) * 6)))){
+                                textRectPrep = textRect.prepare(currentTask, (int) (width - ((width / 32) * 6)), (int) (height - ((height / 16) * 6)));
                             }
-                            textRect.draw(canvas,  0,  0);
+                            textRect.draw(canvas,  (int) (width / 2) ,  (int) ((height / 32) * 3));
 
                         }
                         else if(camera.getCameraState() == Camera.CameraState.ZOOMEDOUT){
@@ -149,7 +150,7 @@ public class Renderer implements Runnable {
 
     }
 
-    public Bitmap getRenderedBitmap(Rect spaceToDraw){
+    Bitmap getRenderedBitmap(Rect spaceToDraw){
 
         Bitmap.Config conf = Bitmap.Config.RGB_565;
         Bitmap returnBitmap = Bitmap.createBitmap(spaceToDraw.width(),spaceToDraw.height(),conf);
@@ -168,6 +169,7 @@ public class Renderer implements Runnable {
 
         }
          else {
+            map.render(canvas,spaceToDraw);
             playerHandler.renderPlayerIconsWholeMap(canvas);
         }
 
@@ -175,7 +177,7 @@ public class Renderer implements Runnable {
     }
 
 
-    public void updateCurrentTask(){
+    void updateCurrentTask(){
         currentTask = playerHandler.getCurrentPlayer().getTask();
 
     }
