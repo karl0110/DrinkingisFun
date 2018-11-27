@@ -131,7 +131,7 @@ public class ExBeerMiniGame extends MiniGame {
 
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
 
-        if(tutorialFinished){
+        if(tutorialFinished && !minigameFinished){
             canvas.drawText(timerString,width/2,(height/16)*2,timerTextPaint);
         }
 
