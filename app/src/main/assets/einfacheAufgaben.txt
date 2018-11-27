@@ -9,9 +9,17 @@ PlayerName:, wenn du eine Jogginghose trägst darfst du :AnzahlSchlucke: trinken
 PlayerName:, trink :AnzahlSchlucke: wenn du gerne Sport guckst.
 PlayerName:, wenn du ein Android-Handy hast, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, wenn du einen Soundcloud-Account hast, darfst du :AnzahlSchlucke: trinken.
-PlayerName:, wenn du schon mehr als 3 mal von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Anfänger.
+PlayerName:, wenn du schon mehr als 3 mal nur von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Anfänger.
 PlayerName:, wenn du Pyromaniker bist(Wenn du gerne Sachen anzündest), darfst du :AnzahlSchlucke: trinken.
 PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal mit einem Familienmitglied gekifft hast.
 PlayerName:, die anderen Spieler entscheiden, wie viele Bier du verträgst (0,5 L). So viele Schlucke darfst du trinken.
 PlayerName:, wenn du dich gerade in einer Bar befindest, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, wenn du gerade im Park bist, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, falls du einen Untersetzer benutzt darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du eine eigene Wohnung hast, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du ab und an einen Rave besuchst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du Shuffeln kannst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du in den 90' geboren wurdest, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du Pfeifen kannst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du schon mal einen Nintendo hattest, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, wenn du Animal Crossing gespielt hast, darfst du :AnzahlSchlucke: trinken.

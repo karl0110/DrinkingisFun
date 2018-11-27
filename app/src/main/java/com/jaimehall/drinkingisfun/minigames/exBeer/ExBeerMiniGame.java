@@ -39,7 +39,7 @@ public class ExBeerMiniGame extends MiniGame {
 
 
     public ExBeerMiniGame(Game game, float width, float height, BitmapLoader bitmapLoader){
-       super(game);
+       super(game,width,height);
 
        this.width=width;
        this.height = height;
@@ -59,8 +59,9 @@ public class ExBeerMiniGame extends MiniGame {
         bottle[8]=bitmapLoader.getBitmap(R.drawable.bottle8,450,900);
         bottle[9]=bitmapLoader.getBitmap(R.drawable.bottle9,450,900);
 
-        tutorialRect = new Rect(0,0,(int)width,(int)height);
+
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.exbeertutorial);
+        endBitmap = BitmapFactory.decodeResource(resources,R.drawable.endeexbeer);
 
         timerTextPaint = new Paint();
         timerTextPaint.setColor(Color.WHITE);
@@ -78,13 +79,11 @@ public class ExBeerMiniGame extends MiniGame {
           bottleFillStep= 9;
           tapCounter = 0;
           timer= 0;
-          tutorialFinished=false;
-          tickCounter=0;
+          super.universalReset();
 
     }
 
     public void touched(MotionEvent mE){
-        super.universalMinigameTouch();
 
         Rect touchPoint= new Rect((int)mE.getX()-1, (int)mE.getY()-1,(int)mE.getX()+1,(int)mE.getY()+1);
 
@@ -98,30 +97,31 @@ public class ExBeerMiniGame extends MiniGame {
                 }
             }
         }
+        super.universalTouch();
     }
 
     public void tutorialFinished(){
         startTime = System.currentTimeMillis();
-        tutorialFinished=true;
 
     }
 
     public void tick(){
         super.tickUniversalMinigame();
-        if(tutorialFinished){
+        if(tutorialFinished && !minigameFinished){
             timer = System.currentTimeMillis() - startTime;
             double displayTimer = Math.round((amountOfMilliSeconds-timer)*10);
             timerString = "Time left: "+displayTimer/10000+" s";
         }
         if(timer>=amountOfMilliSeconds || bottleFillStep == 0){
+            minigameFinished = true;
             if(bottleFillStep > 3){
-                game.finishMiniGame(0);
+                endScore=0;
             }
             else if(bottleFillStep >2){
-                game.finishMiniGame(1);
+                endScore=1;
             }
             else if(bottleFillStep >=0){
-                game.finishMiniGame(2);
+                endScore=2;
             }
         }
     }
@@ -138,9 +138,8 @@ public class ExBeerMiniGame extends MiniGame {
         canvas.drawBitmap(bottle[bottleFillStep],null,imageRect,null);
         canvas.drawBitmap(button,null,buttonRect,null);
 
-        if(!tutorialFinished){
-            super.renderTutorial(canvas);
-        }
+        super.universalRender(canvas);
+
 
     }
 

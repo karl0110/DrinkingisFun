@@ -21,7 +21,7 @@ public class PongMiniGame extends MiniGame {
 
 
     public PongMiniGame(Game game,float width, float height) {
-        super(game);
+        super(game,width,height);
         this.width=width;
         this.height=height;
         pongBall = new PongBall(this,width/2,height/2,height/64,15,-15,0.1f,false);
@@ -29,28 +29,30 @@ public class PongMiniGame extends MiniGame {
         enemyPaddle=new EnemyPaddle((width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
 
-        tutorialRect = new Rect(0,0,(int)width,(int)height);
         tutorial=BitmapFactory.decodeResource(resources,R.drawable.pongtutorial);
+        endBitmap = BitmapFactory.decodeResource(resources,R.drawable.endepong);
     }
 
     void gameOver(){
+        minigameFinished = true;
         if(ballHit >=7){
-            game.finishMiniGame(2);
+            endScore=2;
         }
         else if(ballHit >=4){
-            game.finishMiniGame(1);
+            endScore=1;
         }
         else if(ballHit >=0){
-            game.finishMiniGame(0);
+            endScore=0;
         }
     }
 
     void gameOverFull(){
-        game.finishMiniGame(2);
+        minigameFinished = true;
+        endScore = 2;
     }
 
     public void tutorialFinished(){
-        tutorialFinished=true;
+
     }
 
     @Override
@@ -60,8 +62,8 @@ public class PongMiniGame extends MiniGame {
         enemyPaddle=new EnemyPaddle((width/8)*3,(height/32),width/8*2,height/32,pongBall,ghostPongBall);
         playerPaddle=new PlayerPaddle(this,(width/8)*3,height-((height/32)*2),(width/8)*2,height/32);
         ballHit = 0;
-        tickCounter=0;
-        tutorialFinished=false;
+
+        super.universalReset();
     }
 
     void resetGhostBall(){
@@ -84,9 +86,8 @@ public class PongMiniGame extends MiniGame {
         enemyPaddle.render(canvas);
         playerPaddle.render(canvas);
 
-        if(!tutorialFinished){
-            super.renderTutorial(canvas);
-        }
+        super.universalRender(canvas);
+
     }
 
     @Override
@@ -103,10 +104,12 @@ public class PongMiniGame extends MiniGame {
 
     @Override
     public void touched(MotionEvent motionEvent) {
-        super.universalMinigameTouch();
+
         if(tutorialFinished){
             playerPaddle.touched(motionEvent);
         }
+
+        super.universalTouch();
 
     }
 

@@ -10,9 +10,12 @@ PlayerName:, du darfst so viele Schlucke trinken, wie du Buchstaben des Alphabet
 PlayerName:, du darfst so viele Schlucke verteilen, wie du Biermarken in 10 Sekunden aufsagen kannst.
 PlayerName:, erzähl eine Geschichte (fiktiv oder nicht), die anderen Spieler bewerten diese von 0 bis 5. So viele Schlucke darfst du trinken.
 PlayerName:, wenn du es schonmal geschafft hast von Gras zu kotzen, darfst du :AnzahlSchlucke: verteilen.
-PlayerName:, wenn du schon mehr als 15 mal von Alkohol gekotzt hast, darfst die nächsten 2 Runden aus den Gläsern deiner Mitspieler trinken + Trink :AnzahlSchlucke:.
+PlayerName:, wenn du schon mehr als 15 mal nur von Alkohol gekotzt hast, darfst die nächsten 2 Runden aus den Gläsern deiner Mitspieler trinken + Trink :AnzahlSchlucke:.
 PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal auf einem Familientreffen besoffen warst.
 PlayerName:, wenn du die Schuhgröße deines rechten Nachbarn erraten kannst, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, für jeden Fahrradunfall auf Suff darfst du :AnzahlSchlucke: trinken. Ab 1,3 Promille ist Fahrrad fahren illegal!!! :)
+PlayerName:, falls du schon mal auf einer Feier in der P5 warst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, alle deine MitspielerInnen dürfen von einem 3 Meter Abstand mit einem Kronkorken auf dich werfen. Wenn du allen ausweichst, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, die anderen SpielerInnen entscheiden ob du so eine/r bist, der/die Lieder in der Mitte ausmacht. Falls nein, darfst du :AnzahlSchlucke: trinken.
 
 

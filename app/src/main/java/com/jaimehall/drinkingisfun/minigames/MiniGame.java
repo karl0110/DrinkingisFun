@@ -14,19 +14,24 @@ public abstract class MiniGame {
     protected Resources resources;
     protected Game game;
     protected boolean tutorialFinished =false;
-    protected int tickCounter = 0;
+    protected boolean minigameFinished = false;
+    protected int endScore = 0;
+    protected int tickCounter = 120;
     protected Bitmap tutorial;
+    protected Bitmap endBitmap;
 
-    protected Rect tutorialRect;
-    protected Paint tutorialPaint;
+    protected Rect fullScreenRect;
+    protected Paint fullScreenPaint;
 
-    public MiniGame(Game game){
+    public MiniGame(Game game,float width,float height){
         this.game=game;
         resources = game.getResources();
 
 
-        tutorialPaint = new Paint();
-        tutorialPaint.setAlpha(180);
+        fullScreenPaint = new Paint();
+        fullScreenPaint.setAlpha(180);
+
+        fullScreenRect = new Rect(0,0,(int)width,(int)height);
     }
 
     public abstract void render(Canvas canvas);
@@ -35,19 +40,41 @@ public abstract class MiniGame {
     public abstract void reset();
     public abstract void tutorialFinished();
 
-    protected void renderTutorial(Canvas canvas){
-        canvas.drawBitmap(tutorial,null,tutorialRect,tutorialPaint);
+    protected void universalReset(){
+        tutorialFinished = false;
+        minigameFinished = false;
+        tickCounter=120;
+
+    }
+
+    protected void universalRender(Canvas canvas){
+        if(!tutorialFinished){
+            canvas.drawBitmap(tutorial,null,fullScreenRect,fullScreenPaint);
+        }
+        if(minigameFinished){
+            canvas.drawBitmap(endBitmap,null,fullScreenRect,fullScreenPaint);
+        }
+    }
+
+    protected void universalTouch(){
+
+        if(minigameFinished && tickCounter == 0){
+            game.finishMiniGame(endScore);
+        }
+        if(!tutorialFinished && tickCounter == 0){
+            tutorialFinished = true;
+            tutorialFinished();
+        }
+
+        tickCounter = 120;
     }
 
     protected void tickUniversalMinigame(){
-        tickCounter++;
-
-    }
-
-    protected void universalMinigameTouch(){
-        if(!tutorialFinished&& tickCounter>=120){
-            tutorialFinished();
+        if(tickCounter >0) {
+            tickCounter--;
         }
+
     }
+
 
 }

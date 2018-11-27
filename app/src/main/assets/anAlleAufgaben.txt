@@ -1,3 +1,8 @@
 Die Person die am weitesten weg gereist ist, darf :AnzahlSchlucke: trinken.
 Wenn eine Kerze im Raum ist, dürfen alle Spieler/innen :AnzahlSchlucke: trinken.
 Wenn ihr in einer Bar seid, dürfen alle Spieler/innen :AnzahlSchlucke: trinken.
+Kommunismus: Bis zum nächsten Minigame stellen alle ihre Gläser in die Mitte und trinken aus einem beliebigen Glas.
+Kapitalismus: Der Spieler mit den meisten Punkten darf bis zum nächsten Minigame aus einem beliebigen Glas seiner MitspielerInnen trinken.
+Kommunismus: Der Spieler mit den meisten Punkten gibt eine Runde aus.
+Kapitalismus: Alle SpielerInnen geben dem/der SpielerIn mit den meisten Punkten ein Glas aus.
+Wenn gerade ein Joint gebaut wird, dürfen alle trinken.

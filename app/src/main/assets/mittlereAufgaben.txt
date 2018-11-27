@@ -10,9 +10,13 @@ PlayerName:, wenn du Sommer besser als Winter findest, darfst du :AnzahlSchlucke
 PlayerName:, wenn du mit weniger als 5 Leuten schonmal einen Kasten getrunken hast, trink :AnzahlSchlucke:. Wer von den Mitspielern mitgemacht hat darf auch trinken.
 PlayerName:, für jedes 2 Euro Stück in deinem Portmonnaie, darfst du :AnzahlSchlucke: verteilen.
 PlayerName:, für jeden Joint den du heute gebaut hast, darfst du :AnzahlSchlucke: trinken.
-PlayerName:, wenn du schon mehr als 6 mal von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Nicht Schlecht.
+PlayerName:, wenn du schon mehr als 6 mal nur von Alkohol gekotzt hast, darfst du :AnzahlSchlucke: trinken. Nicht Schlecht.
 PlayerName:, du darfst :AnzahlSchlucke: trinken, wenn du schon einmal mit einem Familienmitglied Bierball gespielt hast.
 PlayerName:, trink so viele Schlucke wie du schon Haustiere hattest.
 PlayerName:, gurgel ein Lied mit Bier im Mund. Wenn die anderen Spieler es erraten können, darfst du :AnzahlSchlucke: trinken.
 PlayerName:, Wenn du heute länger als 1 Minute mit einem Familienmitglied telefoniert hast, darfst du :AnzahlSchlucke: trinken. Mein Beleid.
 PlayerName:, für jede Ordnungswidrigkeit die du begangen hast, darfst du :AnzahlSchlucke: trinken. Tsk Tsk
+PlayerName:, falls bei dir Zuhause schon mehr als 5 Leute gekotzt haben, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, falls du ein Raver bist, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, falls du einen Gameboy Color besitzt, darfst du :AnzahlSchlucke: trinken.
+PlayerName:, falls du ein Sterni-Plakat besitzt, darfst du :AnzahlSchlucke: trinken.
