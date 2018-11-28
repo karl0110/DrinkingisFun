@@ -84,7 +84,7 @@ public class Renderer implements Runnable {
             showPlayers = bitmapLoader.getBitmap(R.drawable.spieleranzeigen, 100, 100);
 
             zoomButtonZoomedIn = bitmapLoader.getBitmap(R.drawable.minuslupe, 100, 100);
-            zoomButtonZoomedOut = bitmapLoader.getBitmap(R.drawable.pluslupe, 1000, 1000);
+            zoomButtonZoomedOut = bitmapLoader.getBitmap(R.drawable.pluslupe, 100, 100);
 
             updateCurrentTask();
 
@@ -161,7 +161,7 @@ public class Renderer implements Runnable {
 
         canvas.translate(-spaceToDraw.left,-spaceToDraw.top);
 
-        backgroundHandler.render(canvas,spaceToDraw);
+        //backgroundHandler.render(canvas,spaceToDraw);
 
         if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 

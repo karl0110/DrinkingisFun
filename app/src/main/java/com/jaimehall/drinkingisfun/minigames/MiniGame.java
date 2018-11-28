@@ -20,8 +20,8 @@ public abstract class MiniGame {
     protected Bitmap tutorial;
     protected Bitmap endBitmap;
 
-    protected Rect fullScreenRect;
-    protected Paint fullScreenPaint;
+    private Rect fullScreenRect;
+    private Paint fullScreenPaint;
 
     public MiniGame(Game game,float width,float height){
         this.game=game;
@@ -43,7 +43,7 @@ public abstract class MiniGame {
     protected void universalReset(){
         tutorialFinished = false;
         minigameFinished = false;
-        tickCounter=120;
+        tickCounter=90;
 
     }
 
@@ -66,14 +66,13 @@ public abstract class MiniGame {
             tutorialFinished();
         }
 
-        tickCounter = 120;
+        tickCounter = 90;
     }
 
     protected void tickUniversalMinigame(){
         if(tickCounter >0) {
             tickCounter--;
         }
-
     }
 
 

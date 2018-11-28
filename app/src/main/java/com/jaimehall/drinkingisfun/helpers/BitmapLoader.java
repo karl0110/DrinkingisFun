@@ -53,7 +53,7 @@ public class BitmapLoader implements Runnable{
     @Override
     public void run() {
         if(!loadedBackground){
-            background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.maphintergrund,options),6500,1260,false);
+            //background = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,R.drawable.maphintergrund,options),6500,1260,false);
             loadedBackground=true;
         }
         bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources,id,options),width,height,false);

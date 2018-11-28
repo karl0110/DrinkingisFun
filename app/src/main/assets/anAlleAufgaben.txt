@@ -6,3 +6,4 @@ Kapitalismus: Der Spieler mit den meisten Punkten darf bis zum nächsten Minigam
 Kommunismus: Der Spieler mit den meisten Punkten gibt eine Runde aus.
 Kapitalismus: Alle SpielerInnen geben dem/der SpielerIn mit den meisten Punkten ein Glas aus.
 Wenn gerade ein Joint gebaut wird, dürfen alle trinken.
+Wenn gerade ein Joint geraucht wird, dürfen alle trinken.
