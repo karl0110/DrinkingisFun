@@ -72,14 +72,14 @@ public class CameraRenderer implements Runnable {
 
 
         //Creating bigger Canvas Bitmap so Camera can zoom out
-        if(camera.getCameraState() == Camera.CameraState.ZOOMINGOUT) {
+        if(camera.getCameraState() == Camera.CameraState.ZOOMINGOUT || camera.getCameraState() == Camera.CameraState.FIRSTHALFFOCUSCHANGE) {
             if (canvasRect.width()  < (cameraRect.width()  * 1.9)) {
                 updateCanvasBitmap();
             }
         }
 
         //Creating smaller Canvas Bitmap so Camera can zoom in
-        if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN){
+        if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN || camera.getCameraState() == Camera.CameraState.SECONDHALFFOCUSCHANGE){
             if ((canvasRect.width() *2.1) > cameraRect.width()  ) {
                 updateCanvasBitmap();
             }

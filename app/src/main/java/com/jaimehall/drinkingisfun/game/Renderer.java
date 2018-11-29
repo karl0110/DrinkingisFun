@@ -161,7 +161,7 @@ public class Renderer implements Runnable {
 
         canvas.translate(-spaceToDraw.left,-spaceToDraw.top);
 
-        //backgroundHandler.render(canvas,spaceToDraw);
+        backgroundHandler.render(canvas,spaceToDraw);
 
         if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
 
