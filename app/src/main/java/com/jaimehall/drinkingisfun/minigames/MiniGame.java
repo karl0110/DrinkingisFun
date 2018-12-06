@@ -65,8 +65,9 @@ public abstract class MiniGame {
             tutorialFinished = true;
             tutorialFinished();
         }
-
-        tickCounter = 90;
+        if(tickCounter == 0) {
+            tickCounter = 90;
+        }
     }
 
     protected void tickUniversalMinigame(){

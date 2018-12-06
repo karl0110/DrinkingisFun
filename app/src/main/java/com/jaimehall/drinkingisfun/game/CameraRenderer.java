@@ -49,7 +49,7 @@ public class CameraRenderer implements Runnable {
 
                 Matrix m = new Matrix();
 
-                m.setTranslate(-camera.getTranslateX(), -camera.getTranslateY());
+                m.setTranslate(-cameraRect.left, cameraRect.top);
                 m.setScale(camera.getScaleX(), camera.getScaleY());
 
                 cameraBitmap = Bitmap.createBitmap(canvasBitmap,x ,y , cameraRect.width(), cameraRect.height(), m, false);
@@ -73,14 +73,14 @@ public class CameraRenderer implements Runnable {
 
         //Creating bigger Canvas Bitmap so Camera can zoom out
         if(camera.getCameraState() == Camera.CameraState.ZOOMINGOUT || camera.getCameraState() == Camera.CameraState.FIRSTHALFFOCUSCHANGE) {
-            if (canvasRect.width()  < (cameraRect.width()  * 1.9)) {
+            if (canvasRect.width()  < (cameraRect.width()  * 2)) {
                 updateCanvasBitmap();
             }
         }
 
         //Creating smaller Canvas Bitmap so Camera can zoom in
         if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN || camera.getCameraState() == Camera.CameraState.SECONDHALFFOCUSCHANGE){
-            if ((canvasRect.width() *2.1) > cameraRect.width()  ) {
+            if ((canvasRect.width() /5) > cameraRect.width()  ) {
                 updateCanvasBitmap();
             }
         }
@@ -89,19 +89,19 @@ public class CameraRenderer implements Runnable {
     void updateCanvasBitmap(){
 
 
-        float canvasRectLeft = cameraRect.left-(cameraRect.width()/2);
+        float canvasRectLeft = cameraRect.left-(cameraRect.width());
         if(canvasRectLeft<0){
             canvasRectLeft=0;
         }
-        float canvasRectTop = cameraRect.top-(cameraRect.height()/2);
+        float canvasRectTop = cameraRect.top-(cameraRect.height());
         if(canvasRectTop<0){
             canvasRectTop=0;
         }
-        float canvasRectRight = cameraRect.right+(cameraRect.width()/2);
+        float canvasRectRight = cameraRect.right+(cameraRect.width());
         if(canvasRectRight>6500){
             canvasRectRight=6500;
         }
-        float canvasRectBottom = cameraRect.bottom+(cameraRect.height()/2);
+        float canvasRectBottom = cameraRect.bottom+(cameraRect.height());
         if(canvasRectBottom>1260){
             canvasRectBottom=1260;
         }

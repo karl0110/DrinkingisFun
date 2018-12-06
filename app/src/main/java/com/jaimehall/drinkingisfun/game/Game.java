@@ -196,12 +196,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
         camera.setCameraState(Camera.CameraState.FOCUSED);
 
+        ((GameActivity) context).setScreenOrientationLandscape();
+
         camera.currentFocusedTileChanged();
         nextPlayer();
         camera.currentFocusedTileChanged();
 
-
-        ((GameActivity) context).setScreenOrientationLandscape();
 
         camera.setTouchTimer(60);
     }
