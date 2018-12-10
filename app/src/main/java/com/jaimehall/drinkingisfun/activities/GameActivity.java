@@ -1,6 +1,8 @@
 package com.jaimehall.drinkingisfun.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -178,6 +180,32 @@ public class GameActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        reallyExit();
+    }
+
+    public void reallyExit(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Spiel Beenden");
+        builder.setMessage("Möchtest du wirklich das Spiel verlassen? Alle Spieldaten gehen verloren.");
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                GameActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }
 
 

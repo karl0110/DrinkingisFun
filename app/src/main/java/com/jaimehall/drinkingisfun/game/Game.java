@@ -210,18 +210,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
             if (motionEvent.getX() > motionEvent1.getX()) {
 
-                camera.addToTranslateX(400);
+                camera.setTranslateAccX(50);
 
                 if((camera.getTranslateX()+cameraRenderer.getCameraRect().width())>6500){
                     camera.setTranslateX(6500);
                 }
             } else if (motionEvent.getX() < motionEvent1.getX()) {
 
-                camera.addToTranslateX(-400);
+                camera.setTranslateAccX(-50);
 
-                if(camera.getTranslateX()<0){
-                    camera.setTranslateX(0);
-                }
 
             }
         }

@@ -47,6 +47,9 @@ public class Camera implements Runnable{
     private float scaleY = 0;
     private float translateX = 0;
     private float translateY = 0;
+    private float translateVelX = 0;
+    private float translateAccX = 0;
+
 
     private CameraState cameraState;
     public enum CameraState{
@@ -235,6 +238,38 @@ public class Camera implements Runnable{
                 currentFocusedTileChanged();
             }
         }
+        else if(cameraState == CameraState.ZOOMEDOUT){
+            translateX+=translateVelX;
+            translateVelX+=translateAccX;
+
+            if(translateVelX>0){
+                translateVelX--;
+            }
+            else if(translateVelX<0){
+                translateVelX++;
+            }
+
+            if(translateAccX>0){
+                translateAccX--;
+            }
+            else if(translateAccX<0){
+                translateAccX++;
+            }
+
+            if(translateX<0){
+                translateX=0;
+                translateVelX=0;
+                translateAccX=0;
+            }
+
+            if((translateX+(width/scaleX))>6500){
+                translateX = 6499 - ((width/scaleX));
+                translateVelX=0;
+                translateAccX=0;
+            }
+
+            System.out.println("TranslateX:     "+translateX+"  VelX:   "+translateVelX+"   AccX:   "+translateAccX     );
+        }
 
 
     }
@@ -366,8 +401,7 @@ public class Camera implements Runnable{
         this.touchTimer = touchTimer;
     }
 
-    Tile getCurrentFocusedTile() {
-        return currentFocusedTile;
+    public void setTranslateAccX(float translateAccX) {
+        this.translateAccX = translateAccX;
     }
-
 }

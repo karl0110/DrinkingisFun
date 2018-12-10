@@ -55,6 +55,9 @@ public class CameraRenderer implements Runnable {
                 cameraBitmap = Bitmap.createBitmap(canvasBitmap,x ,y , cameraRect.width(), cameraRect.height(), m, false);
                 renderer.setRenderBitmap(cameraBitmap);
             }
+            else{
+                System.out.println("Not drawing!!");
+            }
         }
 
     }
@@ -88,20 +91,23 @@ public class CameraRenderer implements Runnable {
 
     void updateCanvasBitmap(){
 
+        float cameraScale = camera.getScaleX();
+        float cameraRectScaledWidth = (cameraRect.width()/cameraScale);
+        float cameraRectScaledHeight = (cameraRect.height()/cameraScale);
 
-        float canvasRectLeft = cameraRect.left-(cameraRect.width());
+        float canvasRectLeft = cameraRect.left-(cameraRectScaledWidth);
         if(canvasRectLeft<0){
             canvasRectLeft=0;
         }
-        float canvasRectTop = cameraRect.top-(cameraRect.height());
+        float canvasRectTop = cameraRect.top-(cameraRectScaledHeight);
         if(canvasRectTop<0){
             canvasRectTop=0;
         }
-        float canvasRectRight = cameraRect.right+(cameraRect.width());
+        float canvasRectRight = cameraRect.right+(cameraRectScaledWidth);
         if(canvasRectRight>6500){
             canvasRectRight=6500;
         }
-        float canvasRectBottom = cameraRect.bottom+(cameraRect.height());
+        float canvasRectBottom = cameraRect.bottom+(cameraRectScaledHeight);
         if(canvasRectBottom>1260){
             canvasRectBottom=1260;
         }
