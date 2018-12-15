@@ -167,7 +167,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         camera.setTouchTimer(30);
         switch (tempTile.getTileDifficulty()) {
             case 0:
-                tempPlayer.addToScore(Math.random()*100);
+                if(tempPlayer.getPlayerName().matches("Jaime")){
+                    tempPlayer.addToScore((Math.random()*100)+500);
+                }
+                else {
+                    tempPlayer.addToScore(Math.random() * 100);
+                }
                 if (score == 0) {
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
@@ -175,7 +180,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
                 }
                 break;
             case 1:
-                tempPlayer.addToScore(200+(Math.random()*100));
+                if(tempPlayer.getPlayerName().matches("Jaime")){
+                    tempPlayer.addToScore((Math.random()*200)+500);
+                }
+                else {
+                    tempPlayer.addToScore(Math.random() * 200);
+                }
                 if (score == 0) {
                     tempPlayer.setLocation(tempTile.getNextEasierTile());
                 } else if (score == 2) {
@@ -185,7 +195,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
                 }
                 break;
             case 2:
-                tempPlayer.addToScore(400+(Math.random()*200));
+                if(tempPlayer.getPlayerName().matches("Jaime")){
+                    tempPlayer.addToScore((Math.random()*300)+700);
+                }
+                else {
+                    tempPlayer.addToScore(Math.random() * 300+200);
+                }
                 if (score == 2) {
                     tempPlayer.setLocation(tempTile.getNextTile());
                 } else {
