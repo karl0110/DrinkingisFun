@@ -1,23 +1,31 @@
 package com.jaimehall.drinkingisfun.activities.menu;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.jaimehall.drinkingisfun.R;
 import com.jaimehall.drinkingisfun.helpers.CharacterIO;
 import com.jaimehall.drinkingisfun.helpers.SexButton;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class CharacterEditingActivity extends Activity {
@@ -27,6 +35,7 @@ public class CharacterEditingActivity extends Activity {
     private SexButton playerSexButton;
     private static final int PICK_IMAGE = 100;
     private static final int CROP_IMAGE = 324;
+    private static final int REQUEST_CAMERA =243;
     private Bitmap playerIconImage;
     private File characterIcon;
     private String characterName;
@@ -77,10 +86,49 @@ public class CharacterEditingActivity extends Activity {
 
 
 
-    public void selectPlayerIcon(View view){
+    private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery,PICK_IMAGE);
+    }
 
+    private void openCamera(){
+        try {
+            PackageManager pm = getPackageManager();
+            int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, getPackageName());
+            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+
+                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(camera,REQUEST_CAMERA );
+
+            } else {
+                Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+
+    public void selectPlayerIcon(View view){
+
+        final CharSequence[] options = {"Gallerie", "Kamera"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,android.R.style.Theme_DeviceDefault));
+        builder.setTitle("Bild für Charakter Auswählen");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Gallerie")) {
+                    dialog.dismiss();
+                    openGallery();
+                } else if (options[item].equals("Kamera")) {
+                    dialog.dismiss();
+                    openCamera();
+                }
+            }
+        });
+        builder.show();
 
     }
 
@@ -88,12 +136,12 @@ public class CharacterEditingActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            if (requestCode == PICK_IMAGE) {
+            if (requestCode == PICK_IMAGE ) {
                 Uri imageUri = data.getData();
                 cropImage(imageUri);
 
             }
-            if (requestCode == CROP_IMAGE) {
+            else if (requestCode == CROP_IMAGE) {
 
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -104,12 +152,27 @@ public class CharacterEditingActivity extends Activity {
                 }
 
             }
+            else if(requestCode == REQUEST_CAMERA){
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Uri uri = getImageURI(this,(Bitmap)bundle.get("data"));
+                    cropImage(uri);
+                }
+            }
 
 
         }
 
     }
 
+    public Uri getImageURI(Context context, Bitmap bitmap) {
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
+
+    }
     private void cropImage(Uri uri){
         try {
             Intent cropIntent = new Intent("com.android.camera.action.CROP");

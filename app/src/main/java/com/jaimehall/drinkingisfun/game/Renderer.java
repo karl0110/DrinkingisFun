@@ -163,9 +163,9 @@ public class Renderer implements Runnable {
 
         backgroundHandler.render(canvas,spaceToDraw);
 
-        if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+        if (camera.getCameraState() != Camera.CameraState.FOCUSED) {
 
-            playerHandler.renderPlayerIconsOnCurrentTile(canvas);
+            playerHandler.renderPlayerIconsOnCurrentTile(canvas,playerHandler.getCurrentPlayer().getLocation());
 
         }
          else {

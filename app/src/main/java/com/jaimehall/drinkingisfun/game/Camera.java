@@ -268,7 +268,7 @@ public class Camera implements Runnable{
                 translateAccX=0;
             }
 
-            System.out.println("TranslateX:     "+translateX+"  VelX:   "+translateVelX+"   AccX:   "+translateAccX     );
+            //System.out.println("TranslateX:     "+translateX+"  VelX:   "+translateVelX+"   AccX:   "+translateAccX     );
         }
 
 

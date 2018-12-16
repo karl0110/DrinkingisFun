@@ -3,6 +3,7 @@ package com.jaimehall.drinkingisfun.helpers;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -294,4 +295,6 @@ public class CharacterIO implements Serializable {
     public File getCharacterDirectory() {
         return characterDirectory;
     }
+
+
 }

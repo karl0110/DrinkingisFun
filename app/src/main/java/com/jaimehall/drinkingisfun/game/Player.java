@@ -30,7 +30,7 @@ public class Player {
 		this.textHandler=textHandler;
 
         if(playerIconPath.matches("Color")) {
-            Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler,300,300),200,200,false);
+            Bitmap playerIconBackground = Bitmap.createScaledBitmap(bitmapLoader.getBitmap(R.drawable.spieler,300,300),300,300,false);
 
             int r = (int) (Math.random() * 255);
             int g = (int) (Math.random() * 255);
@@ -56,6 +56,11 @@ public class Player {
 
 	public void render(Canvas canvas){
 		canvas.drawBitmap(playerIcon,null,coordinates,null);
+	}
+
+	public void renderAtSpecificCoordinates(Canvas canvas, Rect specificCoordinates){
+
+			canvas.drawBitmap(playerIcon,null,specificCoordinates,null);
 	}
 
 

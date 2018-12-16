@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyCharacterMap;
@@ -28,6 +29,7 @@ public class GameActivity extends Activity {
 
     private Game game;
     private GestureDetector mGestureDetector;
+
 
 
     private int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -82,8 +84,9 @@ public class GameActivity extends Activity {
         mGestureDetector = new GestureDetector(this,customGestureListener);
 
 
-
     }
+
+
 
 
 
@@ -186,7 +189,8 @@ public class GameActivity extends Activity {
     }
 
     public void reallyExit(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,android.R.style.Theme_DeviceDefault));
+
 
         builder.setTitle("Spiel Beenden");
         builder.setMessage("Möchtest du wirklich das Spiel verlassen? Alle Spieldaten gehen verloren.");

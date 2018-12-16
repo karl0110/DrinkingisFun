@@ -149,12 +149,41 @@ import java.util.LinkedList;
 
 	}
 
-	void renderPlayerIconsOnCurrentTile(Canvas canvas) {
-		for(int i =0;i<playersOnCurrentTile.size();i++){
-			playersOnCurrentTile.get(i).render(canvas);
-		}
+	void renderPlayerIconsOnCurrentTile(Canvas canvas,Tile location) {
+
+	    if(location.isMiniGame() || location.isGoal()){
+	        renderAllIconsOnLocation(canvas,location);
+        }
+        else{
+	        if(((NormalTile)location).isBlueTile()){
+                renderAllIconsOnLocation(canvas,location);
+            }
+            else{
+                for(int i =0;i<playersOnCurrentTile.size();i++){
+                    playersOnCurrentTile.get(i).render(canvas);
+                }
+            }
+        }
+
+
 
 	}
+
+	private void renderAllIconsOnLocation(Canvas canvas,Tile location){
+        for(int i=0;i<players.size();i++){
+
+            float tileWidth = location.getWidth();
+            float tileHeight= location.getHeight();
+
+            float baseX = location.getX()+((tileWidth/32)*3);
+            float baseY = location.getY()+((tileHeight/32)*23);
+
+            float x =baseX+(i*((float)((tileWidth/16)*1.6875)+tileWidth/128));
+            Rect rect = new Rect((int)x,(int)baseY,(int)(x+((tileWidth/16)*1.6875)),(int)(baseY+((tileHeight/16)*3)));
+
+            players.get(i).renderAtSpecificCoordinates(canvas,rect);
+        }
+    }
 
 	void renderPlayerIconsWholeMap(Canvas canvas){
         for(int i =0;i<players.size();i++){
