@@ -2,6 +2,7 @@ package com.jaimehall.drinkingisfun.activities.menu;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -21,7 +22,7 @@ import com.jaimehall.drinkingisfun.helpers.SexButton;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PlayerSelectActivity extends Activity {
+public class  PlayerSelectActivity extends Activity {
 
     private final int SELECT_CHARACTERS = 34;
 
@@ -62,12 +63,14 @@ public class PlayerSelectActivity extends Activity {
         firstEditText.setHint("Name");
         firstEditText.setLayoutParams(editTextParams);
         firstEditText.setEms(10);
+        firstEditText.setTextColor(Color.WHITE);
 
         final EditText secondEditText = new EditText(getApplicationContext());
         playerNames.add(secondEditText);
         secondEditText.setHint("Name");
         secondEditText.setLayoutParams(editTextParams);
         secondEditText.setEms(10);
+        secondEditText.setTextColor(Color.WHITE);
 
         SexButton firstSexButton = new SexButton(getApplicationContext());
         playerSexes.add(firstSexButton);
@@ -189,6 +192,7 @@ public class PlayerSelectActivity extends Activity {
         tempEditText.setHint("Name");
         tempEditText.setLayoutParams(editTextParams);
         tempEditText.setEms(10);
+        tempEditText.setTextColor(Color.WHITE);
 
         tempSexButton = new SexButton(getApplicationContext());
         tempSexButton.setLayoutParams(sexButtonParams);

@@ -51,6 +51,7 @@ public class Player {
             playerIcon = bitmapLoader.getBitmapFromPath(playerIconPath);
         }
 
+
 	}
 
 

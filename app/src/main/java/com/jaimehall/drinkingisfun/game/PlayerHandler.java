@@ -29,9 +29,13 @@ import java.util.LinkedList;
 	private Paint textPaint;
 	private Bitmap playerMenuBackground;
 
+	private float width,height;
+
 
 	PlayerHandler( float width, float height, BitmapLoader bitmapLoader,Game game){
         this.game=game;
+        this.width=width;
+        this.height=height;
 
 	    touchRightRect = new Rect((int)(width/2),0,(int)width,(int)height);
 	    touchLeftRect = new Rect(0,0,(int)(width/2),(int)height);
@@ -152,16 +156,14 @@ import java.util.LinkedList;
 	void renderPlayerIconsOnCurrentTile(Canvas canvas,Tile location) {
 
 	    if(location.isMiniGame() || location.isGoal()){
-	        renderAllIconsOnLocation(canvas,location);
+	        renderIconsOnLocation(true,canvas);
         }
         else{
 	        if(((NormalTile)location).isBlueTile()){
-                renderAllIconsOnLocation(canvas,location);
+                renderIconsOnLocation(true,canvas);
             }
             else{
-                for(int i =0;i<playersOnCurrentTile.size();i++){
-                    playersOnCurrentTile.get(i).render(canvas);
-                }
+                renderIconsOnLocation(false,canvas);
             }
         }
 
@@ -169,19 +171,31 @@ import java.util.LinkedList;
 
 	}
 
-	private void renderAllIconsOnLocation(Canvas canvas,Tile location){
-        for(int i=0;i<players.size();i++){
+	private void renderIconsOnLocation(boolean allIcons,Canvas canvas){
 
-            float tileWidth = location.getWidth();
-            float tileHeight= location.getHeight();
+	    if(allIcons) {
+            for (int i = 0; i < players.size(); i++) {
 
-            float baseX = location.getX()+((tileWidth/32)*3);
-            float baseY = location.getY()+((tileHeight/32)*23);
+                float baseX = ((width / 32) * 3);
+                float baseY = ((height / 32) * 23);
 
-            float x =baseX+(i*((float)((tileWidth/16)*1.6875)+tileWidth/128));
-            Rect rect = new Rect((int)x,(int)baseY,(int)(x+((tileWidth/16)*1.6875)),(int)(baseY+((tileHeight/16)*3)));
+                float x = baseX + (i * ((float) ((width / 16) * 1.6875) + width / 128));
+                Rect rect = new Rect((int) x, (int) baseY, (int) (x + ((width / 16) * 1.6875)), (int) (baseY + ((height / 16) * 3)));
 
-            players.get(i).renderAtSpecificCoordinates(canvas,rect);
+                players.get(i).renderAtSpecificCoordinates(canvas, rect);
+            }
+        }
+        else{
+            for (int i = 0; i < playersOnCurrentTile.size(); i++) {
+
+                float baseX = ((width / 32) * 3);
+                float baseY = ((height / 32) * 23);
+
+                float x = baseX + (i * ((float) ((width / 16) * 1.6875) + width / 128));
+                Rect rect = new Rect((int) x, (int) baseY, (int) (x + ((width / 16) * 1.6875)), (int) (baseY + ((height / 16) * 3)));
+
+                playersOnCurrentTile.get(i).renderAtSpecificCoordinates(canvas, rect);
+            }
         }
     }
 

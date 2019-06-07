@@ -111,7 +111,7 @@
         android:onClick="startCharacterSelection"
         android:text="@string/activity_player_select_add_characters"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/playerSelectPlayButton"

@@ -12,6 +12,8 @@ public class BackgroundHandler {
     private Bitmap[][] backgroundTiles;
     private Rect[][] backgroundTileRects;
 
+    private float colWidth,colHeight;
+
     private Camera camera;
 
 
@@ -20,6 +22,9 @@ public class BackgroundHandler {
 
         backgroundTiles = new Bitmap[26][9];
         backgroundTileRects = new Rect[26][9];
+
+        this.colWidth=colWidth;
+        this.colHeight=colHeight;
 
         for(int x = 0; x<26;x++){
             for(int y = 0;y<9;y++) {
@@ -43,6 +48,13 @@ public class BackgroundHandler {
         }
 
     }
+
+//    public void renderSpecificTile(Canvas canvas, Rect tileToDraw){
+//        int x = (int)(tileToDraw.left/colWidth);
+//        int y = (int)(tileToDraw.top/colHeight);
+//
+//        canvas.drawBitmap(backgroundTiles[x][y], null, backgroundTileRects[x][y], null);
+//    }
 
 
 

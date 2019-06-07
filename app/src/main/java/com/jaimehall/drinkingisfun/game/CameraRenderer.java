@@ -13,6 +13,7 @@ public class CameraRenderer implements Runnable {
 
     private Thread thread;
     private boolean running;
+    private boolean needUpdate = false;
 
     private Bitmap cameraBitmap;
     private Rect cameraRect;
@@ -53,10 +54,18 @@ public class CameraRenderer implements Runnable {
                 m.setScale(camera.getScaleX(), camera.getScaleY());
 
                 cameraBitmap = Bitmap.createBitmap(canvasBitmap,x ,y , cameraRect.width(), cameraRect.height(), m, false);
+
+//                Matrix secondM = new Matrix();;
+//
+//                secondM.setScale(cameraRect.width()/1920,cameraRect.height()/1080);
+//                secondM.setTranslate(0,0);
+//
+//                cameraBitmap = Bitmap.createBitmap(tempBitmap,0,0,1920,1080,secondM,false);
+
                 renderer.setRenderBitmap(cameraBitmap);
             }
             else{
-                updateCanvasBitmap();
+                needUpdate = true;
             }
         }
 
@@ -73,40 +82,64 @@ public class CameraRenderer implements Runnable {
 
         cameraRect.set((int) translateX, (int) translateY, (int) (translateX + scaledWidth), (int) (translateY + scaledHeight));
 
-
-        //Creating bigger Canvas Bitmap so Camera can zoom out
-        if(camera.getCameraState() == Camera.CameraState.ZOOMINGOUT || camera.getCameraState() == Camera.CameraState.FIRSTHALFFOCUSCHANGE) {
-            if (canvasRect.width()  < (cameraRect.width()  * 2)) {
-                updateCanvasBitmap();
-            }
+        if(needUpdate){
+            updateCanvasBitmap();
         }
+        else if(cameraRect.width()>1000){
+            updateCanvasBitmap();
+        }
+        else {
 
-        //Creating smaller Canvas Bitmap so Camera can zoom in
-        if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN || camera.getCameraState() == Camera.CameraState.SECONDHALFFOCUSCHANGE){
-            if ((canvasRect.width() /5) > cameraRect.width()  ) {
-                updateCanvasBitmap();
+
+            //Creating bigger Canvas Bitmap so Camera can zoom out
+            if (camera.getCameraState() == Camera.CameraState.ZOOMINGOUT || camera.getCameraState() == Camera.CameraState.FIRSTHALFFOCUSCHANGE) {
+                if (canvasRect.width() < (cameraRect.width() * 6)) {
+                    updateCanvasBitmap();
+                }
+            }
+
+            //Creating smaller Canvas Bitmap so Camera can zoom in
+            if (camera.getCameraState() == Camera.CameraState.ZOOMINGIN || camera.getCameraState() == Camera.CameraState.SECONDHALFFOCUSCHANGE) {
+                if ((canvasRect.width() / 2) > cameraRect.width()) {
+                    updateCanvasBitmap();
+                }
             }
         }
     }
 
     void updateCanvasBitmap(){
 
+        float canvasRectLeft;
+        float canvasRectTop;
+        float canvasRectRight;
+        float canvasRectBottom;
 
-        float canvasRectLeft = cameraRect.left-(cameraRect.width());
-        if(canvasRectLeft<0){
-            canvasRectLeft=0;
+        if(cameraRect.width()>1000){
+            canvasRectLeft = 0;
+            canvasRectTop = 0;
+            canvasRectRight = 6500;
+            canvasRectBottom = 1260;
         }
-        float canvasRectTop = cameraRect.top-(cameraRect.height());
-        if(canvasRectTop<0){
-            canvasRectTop=0;
-        }
-        float canvasRectRight = cameraRect.right+(cameraRect.width());
-        if(canvasRectRight>6500){
-            canvasRectRight=6500;
-        }
-        float canvasRectBottom = cameraRect.bottom+(cameraRect.height());
-        if(canvasRectBottom>1260){
-            canvasRectBottom=1260;
+        else {
+
+
+            canvasRectLeft = cameraRect.left - (cameraRect.width() * 3);
+            if (canvasRectLeft < 0) {
+                canvasRectLeft = 0;
+            }
+            canvasRectTop = cameraRect.top - (cameraRect.height() * 2);
+            if (canvasRectTop < 0) {
+                canvasRectTop = 0;
+            }
+            canvasRectRight = cameraRect.right + (cameraRect.width() * 3);
+            if (canvasRectRight > 6500) {
+                canvasRectRight = 6500;
+            }
+            canvasRectBottom = cameraRect.bottom + (cameraRect.height() * 2);
+            if (canvasRectBottom > 1260) {
+                canvasRectBottom = 1260;
+            }
+
         }
 
         canvasRect.set((int)canvasRectLeft,(int)canvasRectTop,(int)canvasRectRight,(int)canvasRectBottom);
@@ -146,6 +179,7 @@ public class CameraRenderer implements Runnable {
                     timer += 1000;//addiert zum Timer eine Sekunde dazu.
                     System.out.println(" CameraRendererFPS: " + frames);//Druckt die "TicksPerSecond" und "FramesPerSecond" aus.
                     frames = 0;//setzt den Frame-Zähler zurück.
+                    updateCanvasBitmap();
                 }
             }
         }

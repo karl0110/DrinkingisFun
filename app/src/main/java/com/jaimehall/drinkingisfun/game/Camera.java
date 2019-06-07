@@ -17,6 +17,8 @@ public class Camera implements Runnable{
     private PlayerHandler playerHandler;
 
     private double maxZoom;
+    private float maxWidth = 6500;
+    private float maxHeight = 1250;
     private static int zoomSpeed;
 
     private int touchTimer;
@@ -47,8 +49,6 @@ public class Camera implements Runnable{
     private float scaleY = 0;
     private float translateX = 0;
     private float translateY = 0;
-    private float translateVelX = 0;
-    private float translateAccX = 0;
 
 
     private CameraState cameraState;
@@ -152,11 +152,17 @@ public class Camera implements Runnable{
     }
 
     private void tickMainGame(){
+
+        float resultScaleX=scaleX;
+        float resultScaleY=scaleY;
+        float resultTranslateX=translateX;
+        float resultTranslateY =translateY;
+
         if(cameraState == CameraState.FOCUSED){
-            scaleX = focusedScaleX;
-            scaleY = focusedScaleY;
-            translateX = currentFocusedTile.getX();
-            translateY = currentFocusedTile.getY();
+            resultScaleX = focusedScaleX;
+            resultScaleY = focusedScaleY;
+            resultTranslateX = currentFocusedTile.getX();
+            resultTranslateY = currentFocusedTile.getY();
         }
         else if(cameraState == CameraState.ZOOMINGOUT){
             if (frameZoomEvent < zoomSpeed) {
@@ -167,10 +173,10 @@ public class Camera implements Runnable{
                 zoomFactorXFocusChange -= zoomFactorXStepFocusChange;
                 zoomFactorYFocusChange -= zoomFactorYStepFocusChange;
 
-                scaleX = (float) zoomFactorXFocusChange;
-                scaleY = (float) zoomFactorYFocusChange;
-                translateX = (float) actualXFocusChange;
-                translateY = (float) actualYFocusChange;
+                resultScaleX = (float) zoomFactorXFocusChange;
+                resultScaleY = (float) zoomFactorYFocusChange;
+                resultTranslateX = (float) actualXFocusChange;
+                resultTranslateY = (float) actualYFocusChange;
 
                 frameZoomEvent++;
             } else {
@@ -185,10 +191,10 @@ public class Camera implements Runnable{
                 zoomFactorXFocusChange += zoomFactorXStepFocusChange;
                 zoomFactorYFocusChange += zoomFactorYStepFocusChange;
 
-                scaleX = (float) zoomFactorXFocusChange;
-                scaleY = (float) zoomFactorYFocusChange;
-                translateX = (float) actualXFocusChange;
-                translateY = (float) actualYFocusChange;
+                resultScaleX = (float) zoomFactorXFocusChange;
+                resultScaleY = (float) zoomFactorYFocusChange;
+                resultTranslateX = (float) actualXFocusChange;
+                resultTranslateY = (float) actualYFocusChange;
 
                 frameZoomEvent++;
             } else {
@@ -204,10 +210,10 @@ public class Camera implements Runnable{
                 actualXFocusChange += actualXStepFocusChange;
                 actualYFocusChange += actualYStepFocusChange;
 
-                scaleX = (float) zoomFactorXFocusChange;
-                scaleY = (float) zoomFactorYFocusChange;
-                translateX = (float) (actualXFocusChange - (xZoomTranslateVariable / zoomFactorXFocusChange));
-                translateY = (float) (actualYFocusChange - (yZoomTranslateVariable / zoomFactorYFocusChange));
+                resultScaleX = (float) zoomFactorXFocusChange;
+                resultScaleY = (float) zoomFactorYFocusChange;
+                resultTranslateX = (float) (actualXFocusChange - (xZoomTranslateVariable / zoomFactorXFocusChange));
+                resultTranslateY = (float) (actualYFocusChange - (yZoomTranslateVariable / zoomFactorYFocusChange));
                 frameFocusChange++;
             } else {
 
@@ -225,10 +231,10 @@ public class Camera implements Runnable{
                 actualXFocusChange += actualXStepFocusChange;
                 actualYFocusChange += actualYStepFocusChange;
 
-                scaleX = (float) zoomFactorXFocusChange;
-                scaleY = (float) zoomFactorYFocusChange;
-                translateX = (float) (actualXFocusChange - (xZoomTranslateVariable / zoomFactorXFocusChange));
-                translateY = (float) (actualYFocusChange - (yZoomTranslateVariable / zoomFactorYFocusChange));
+                resultScaleX = (float) zoomFactorXFocusChange;
+                resultScaleY = (float) zoomFactorYFocusChange;
+                resultTranslateX = (float) (actualXFocusChange - (xZoomTranslateVariable / zoomFactorXFocusChange));
+                resultTranslateY = (float) (actualYFocusChange - (yZoomTranslateVariable / zoomFactorYFocusChange));
                 frameFocusChange++;
             } else {
                 cameraState = CameraState.FOCUSED;
@@ -238,39 +244,11 @@ public class Camera implements Runnable{
                 currentFocusedTileChanged();
             }
         }
-        else if(cameraState == CameraState.ZOOMEDOUT){
-            translateX+=translateVelX;
-            translateVelX+=translateAccX;
 
-            if(translateVelX>0){
-                translateVelX--;
-            }
-            else if(translateVelX<0){
-                translateVelX++;
-            }
-
-            if(translateAccX>0){
-                translateAccX--;
-            }
-            else if(translateAccX<0){
-                translateAccX++;
-            }
-
-            if(translateX<0){
-                translateX=0;
-                translateVelX=0;
-                translateAccX=0;
-            }
-
-            if((translateX+(width/scaleX))>6500){
-                translateX = 6499 - ((width/scaleX));
-                translateVelX=0;
-                translateAccX=0;
-            }
-
-            //System.out.println("TranslateX:     "+translateX+"  VelX:   "+translateVelX+"   AccX:   "+translateAccX     );
-        }
-
+        translateX=resultTranslateX;
+        translateY=resultTranslateY;
+        scaleX=resultScaleX;
+        scaleY=resultScaleY;
 
     }
 
@@ -377,12 +355,37 @@ public class Camera implements Runnable{
         return translateY;
     }
 
-    public void setTranslateX(float translateX) {
-        this.translateX = translateX;
-    }
-
     void addToTranslateX(float amount) {
-        this.translateX += amount;
+
+        float tempTranslateX = translateX;
+
+        tempTranslateX += (amount/scaleX);
+
+        if(tempTranslateX > maxWidth){
+            tempTranslateX = (maxWidth-1)- ((width/scaleX));
+        }
+
+        if(tempTranslateX <0) {
+            tempTranslateX = 0;
+        }
+
+        this.translateX = tempTranslateX;
+    }
+    void addToTranslateY(float amount) {
+
+        float tempTranslateY = translateY;
+
+        tempTranslateY += (amount/scaleY);
+
+        if(tempTranslateY > maxHeight){
+            tempTranslateY = (maxHeight-1)- ((height/scaleY));
+        }
+
+        if(tempTranslateY <0){
+            tempTranslateY =0;
+        }
+
+        this.translateY = tempTranslateY;
     }
 
     CameraState getCameraState() {
@@ -401,7 +404,19 @@ public class Camera implements Runnable{
         this.touchTimer = touchTimer;
     }
 
-    public void setTranslateAccX(float translateAccX) {
-        this.translateAccX = translateAccX;
+    public void setScale(float scaleFactor){
+        float tempScaleX = scaleX *= scaleFactor;
+
+        tempScaleX = Math.max((float)maxZoom, Math.min(tempScaleX, focusedScaleX/2));
+
+        scaleX = tempScaleX;
+
+
+
+        float tempScaleY = scaleY *= scaleFactor;
+
+        tempScaleY = Math.max((float)maxZoom, Math.min(tempScaleY, focusedScaleY/2));
+
+        scaleY = tempScaleY;
     }
 }

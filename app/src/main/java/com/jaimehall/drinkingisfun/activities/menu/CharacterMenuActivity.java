@@ -6,9 +6,12 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import com.jaimehall.drinkingisfun.R;
@@ -22,6 +25,9 @@ public class CharacterMenuActivity extends Activity {
 
     private CharacterIO characterIO;
 
+    private LinearLayout.LayoutParams buttonLayoutParams;
+    private LinearLayout.LayoutParams horizontalLayoutParams;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +35,9 @@ public class CharacterMenuActivity extends Activity {
         linearLayout = findViewById(R.id.characterMenuLinearLayout);
 
         characterIO = (CharacterIO) getIntent().getSerializableExtra("characterIO");
+
+         buttonLayoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,1.0f);
+         horizontalLayoutParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
 
         refreshUI();
 
@@ -55,40 +64,39 @@ public class CharacterMenuActivity extends Activity {
 
         linearLayout.removeAllViews();
 
-        String[] playerNames = characterIO.getCharacterNames();
-
-        LinearLayout.LayoutParams buttonLayout = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        for(int i = 0;i<playerNames.length;i++){
-            final int index =i;
-            Button button = new Button(this);
-            button.setText(playerNames[i]);
-            button.setLayoutParams(buttonLayout);
-            button.setTextSize(30f);
-
-            int darkRed = getResources().getColor(R.color.darkRed);
-
-            button.setTextColor(darkRed);
-
-            ShapeDrawable sd = new ShapeDrawable();
-            sd.setShape(new RoundRectShape(new float[]{100,100,100,100,100,100,100,100},null,null));
-            sd.getPaint().setColor(darkRed);
-            sd.getPaint().setStrokeWidth(20f);
-            sd.getPaint().setStyle(Paint.Style.STROKE);
-            button.setBackground(sd);
+        String[] characterNames = characterIO.getCharacterNames();
 
 
-            button.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startCharacterEditing(index);
-                    }
-                });
-            linearLayout.addView(button);
+        for(int i = 0; i<characterNames.length;i++){
+            Button tempButton = new Button(getApplicationContext());
+            tempButton.setLayoutParams(buttonLayoutParams);
+            tempButton.setText(characterNames[i]);
+            tempButton.setEms(10);
 
-            }
 
+            LinearLayout horizontalLayout = new LinearLayout(this);
+            horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+            horizontalLayout.setLayoutParams(new WindowManager.LayoutParams());
+            horizontalLayout.setLayoutParams(horizontalLayoutParams);
+
+
+            horizontalLayout.addView(tempButton);
+
+
+            linearLayout.addView(horizontalLayout);
+
+            final int index = i;
+
+            tempButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startCharacterEditing(index);
+                }
+            });
+
+
+
+        }
     }
 
     public void startCharacterEditing(int index){

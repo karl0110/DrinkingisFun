@@ -2,8 +2,10 @@ package com.jaimehall.drinkingisfun.game;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -39,6 +41,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
     private MiniGameHandler miniGameHandler;
 
     private State gameState;
+
+    private static final int INVALID_POINTER_ID = 259;
+    private int activePointerId = INVALID_POINTER_ID;
+    private float lastTouchX = 0;
+    private float lastTouchY = 0;
 
     public enum State {
         MAINGAME, MINIGAME, PLAYERMENU
@@ -221,20 +228,109 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         camera.setTouchTimer(60);
     }
 
-    public void fling(MotionEvent motionEvent, MotionEvent motionEvent1){
-        if (camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
-            if (motionEvent.getX() > motionEvent1.getX()) {
+    public void scale(float scaleFactor){
+        camera.setScale(scaleFactor);
+    }
 
-                camera.setTranslateAccX(10);
+    public void touch(MotionEvent e){
+
+        if (gameState == State.MINIGAME) {
+            miniGameHandler.touched(e);
+            camera.setTouchTimer(60);
+        }
+        else{
+
+            if (camera.getTouchTimer() == 0) {
+
+                Rect touchPoint = new Rect((int) e.getX() - 1, (int) e.getY() - 1, (int) e.getX() + 1, (int) e.getY() + 1);
+                if (gameState == State.MAINGAME) {
+                    if (Rect.intersects(touchPoint, zoomButtonRect)) {
+                        camera.prepareZoomEvent();
+                    } else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                        gameState = State.PLAYERMENU;
+
+                    } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
+
+                        if (playerHandler.getCurrentPlayer().getLocation().isMiniGame()) {
+                            startMiniGame();
+                        } else if (playerHandler.getCurrentPlayer().getLocation().isGoal()) {
+
+                            finishGame();
+                        } else {
+                            camera.prepareFocusChange();
+                        }
+                    }
+                } else if (gameState == State.PLAYERMENU) {
+                    if (Rect.intersects(touchPoint, playerIconTouchRect)) {
+                        gameState = State.MAINGAME;
+                    } else {
+                        playerHandler.touched(touchPoint);
+                    }
+                }
 
 
-            } else if (motionEvent.getX() < motionEvent1.getX()) {
+                camera.setTouchTimer(60);
+            }
 
-                camera.setTranslateAccX(-10);
+        }
+        if(camera.getCameraState() == Camera.CameraState.ZOOMEDOUT) {
 
+            final int action = e.getActionMasked();
+
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
+
+                    final int pointerIndex = e.getActionIndex();
+                    lastTouchX = e.getX(pointerIndex);
+                    lastTouchY = e.getY(pointerIndex);
+
+                    activePointerId = e.getPointerId(pointerIndex);
+                    break;
+                }
+                case MotionEvent.ACTION_MOVE: {
+
+                    final int pointerIndex = e.findPointerIndex(activePointerId);
+
+                    final float x = e.getX(pointerIndex);
+                    final float y = e.getY(pointerIndex);
+
+                    camera.addToTranslateX(lastTouchX-x);
+                    camera.addToTranslateY(lastTouchY-y);
+
+                    lastTouchX = x;
+                    lastTouchY = y;
+
+                    break;
+                }
+
+                case MotionEvent.ACTION_UP: {
+                    activePointerId = INVALID_POINTER_ID;
+                    break;
+                }
+
+                case MotionEvent.ACTION_CANCEL: {
+                    activePointerId = INVALID_POINTER_ID;
+                    break;
+                }
+
+                case MotionEvent.ACTION_POINTER_UP: {
+
+                    final int pointerIndex = e.getActionIndex();
+                    final int pointerId = e.getPointerId(pointerIndex);
+
+                    if (pointerId == activePointerId) {
+                        // This was our active pointer going up. Choose a new
+                        // active pointer and adjust accordingly.
+                        final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                        activePointerId = e.getPointerId(newPointerIndex);
+                    }
+                    break;
+                }
 
             }
+
         }
+
 
     }
 
@@ -248,50 +344,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
     }
 
-    public void progress(MotionEvent motionEvent){
-
-            if (camera.getTouchTimer() == 0) {
-
-                Rect touchPoint = new Rect((int) motionEvent.getX() - 1, (int) motionEvent.getY() - 1, (int) motionEvent.getX() + 1, (int) motionEvent.getY() + 1);
-                if (gameState == State.MAINGAME) {
-                    if (Rect.intersects(touchPoint, zoomButtonRect)) {
-                        camera.prepareZoomEvent();
-                    } else if (Rect.intersects(touchPoint, playerIconTouchRect)) {
-                        gameState = State.PLAYERMENU;
-
-                    } else if (camera.getCameraState() == Camera.CameraState.FOCUSED) {
-
-                        if (playerHandler.getCurrentPlayer().getLocation().isMiniGame()) {
-                            startMiniGame();
-                        }
-                        else if(playerHandler.getCurrentPlayer().getLocation().isGoal()){
-
-                            finishGame();
-                        }
-                        else {
-                            camera.prepareFocusChange();
-                        }
-                    }
-                } else if (gameState == State.PLAYERMENU) {
-                    if (Rect.intersects(touchPoint, playerIconTouchRect)) {
-                        gameState = State.MAINGAME;
-                    }
-                    else {
-                        playerHandler.touched(touchPoint);
-                    }
-                }
-
-
-                camera.setTouchTimer(60);
-            }
-
-        if (gameState == State.MINIGAME) {
-            miniGameHandler.touched(motionEvent);
-            camera.setTouchTimer(60);
-        }
-
-
-    }
 
 
     public void pause() {

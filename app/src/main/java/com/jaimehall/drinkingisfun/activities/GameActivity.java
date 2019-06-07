@@ -7,30 +7,25 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.ContextThemeWrapper;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.jaimehall.drinkingisfun.game.Game;
 
-import java.util.ArrayList;
-
-public class GameActivity extends Activity {
+public class GameActivity extends Activity{
 
     private Game game;
-    private GestureDetector mGestureDetector;
 
-
+    private ScaleGestureDetector scaleDetector;
 
     private int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -69,21 +64,14 @@ public class GameActivity extends Activity {
         game.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View view, MotionEvent motionEvent) {
-                                        game.progress(motionEvent);
-                                        mGestureDetector.onTouchEvent(motionEvent);
+                                        scaleDetector.onTouchEvent(motionEvent);
+                                        game.touch(motionEvent);
                                         return true;
                                     }
                                 }
         );
 
-
-
-
-        CustomGestureListener customGestureListener = new CustomGestureListener();
-
-        mGestureDetector = new GestureDetector(this,customGestureListener);
-
-
+        scaleDetector = new ScaleGestureDetector(this,new ScaleListener());
     }
 
 
@@ -150,38 +138,7 @@ public class GameActivity extends Activity {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    class CustomGestureListener implements GestureDetector.OnGestureListener{
-        @Override
-        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            game.fling(motionEvent,motionEvent1);
-            return true;
-        }
 
-        @Override
-        public boolean onDown(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent motionEvent) {
-
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            return false;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent motionEvent) {
-
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -209,6 +166,16 @@ public class GameActivity extends Activity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+
+            game.scale(detector.getScaleFactor());
+
+            return true;
+        }
     }
 }
 
