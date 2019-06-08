@@ -20,8 +20,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
     private float width,height;
 
-    private boolean initFinished=false;
-
     private String[] playerNames;
     private String[] playerIcons;
     private String[] playerSexes;
@@ -53,7 +51,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
 
 
-    public Game(Context context, String[] playerNames,String[] playerIcons, String[] playerSexes, float width, float height) {
+    public Game(Context context, String[] playerNames,String[] playerIcons, String[] playerSexes, float width, float height, LoadingScreen loadingScreen) {
         super(context);
         this.width=width;
         this.height=height;
@@ -62,13 +60,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
         this.playerIcons = playerIcons;
         this.playerSexes=playerSexes;
 
-        loadingScreen = new LoadingScreen(width,height,12);
-        renderer = new Renderer(this,loadingScreen,width,height);
+        this.loadingScreen = loadingScreen;
+        renderer = new Renderer(this,width,height);
 
 
         getHolder().addCallback(this);
 
-        init();
     }
 
     @Override
@@ -88,61 +85,70 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
 
     public void init(){
-        if(!initFinished) {
             loadingScreen.progressOne();
 
-            BitmapLoader bitmapLoader = new BitmapLoader(getResources());
-
-            loadingScreen.progressOne();
-            loadingScreen.progressOne();
-            loadingScreen.progressOne();
-
-            gameState = State.MAINGAME;
-
-            playerHandler = new PlayerHandler( width, height, bitmapLoader,this);
-            loadingScreen.progressOne();
-
-            BackgroundHandler backgroundHandler = new BackgroundHandler(bitmapLoader,250,140);
-            loadingScreen.progressOne();
-            loadingScreen.progressOne();
-
-            Map map = new Map(bitmapLoader);
-            loadingScreen.progressOne();
-
-            TextHandler textHandler = new TextHandler(this);
-            loadingScreen.progressOne();
-
-            for (int i = 0; i < playerNames.length; i++) {
-                playerHandler.addPlayer(new Player(map.getTileFromTileMap(2, 4), playerNames[i], playerSexes[i], playerIcons[i], bitmapLoader, textHandler));
-            }
-
-            loadingScreen.progressOne();
-            loadingScreen.progressOne();
-
-            miniGameHandler = new MiniGameHandler(this, height, width, bitmapLoader);
-            loadingScreen.progressOne();
-
-            playerIconTouchRect = new Rect((int) (width-(width / 8) ), 0, (int) width, ((int) (height / 8)));
-
-            zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
-
-
-            camera = new Camera(this, playerHandler, width, height);
-
-            renderer.init( bitmapLoader,  playerHandler, camera, miniGameHandler, backgroundHandler,map);
+                    BitmapLoader bitmapLoader = new BitmapLoader(getResources());
 
             loadingScreen.progressOne();
 
-            cameraRenderer = new CameraRenderer(renderer,camera,width,height,this);
 
-            playerHandler.currentPlayerChanged();
+                    gameState = State.MAINGAME;
 
-            camera.init();
+                    playerHandler = new PlayerHandler( width, height, bitmapLoader,this);
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    BackgroundHandler backgroundHandler = new BackgroundHandler(bitmapLoader,250,140);
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    Map map = new Map(bitmapLoader);
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    TextHandler textHandler = new TextHandler(this);
+            loadingScreen.progressOne();
+
+                    for (int i = 0; i < playerNames.length; i++) {
+                         playerHandler.addPlayer(new Player(map.getTileFromTileMap(2, 4), playerNames[i], playerSexes[i], playerIcons[i], bitmapLoader, textHandler));
+                    }
+
+            loadingScreen.progressOne();
+
+                    miniGameHandler = new MiniGameHandler(this, height, width, bitmapLoader);
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    playerIconTouchRect = new Rect((int) (width-(width / 8) ), 0, (int) width, ((int) (height / 8)));
+
+                    zoomButtonRect = new Rect(0, 0, (int) (width / 8), ((int) (height / 8)));
+            loadingScreen.progressOne();
 
 
-            initFinished = true;
-            resume();
-        }
+                    camera = new Camera(this, playerHandler, width, height);
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    renderer.init( bitmapLoader,  playerHandler, camera, miniGameHandler, backgroundHandler,map);
+
+            loadingScreen.progressOne();
+
+                    cameraRenderer = new CameraRenderer(renderer,camera,width,height,this);
+
+                    playerHandler.currentPlayerChanged();
+            loadingScreen.progressOne();
+
+                    camera.init();
+
+            loadingScreen.progressOne();
+            loadingScreen.progressOne();
+
+                    ((GameActivity)context).initComplete();
+
     }
 
     public void finishGame(){
@@ -356,12 +362,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback{
 
 
     public void resume() {
-        if(initFinished) {
             camera.resume();
             renderer.resume();
             miniGameHandler.resume();
             cameraRenderer.resume();
-        }
 
     }
 

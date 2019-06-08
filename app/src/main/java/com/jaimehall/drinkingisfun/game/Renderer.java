@@ -38,7 +38,6 @@ public class Renderer implements Runnable {
     private Bitmap renderBitmap;
 
     private boolean initPhase = true;
-    private LoadingScreen loadingScreen;
 
     private Rect zoomButtonRenderingRect;
     private Rect playerIconRenderingRect;
@@ -48,10 +47,9 @@ public class Renderer implements Runnable {
     private int textRectPrep;
 
 
-    Renderer(Game game,LoadingScreen loadingScreen,float width,float height){
+    Renderer(Game game,float width,float height){
         this.surfaceHolder = game.getHolder();
         surfaceHolder.setFormat(0x00000004);
-        this.loadingScreen = loadingScreen;
         this.game = game;
         this.width=width;
         this.height=height;
@@ -108,11 +106,6 @@ public class Renderer implements Runnable {
                     canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//Drawing a transparent Background to clear away old draws from the Tiles.
                 }
 
-                if(initPhase){
-                    loadingScreen.render(canvas);
-                }
-                else {
-
                     if (game.getGameState() == Game.State.MAINGAME) {
 
                         if(renderBitmap != null) {
@@ -145,7 +138,7 @@ public class Renderer implements Runnable {
                         playerHandler.renderPlayerMenu(canvas);
 
                     }
-                }
+
 
 
                 surfaceHolder.unlockCanvasAndPost(canvas);

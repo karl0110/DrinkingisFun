@@ -20,10 +20,13 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.jaimehall.drinkingisfun.game.Game;
+import com.jaimehall.drinkingisfun.game.LoadingScreen;
 
 public class GameActivity extends Activity{
 
     private Game game;
+    private LoadingScreen loadingScreen;
+    private boolean initPhase = true;
 
     private ScaleGestureDetector scaleDetector;
 
@@ -39,9 +42,6 @@ public class GameActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-
-
         Display display =getWindowManager().getDefaultDisplay();
 
         Point size = new Point();
@@ -49,16 +49,23 @@ public class GameActivity extends Activity{
         float width = size.x;
         float height = size.y+getNavBarHeight();
 
+        setScreenOrientationLandscape();
+
+        loadingScreen = new LoadingScreen(this,height ,width,20);
+
+        setContentView(loadingScreen);
+
+        loadingScreen.setSystemUiVisibility(uiOptions);
+
+
+        Intent intent = getIntent();
+
         String[] playerNames = intent.getStringArrayExtra("playerNames");
         String[] playerIcons = intent.getStringArrayExtra("playerIcons");
         String[] playerSexes = intent.getStringArrayExtra("playerSexes");
 
-        game = new Game(this , playerNames,playerIcons, playerSexes, height, width);
-
-        setContentView(game);
-
+        game = new Game(this , playerNames,playerIcons, playerSexes, height, width, loadingScreen);
         game.setSystemUiVisibility(uiOptions);
-        setScreenOrientationLandscape();
 
 
         game.setOnTouchListener(new View.OnTouchListener() {
@@ -72,10 +79,36 @@ public class GameActivity extends Activity{
         );
 
         scaleDetector = new ScaleGestureDetector(this,new ScaleListener());
+
+
+        System.out.println("Finished with gameActivity");
     }
 
+    public void initComplete(){
+        initPhase = false;
+        game.resume();
+        game.setSystemUiVisibility(uiOptions);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setContentView(game);
+            }
+        });
+        loadingScreen.pause();
 
+    }
 
+    public void initGame(){
+        final Thread initializerThread = new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                game.init();
+            }
+        };
+
+        initializerThread.start();
+    }
 
 
     public void startGameOverAcitivty(String[] playerNames, long[] playerScores){
@@ -88,15 +121,25 @@ public class GameActivity extends Activity{
 
         protected void onResume() {
             super.onResume();
-            game.resume();
-            game.setSystemUiVisibility(uiOptions);
+            if(initPhase){
+                loadingScreen.resume();
+            }
+            else {
+                game.resume();
+                game.setSystemUiVisibility(uiOptions);
+            }
 
         }
 
 
         protected void onPause() {
-            super.onPause();
-            game.pause();
+            if(initPhase){
+                loadingScreen.pause();
+            }
+            else {
+                super.onPause();
+                game.pause();
+            }
         }
 
         public void setScreenOrientationLandscape(){
