@@ -287,11 +287,11 @@ public class Camera implements Runnable{
         }
         if (cameraState == CameraState.ZOOMEDOUT){
             float startXFocusChange = translateX;
-            float startYFocusChange = 0;
+            float startYFocusChange = translateY;
             float targetXFocusChange = currentFocusedTile.getX();
             float targetYFocusChange = currentFocusedTile.getY();
-            zoomFactorXFocusChange = maxZoom;
-            zoomFactorYFocusChange = maxZoom;
+            zoomFactorXFocusChange = scaleX;
+            zoomFactorYFocusChange = scaleY;
 
             actualXFocusChange = startXFocusChange;
             actualYFocusChange = startYFocusChange;
